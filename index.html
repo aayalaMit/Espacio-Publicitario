@@ -12,7 +12,6 @@
   --navy-mid: #142038;
   --navy-light: #1E3055;
   --gold: #F5C842;
-  --gold-light: #FDE68A;
   --teal: #2EC4B6;
   --coral: #E8603C;
   --blue: #378ADD;
@@ -53,7 +52,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 3rem 4rem; }
 .section-heading { font-family: var(--font-display); font-size: 24px; font-weight: 400; color: var(--white); margin-bottom: .3rem; }
 .section-sub { font-size: 13px; color: var(--muted); margin-bottom: 2rem; }
 
-.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 2rem; }
 .metric { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1rem; }
 .metric-label { font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
 .metric-value { font-family: var(--font-display); font-size: 22px; color: var(--white); line-height: 1.1; }
@@ -71,7 +70,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 3rem 4rem; }
 .ctrl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--gold); border: 2px solid var(--navy); cursor: pointer; }
 .ctrl-row select { flex: 1; min-width: 200px; background: rgba(255,255,255,.07); border: 1px solid var(--border); border-radius: 8px; color: var(--white); padding: 7px 10px; font-family: var(--font-body); font-size: 13px; cursor: pointer; }
 .ctrl-row select option { background: var(--navy-mid); color: var(--white); }
-.ctrl-val { font-family: var(--font-mono); font-size: 13px; color: var(--white); min-width: 80px; text-align: right; }
+.ctrl-val { font-family: var(--font-mono); font-size: 13px; color: var(--white); min-width: 70px; text-align: right; }
 
 .toggle-row { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; flex-wrap: wrap; }
 .toggle-label { font-size: 13px; color: var(--muted); }
@@ -82,7 +81,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 3rem 4rem; }
 .timeline-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; overflow-x: auto; }
 .tl-label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
 .tl-bar { display: flex; height: 48px; border-radius: 8px; overflow: hidden; gap: 2px; }
-.tl-slot { flex: 1; min-width: 10px; display: flex; align-items: center; justify-content: center; cursor: default; transition: opacity .15s; }
+.tl-slot { flex: 1; min-width: 10px; cursor: default; transition: opacity .15s; }
 .tl-slot:hover { opacity: .75; }
 .tl-hours { display: flex; margin-top: 6px; }
 .tl-hours span { flex: 1; font-size: 9px; color: var(--muted); font-family: var(--font-mono); }
@@ -101,8 +100,8 @@ main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 3rem 4rem; }
 table.data { width: 100%; border-collapse: collapse; font-size: 13px; }
 table.data th { text-align: left; padding: 10px 14px; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); }
 table.data td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,.04); color: var(--white); }
-table.data tr:last-child td { background: rgba(245,200,66,.06); font-weight: 500; }
-table.data tr:hover:not(:last-child) td { background: rgba(255,255,255,.02); }
+table.data tr.total-row td { background: rgba(245,200,66,.06); font-weight: 500; }
+table.data tr:hover:not(.total-row) td { background: rgba(255,255,255,.02); }
 
 .note { font-size: 12px; color: var(--muted); line-height: 1.65; padding: 1rem 1.25rem; background: rgba(245,200,66,.05); border-left: 3px solid rgba(245,200,66,.4); margin-bottom: 1.5rem; }
 .note b { color: var(--white); }
@@ -155,13 +154,13 @@ footer span { color: var(--gold); }
       <div class="eyebrow">Caso de Negocio Interno</div>
       <h1>Pantallas LED — <em>Monetización</em><br>de Espacio Publicitario</h1>
       <div class="header-meta">
-        <span>📍 Inverfin S.A. — Av. Artigas, Asunción</span>
+        <span>📍 Inverfin SAECA — Av. Artigas, Asunción</span>
         <span>📅 Mayo 2026</span>
         <span>🏢 Romis Paraguay · Prourbe Medios</span>
       </div>
     </div>
     <div class="header-right">
-      <div class="inv-logo"><span>E</span>Inverfin</div>
+      <div class="inv-logo"><span>E</span>Inverfin <small style="font-size:13px;color:var(--muted)">SAECA</small></div>
       <div class="date-badge">2026-05-28</div>
     </div>
   </div>
@@ -178,12 +177,10 @@ footer span { color: var(--gold); }
 
 <main>
 
-<!-- ══════════════════════════════════════
-     TAB 1: SPOTS
-══════════════════════════════════════ -->
+<!-- TAB 1: SPOTS -->
 <div id="tab-spots" class="section active">
   <div class="section-heading">Planificador de spots</div>
-  <div class="section-sub">Configurá los parámetros operativos y observá cómo se distribuye el inventario entre Inverfin y anunciantes externos.</div>
+  <div class="section-sub">Configurá los parámetros operativos y observá cómo se distribuye el inventario entre Inverfin SAECA y anunciantes externos.</div>
   <div class="metrics" id="spot-metrics"></div>
   <div class="controls-box">
     <div class="controls-title">Parámetros de operación</div>
@@ -198,7 +195,7 @@ footer span { color: var(--gold); }
       <span class="ctrl-val" id="winHoursVal">16 h</span>
     </div>
     <div class="ctrl-row">
-      <span class="ctrl-label">% de spots para Inverfin</span>
+      <span class="ctrl-label">% de spots para Inverfin SAECA</span>
       <input type="range" id="inverfinPct" min="5" max="70" step="5" value="30" oninput="recalcSpots()">
       <span class="ctrl-val" id="inverfinPctVal">30 %</span>
     </div>
@@ -208,7 +205,7 @@ footer span { color: var(--gold); }
     <div class="tl-bar" id="tl-bar"></div>
     <div class="tl-hours" id="tl-hours"></div>
     <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#2EC4B6"></div>Inverfin (propio)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#2EC4B6"></div>Inverfin SAECA (propio)</div>
       <div class="legend-item"><div class="legend-dot" style="background:#F5C842"></div>Anunciantes diurnos (tarifa alta)</div>
       <div class="legend-item"><div class="legend-dot" style="background:#E8603C"></div>Anunciantes nocturnos (tarifa reducida)</div>
       <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.1)"></div>Fuera de ventana</div>
@@ -217,18 +214,16 @@ footer span { color: var(--gold); }
   <div class="note" id="spot-note"></div>
 </div>
 
-<!-- ══════════════════════════════════════
-     TAB 2: INGRESOS
-══════════════════════════════════════ -->
+<!-- TAB 2: INGRESOS -->
 <div id="tab-ingresos" class="section">
   <div class="section-heading">Proyección de ingresos</div>
-  <div class="section-sub">Tarifas en guaraníes según zona de mercado paraguayo. Incluye factor de vacancia y toggle para visualizar ingresos con o sin el valor de los spots propios de Inverfin.</div>
+  <div class="section-sub">Todos los valores en USD. Tarifas convertidas desde guaraníes según datos de mercado PY 2026 (TC: ₲ 7.750 / USD). Caso base: ocupación 80%, vacancia 10%.</div>
 
   <div class="toggle-row">
     <span class="toggle-label">Vista de ingresos:</span>
     <div class="toggle-group">
       <button class="tog on" id="tog-ext" onclick="setView('ext')">Solo anunciantes externos</button>
-      <button class="tog" id="tog-total" onclick="setView('total')">Externos + valor Inverfin</button>
+      <button class="tog" id="tog-total" onclick="setView('total')">Externos + valor Inverfin SAECA</button>
     </div>
   </div>
 
@@ -251,13 +246,13 @@ footer span { color: var(--gold); }
     <div class="controls-title">Factor de ocupación y vacancia</div>
     <div class="ctrl-row">
       <span class="ctrl-label">Ocupación promedio de anunciantes</span>
-      <input type="range" id="ocup" min="20" max="100" step="5" value="65" oninput="recalcIng()">
-      <span class="ctrl-val" id="ocupV">65 %</span>
+      <input type="range" id="ocup" min="20" max="100" step="5" value="80" oninput="recalcIng()">
+      <span class="ctrl-val" id="ocupV">80 %</span>
     </div>
     <div class="ctrl-row">
       <span class="ctrl-label">Factor de vacancia esperado</span>
-      <input type="range" id="vac" min="0" max="40" step="5" value="15" oninput="recalcIng()">
-      <span class="ctrl-val" id="vacV">15 %</span>
+      <input type="range" id="vac" min="0" max="40" step="5" value="10" oninput="recalcIng()">
+      <span class="ctrl-val" id="vacV">10 %</span>
     </div>
     <div class="ctrl-row">
       <span class="ctrl-label">% franja diurna en ventana (6–22 h)</span>
@@ -266,14 +261,14 @@ footer span { color: var(--gold); }
     </div>
   </div>
 
-  <div style="font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">Tarifas de referencia por zona — mercado PY (Gemini 2026)</div>
+  <div style="font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">Tarifas de referencia por zona — mercado PY 2026</div>
   <div class="zone-table-wrap">
     <table class="zone-table" id="zone-table"></table>
   </div>
 
   <div class="note" id="note-occ"></div>
 
-  <div style="font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">Proyección mensual de ingresos</div>
+  <div style="font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">Proyección mensual de ingresos (USD)</div>
   <div class="tbl-wrap">
     <table class="data">
       <thead>
@@ -281,9 +276,9 @@ footer span { color: var(--gold); }
           <th>Franja</th>
           <th>Spots ext. disp./día</th>
           <th>Spots vendidos/día</th>
-          <th>Tarifa (Gs)</th>
-          <th>Ingreso mensual (Gs)</th>
-          <th>En USD</th>
+          <th>Tarifa USD/spot</th>
+          <th>Ingreso mensual USD</th>
+          <th>Ingreso anual USD</th>
         </tr>
       </thead>
       <tbody id="ing-rows"></tbody>
@@ -292,18 +287,16 @@ footer span { color: var(--gold); }
 
   <div class="legend-row" id="chart-legend"></div>
   <div class="chart-wrap">
-    <canvas id="ingChart" role="img" aria-label="Ingresos mensuales por franja con y sin spots Inverfin"></canvas>
+    <canvas id="ingChart" role="img" aria-label="Ingresos mensuales en USD por franja horaria"></canvas>
   </div>
 
   <div id="payback-section"></div>
 </div>
 
-<!-- ══════════════════════════════════════
-     TAB 3: COMPARACIÓN
-══════════════════════════════════════ -->
+<!-- TAB 3: COMPARACIÓN -->
 <div id="tab-compare" class="section">
   <div class="section-heading">Comparación de proveedores</div>
-  <div class="section-sub">Análisis lado a lado de Romis Paraguay S.A. y Prourbe Medios S.A. en precio, especificaciones técnicas, experiencia y capacidad comercial.</div>
+  <div class="section-sub">Análisis lado a lado de Romis Paraguay S.A. y Prourbe Medios S.A. en precio, especificaciones, experiencia y capacidad comercial.</div>
 
   <div class="cmp-grid">
     <div class="cmp-card">
@@ -316,10 +309,10 @@ footer span { color: var(--gold); }
       </div>
       <div class="cmp-section-title">Propuesta — Casa Central</div>
       <div class="cmp-row"><span class="cmp-key">Pantalla</span><span class="cmp-val">LED Outdoor P8 · 8,64 × 4,80 m · 9 000 nits</span></div>
-      <div class="cmp-row"><span class="cmp-key">Total IVA incl.</span><span class="cmp-val" style="color:var(--gold);font-weight:600">USD 115.300,75</span></div>
+      <div class="cmp-row"><span class="cmp-key">Total IVA incl.</span><span class="cmp-val" style="color:var(--gold);font-weight:600">USD 115,300.75</span></div>
       <div class="cmp-row"><span class="cmp-key">Estructura</span><span class="cmp-val">Cilíndrica 7 m · 12 mm — incluida</span></div>
       <div class="cmp-row"><span class="cmp-key">Inst. eléctrica</span><span class="cmp-val">Incluida (USD 450)</span></div>
-      <div class="cmp-row"><span class="cmp-key">Administración</span><span class="cmp-val">12 meses × USD 113,64</span></div>
+      <div class="cmp-row"><span class="cmp-key">Administración</span><span class="cmp-val">12 meses × USD 113.64</span></div>
       <div class="cmp-row"><span class="cmp-key">Garantía</span><span class="cmp-val"><span class="badge badge-teal">2 años</span></span></div>
       <div class="cmp-row"><span class="cmp-key">Entrega</span><span class="cmp-val"><span class="badge badge-gold">2–4 semanas</span></span></div>
       <div class="cmp-row"><span class="cmp-key">Pago</span><span class="cmp-val">50 % inicio · 50 % entrega</span></div>
@@ -341,19 +334,19 @@ footer span { color: var(--gold); }
       </div>
       <div class="cmp-section-title">Propuesta — Casa Central (5×8 m vertical)</div>
       <div class="cmp-row"><span class="cmp-key">Pantalla</span><span class="cmp-val">LED Vertical 5×8 m · 10 000 nits · ≥15 000 Hz</span></div>
-      <div class="cmp-row"><span class="cmp-key">Total IVA incl.</span><span class="cmp-val" style="color:var(--teal);font-weight:600">USD 98.901,73</span></div>
+      <div class="cmp-row"><span class="cmp-key">Total IVA incl.</span><span class="cmp-val" style="color:var(--teal);font-weight:600">USD 98,901.73</span></div>
       <div class="cmp-row"><span class="cmp-key">Estructura</span><span class="cmp-val">Cotizada a medida · sin lookeo</span></div>
-      <div class="cmp-row"><span class="cmp-key">PC contenido</span><span class="cmp-val">Incluido (USD 3.066,12)</span></div>
+      <div class="cmp-row"><span class="cmp-key">PC contenido</span><span class="cmp-val">Incluido (USD 3,066.12)</span></div>
       <div class="cmp-row"><span class="cmp-key">Mantenimiento</span><span class="cmp-val">1 año incluido · renovable</span></div>
       <div class="cmp-row"><span class="cmp-key">Garantía</span><span class="cmp-val"><span class="badge badge-teal">1 año + renovación</span></span></div>
       <div class="cmp-row"><span class="cmp-key">Entrega</span><span class="cmp-val">~90 días (fabr. + importación)</span></div>
-      <div class="cmp-row"><span class="cmp-key">Sucursal E. Ayala</span><span class="cmp-val" style="font-weight:500">USD 119.742,28 · 10×5 m horizontal</span></div>
+      <div class="cmp-row"><span class="cmp-key">Sucursal E. Ayala</span><span class="cmp-val" style="font-weight:500">USD 119,742.28 · 10×5 m horizontal</span></div>
       <div class="cmp-section-title">Perfil de empresa</div>
       <div class="cmp-row"><span class="cmp-key">Especialidad</span><span class="cmp-val">Líder OOH + DOOH · centros comerciales</span></div>
       <div class="cmp-row"><span class="cmp-key">Clientes ref.</span><span class="cmp-val">Nestlé, Mastercard, McDonald's, Itaú, KFC, Huawei, Arcor, Samsung…</span></div>
       <div class="cmp-row"><span class="cmp-key">Soporte técnico</span><span class="cmp-val"><span class="badge badge-teal">Equipo local propio confirmado</span></span></div>
       <div class="cmp-row"><span class="cmp-key">Red comercial</span><span class="cmp-val"><span class="badge badge-teal">Puede vender slots en pantalla</span></span></div>
-      <div class="cmp-row"><span class="cmp-key">Capacitación</span><span class="cmp-val">Personal de Inverfin incluida</span></div>
+      <div class="cmp-row"><span class="cmp-key">Capacitación</span><span class="cmp-val">Personal de Inverfin SAECA incluida</span></div>
       <div class="cmp-row"><span class="cmp-key">Pantallas inst.</span><span class="cmp-val">+20 grandes formatos en PY</span></div>
     </div>
   </div>
@@ -363,9 +356,9 @@ footer span { color: var(--gold); }
     <table class="data">
       <thead><tr><th>Criterio</th><th>Romis Paraguay</th><th>Prourbe Medios</th></tr></thead>
       <tbody>
-        <tr><td>Precio casa central (IVA incl.)</td><td>USD 115.300,75</td><td style="color:var(--teal)">USD 98.901,73 (−14 %)</td></tr>
-        <tr><td>Brillo de pantalla</td><td>9 000 nits</td><td style="color:var(--teal)">10 000 nits ✓</td></tr>
-        <tr><td>Frecuencia de actualización</td><td>N/D</td><td style="color:var(--teal)">≥15 000 Hz ✓</td></tr>
+        <tr><td>Precio casa central (IVA incl.)</td><td>USD 115,300.75</td><td style="color:var(--teal)">USD 98,901.73 (−14 %)</td></tr>
+        <tr><td>Brillo de pantalla</td><td>9,000 nits</td><td style="color:var(--teal)">10,000 nits ✓</td></tr>
+        <tr><td>Frecuencia de actualización</td><td>N/D</td><td style="color:var(--teal)">≥15,000 Hz ✓</td></tr>
         <tr><td>Pantallas instaladas en PY</td><td>N/D</td><td style="color:var(--teal)">+20 grandes formatos ✓</td></tr>
         <tr><td>Red de anunciantes</td><td>No mencionada</td><td style="color:var(--teal)">Sí — puede monetizar slots ✓</td></tr>
         <tr><td>Soporte técnico local propio</td><td>Información limitada</td><td style="color:var(--teal)">Confirmado ✓</td></tr>
@@ -373,24 +366,24 @@ footer span { color: var(--gold); }
         <tr><td>Tiempo de entrega</td><td style="color:var(--gold)">2–4 semanas ✓</td><td>~90 días</td></tr>
         <tr><td>Capacitación personal</td><td>No indicada</td><td style="color:var(--teal)">Incluida ✓</td></tr>
         <tr><td>Portafolio de clientes</td><td>No detallado</td><td style="color:var(--teal)">+40 marcas ✓</td></tr>
-        <tr><td><strong>Recomendación monetización</strong></td><td>—</td><td style="color:var(--teal);font-weight:600">⭐ Preferido</td></tr>
+        <tr class="total-row"><td><strong>Recomendación monetización</strong></td><td>—</td><td style="color:var(--teal);font-weight:600">⭐ Preferido</td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     TAB 4: RESUMEN EJECUTIVO
-══════════════════════════════════════ -->
+<!-- TAB 4: RESUMEN EJECUTIVO -->
 <div id="tab-resumen" class="section">
   <div class="section-heading">Resumen ejecutivo</div>
-  <div class="section-sub">Síntesis del caso de negocio y recomendación para la toma de decisión.</div>
+  <div class="section-sub">Síntesis del caso de negocio para Inverfin SAECA. Todos los valores en USD.</div>
 
   <div class="metrics">
-    <div class="metric"><div class="metric-label">Inversión recomendada</div><div class="metric-value gold">$98.9K</div><div class="metric-sub">Prourbe · casa central</div></div>
-    <div class="metric"><div class="metric-label">Ingreso est. ext./mes</div><div class="metric-value teal" id="res-monthly">—</div><div class="metric-sub">spots externos (base)</div></div>
-    <div class="metric"><div class="metric-label">Payback estimado</div><div class="metric-value" id="res-payback">—</div><div class="metric-sub">meses (solo ingresos ext.)</div></div>
-    <div class="metric"><div class="metric-label">Spots Inverfin/día</div><div class="metric-value blue" id="res-inv-spots">—</div><div class="metric-sub">30% del inventario</div></div>
+    <div class="metric"><div class="metric-label">Inversión recomendada</div><div class="metric-value gold" id="res-inv">USD 98,902</div><div class="metric-sub">Prourbe · casa central</div></div>
+    <div class="metric"><div class="metric-label">Ingreso ext./mes</div><div class="metric-value teal" id="res-monthly">—</div><div class="metric-sub">spots externos (caso base)</div></div>
+    <div class="metric"><div class="metric-label">Ingreso anual ext.</div><div class="metric-value" id="res-annual">—</div><div class="metric-sub">proyección lineal</div></div>
+    <div class="metric"><div class="metric-label">Payback estimado</div><div class="metric-value" id="res-payback">—</div><div class="metric-sub">meses (solo ing. externos)</div></div>
+    <div class="metric"><div class="metric-label">Valor spots propios/mes</div><div class="metric-value blue" id="res-inv-val">—</div><div class="metric-sub">ahorro pub. Inverfin SAECA</div></div>
+    <div class="metric"><div class="metric-label">Spots Inverfin/día</div><div class="metric-value" id="res-inv-spots">—</div><div class="metric-sub">30% del inventario</div></div>
   </div>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem">
@@ -398,20 +391,20 @@ footer span { color: var(--gold); }
       <div class="controls-title" style="color:var(--teal)">Oportunidades</div>
       <ul style="list-style:none;display:flex;flex-direction:column;gap:.75rem;margin-top:.5rem">
         <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Visibilidad de marca 24/7 en sucursales propias sin costo adicional de medios.</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Ingresos recurrentes que amortizan la inversión en 12–18 meses.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Ingresos recurrentes que amortizan la inversión en 12–18 meses (caso base).</li>
         <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Prourbe tiene red comercial activa — anunciantes desde el primer mes.</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Escalable a múltiples sucursales con economías de escala.</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">10 000 nits garantizan visibilidad en luz solar directa en Av. Artigas.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Escalable a múltiples sucursales con economías de escala en precio.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">10,000 nits garantizan visibilidad en luz solar directa — crítico en Av. Artigas.</li>
       </ul>
     </div>
     <div class="controls-box" style="margin-bottom:0">
       <div class="controls-title" style="color:var(--coral)">Riesgos y consideraciones</div>
       <ul style="list-style:none;display:flex;flex-direction:column;gap:.75rem;margin-top:.5rem">
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Tiempo de entrega de Prourbe (~90 días) requiere planificación anticipada.</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Vacancia de anunciantes puede reducir ingresos — prever 15–20% en año 1.</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Estructura y fundación de Prourbe cotizada aparte (USD 17–20K adicionales).</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Tiempo de entrega Prourbe (~90 días) — requiere planificación anticipada.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Vacancia de anunciantes puede reducir ingresos — prever 10–15% en año 1.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Estructura y fundación de Prourbe cotizada aparte (~USD 18–20K adicionales).</li>
         <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Requiere habilitación municipal y permisos de señalización vial.</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Zona Av. Artigas es "Alto impacto" — tarifa referencial ₲ 5.500.000/mes.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Zona Av. Artigas: tarifa referencial USD 710/mes (≈ USD 0.13/spot).</li>
       </ul>
     </div>
   </div>
@@ -419,16 +412,16 @@ footer span { color: var(--gold); }
   <div class="controls-box">
     <div class="controls-title">Recomendación</div>
     <p style="font-size:14px;color:var(--white);line-height:1.8;margin-bottom:1rem">
-      Se recomienda avanzar con <strong style="color:var(--teal)">Prourbe Medios</strong> como proveedor para casa central: precio USD 16.400 inferior al de Romis, mayor brillo, soporte técnico local confirmado, y red comercial propia que permite monetizar slots externos desde el primer mes.
+      Se recomienda avanzar con <strong style="color:var(--teal)">Prourbe Medios</strong> como proveedor para casa central: precio USD 16,399 inferior al de Romis (−14%), mayor brillo, soporte técnico local confirmado, y red comercial propia que permite monetizar slots externos desde el primer mes sin esfuerzo adicional de Inverfin SAECA.
     </p>
     <p style="font-size:14px;color:var(--muted);line-height:1.8">
-      Si la velocidad de entrega es prioritaria, <strong style="color:var(--gold)">Romis</strong> es la alternativa válida con entrega en 2–4 semanas y garantía de 2 años.
+      Si la velocidad de entrega es prioritaria, <strong style="color:var(--gold)">Romis</strong> entrega en 2–4 semanas con garantía de 2 años. Considerar para sucursales de menor escala.
     </p>
   </div>
 
   <div style="margin-top:2rem">
     <div style="font-size:16px;font-family:'DM Serif Display',serif;margin-bottom:.75rem;color:var(--white)">Modelo operativo sugerido</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem">
       <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
         <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Spot estándar</div>
         <div style="font-size:26px;font-family:var(--font-display);color:var(--white)">15 seg</div>
@@ -437,17 +430,17 @@ footer span { color: var(--gold); }
       <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
         <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Ventana operativa</div>
         <div style="font-size:26px;font-family:var(--font-display);color:var(--white)">06 – 22 h</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:6px">16 horas activas · concentradas en franja de mayor tráfico</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">16 horas activas · mayor tráfico en Av. Artigas</div>
       </div>
       <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
         <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Split sugerido</div>
         <div style="font-size:26px;font-family:var(--font-display);color:var(--white)">30 / 70</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:6px">30% Inverfin · 70% anunciantes externos</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">30% Inverfin SAECA · 70% anunciantes externos</div>
       </div>
       <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
-        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Tarifa zona</div>
-        <div style="font-size:26px;font-family:var(--font-display);color:var(--white)">₲ 1.050</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:6px">Por spot diurno · Av. Artigas · nocturno 60% = ₲ 630</div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Tarifa zona (USD)</div>
+        <div style="font-size:26px;font-family:var(--font-display);color:var(--white)">$0.14</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">Por spot diurno · nocturno 60% = $0.08 · Av. Artigas</div>
       </div>
     </div>
   </div>
@@ -456,22 +449,28 @@ footer span { color: var(--gold); }
 </main>
 
 <footer>
-  Documento preparado para <span>Inverfin S.A.</span> · Uso interno · Mayo 2026 · Basado en propuestas de Romis Paraguay S.A., Prourbe Medios S.A. y datos de mercado PY (Gemini 2026)
+  Documento preparado para <span>Inverfin SAECA</span> · Uso interno · Mayo 2026 · Fuentes: Romis Paraguay S.A., Prourbe Medios S.A., datos de mercado PY (Gemini 2026) · TC referencial ₲ 7.750 / USD
 </footer>
 
 <script>
 const ZONAS = {
-  premium:    { label:'Premium — Aviadores / Santa Teresa', gs: 9500000, costMin:1750, costMax:1850 },
-  alto:       { label:'Alto impacto — Av. Artigas / San Martín', gs: 5500000, costMin:1000, costMax:1100 },
-  intermedio: { label:'Flujo intermedio — Eusebio Ayala', gs: 3500000, costMin:650, costMax:750 },
-  interior:   { label:'Interior — CDE / Encarnación', gs: 3000000, costMin:550, costMax:600 },
+  premium:    { label:'Premium — Aviadores / Santa Teresa',      gsPerSpotMin:1750, gsPerSpotMax:1850, gsMes:9500000 },
+  alto:       { label:'Alto impacto — Av. Artigas / San Martín', gsPerSpotMin:1000, gsPerSpotMax:1100, gsMes:5500000 },
+  intermedio: { label:'Flujo intermedio — Eusebio Ayala',        gsPerSpotMin:650,  gsPerSpotMax:750,  gsMes:3500000 },
+  interior:   { label:'Interior — CDE / Encarnación',            gsPerSpotMin:550,  gsPerSpotMax:600,  gsMes:3000000 },
 };
-const USD_GS = 7750;
+const TC = 7750;
 let ingChartInst = null;
 let ingView = 'ext';
 
-function fmtGs(n) { return '₲ ' + Math.round(n).toLocaleString('es-PY'); }
-function fmtUSD(n) { return 'USD ' + Math.round(n).toLocaleString('es-PY'); }
+function usd(gs) { return gs / TC; }
+function fmtUSD(n, dec=2) {
+  return '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits:dec, maximumFractionDigits:dec});
+}
+function fmtUSDk(n) {
+  if (Math.abs(n) >= 1000) return '$' + (n/1000).toFixed(1) + 'K';
+  return fmtUSD(n, 0);
+}
 
 function showTab(id) {
   document.querySelectorAll('.nav-btn').forEach((b,i) => {
@@ -490,7 +489,6 @@ function setView(v) {
   recalcIng();
 }
 
-/* ── SPOTS TAB ── */
 function recalcSpots() {
   const dur = +document.getElementById('spotDur').value;
   const hrs = +document.getElementById('winHours').value;
@@ -500,15 +498,15 @@ function recalcSpots() {
   document.getElementById('inverfinPctVal').textContent = Math.round(ipct*100) + ' %';
 
   const spotsDay = Math.round(hrs * 3600 / dur);
-  const spotsHr = Math.round(3600/dur);
-  const invSpots = Math.round(spotsDay * ipct);
-  const extSpots = spotsDay - invSpots;
+  const spotsHr  = Math.round(3600 / dur);
+  const invSpots  = Math.round(spotsDay * ipct);
+  const extSpots  = spotsDay - invSpots;
 
   document.getElementById('spot-metrics').innerHTML = `
-    <div class="metric"><div class="metric-label">Spots totales/día</div><div class="metric-value">${spotsDay.toLocaleString()}</div><div class="metric-sub">${hrs}h × ${spotsHr} spots/h</div></div>
+    <div class="metric"><div class="metric-label">Spots totales/día</div><div class="metric-value">${spotsDay.toLocaleString()}</div><div class="metric-sub">${hrs}h × ${spotsHr}/h</div></div>
     <div class="metric"><div class="metric-label">Spots Inverfin/día</div><div class="metric-value teal">${invSpots.toLocaleString()}</div><div class="metric-sub">${Math.round(ipct*100)}% del inventario</div></div>
     <div class="metric"><div class="metric-label">Spots externos/día</div><div class="metric-value gold">${extSpots.toLocaleString()}</div><div class="metric-sub">${Math.round((1-ipct)*100)}% disponible</div></div>
-    <div class="metric"><div class="metric-label">Spots Inverfin/mes</div><div class="metric-value">${(invSpots*30).toLocaleString()}</div><div class="metric-sub">≈${Math.round(invSpots/hrs)} por hora</div></div>
+    <div class="metric"><div class="metric-label">Spots Inverfin/mes</div><div class="metric-value">${(invSpots*30).toLocaleString()}</div><div class="metric-sub">≈ ${Math.round(invSpots/hrs)}/hora</div></div>
   `;
 
   const bar = document.getElementById('tl-bar');
@@ -520,137 +518,160 @@ function recalcSpots() {
     let bg;
     if (!inWin) bg = 'rgba(255,255,255,0.08)';
     else {
-      const r = (h*7+13) % 100;
-      if (r < ipct*100) bg = '#2EC4B6';
+      const r = (h * 7 + 13) % 100;
+      if (r < ipct * 100) bg = '#2EC4B6';
       else if (isPico) bg = '#F5C842';
       else bg = '#E8603C';
     }
     const s = document.createElement('div');
     s.className = 'tl-slot';
     s.style.cssText = `flex:1;background:${bg};`;
-    s.title = `${h}:00 — ${!inWin?'Fuera de ventana':(bg==='#2EC4B6'?'Inverfin':isPico?'Anunciante diurno':'Anunciante nocturno')}`;
+    s.title = `${h}:00 — ${!inWin ? 'Fuera de ventana' : bg==='#2EC4B6' ? 'Inverfin SAECA' : isPico ? 'Anunciante diurno' : 'Anunciante nocturno'}`;
     bar.appendChild(s);
   }
-
   const th = document.getElementById('tl-hours');
   th.innerHTML = '';
-  [0,6,12,18,24].forEach(h => { const sp=document.createElement('span'); sp.textContent=h+'h'; th.appendChild(sp); });
+  [0,6,12,18,24].forEach(h => { const sp = document.createElement('span'); sp.textContent = h+'h'; th.appendChild(sp); });
 
   document.getElementById('spot-note').innerHTML =
     `La pantalla emite <b>${spotsDay.toLocaleString()} spots/día</b> en una ventana de <b>${hrs} horas</b> con spots de <b>${dur} segundos</b>. 
-    Inverfin ocupa <b>${invSpots.toLocaleString()} spots/día</b> (${Math.round(ipct*100)}%) y los anunciantes externos disponen de <b>${extSpots.toLocaleString()} spots/día</b> (${Math.round((1-ipct)*100)}%).
+    Inverfin SAECA ocupa <b>${invSpots.toLocaleString()} spots/día</b> (${Math.round(ipct*100)}%) y los anunciantes externos disponen de <b>${extSpots.toLocaleString()} spots/día</b> (${Math.round((1-ipct)*100)}%).
     Mensualmente: <b>${(invSpots*30).toLocaleString()}</b> impresiones propias y <b>${(extSpots*30).toLocaleString()}</b> spots comercializables.`;
 }
 
-/* ── INGRESOS TAB ── */
 function recalcIng() {
-  const dur = +document.getElementById('spotDur').value;
-  const hrs = +document.getElementById('winHours').value;
-  const ipct = +document.getElementById('inverfinPct').value / 100;
-  const zona = document.getElementById('zona').value;
-  const ocup = +document.getElementById('ocup').value / 100;
-  const vac = +document.getElementById('vac').value / 100;
+  const dur   = +document.getElementById('spotDur').value;
+  const hrs   = +document.getElementById('winHours').value;
+  const ipct  = +document.getElementById('inverfinPct').value / 100;
+  const zona  = document.getElementById('zona').value;
+  const ocup  = +document.getElementById('ocup').value / 100;
+  const vac   = +document.getElementById('vac').value / 100;
   const ppico = +document.getElementById('ppico').value / 100;
 
-  document.getElementById('ocupV').textContent = Math.round(ocup*100) + ' %';
-  document.getElementById('vacV').textContent = Math.round(vac*100) + ' %';
+  document.getElementById('ocupV').textContent  = Math.round(ocup*100) + ' %';
+  document.getElementById('vacV').textContent   = Math.round(vac*100) + ' %';
   document.getElementById('ppicoV').textContent = Math.round(ppico*100) + ' %';
 
   const z = ZONAS[zona];
-  const costMid = (z.costMin + z.costMax) / 2;
-  const tarifaDia = costMid;
-  const tarifaNoche = costMid * 0.6;
+  const tarifaDia   = usd((z.gsPerSpotMin + z.gsPerSpotMax) / 2);
+  const tarifaNoche = tarifaDia * 0.60;
 
-  const spotsDay = Math.round(hrs * 3600 / dur);
+  const spotsDay    = Math.round(hrs * 3600 / dur);
   const invSpotsDay = Math.round(spotsDay * ipct);
   const extSpotsDay = spotsDay - invSpotsDay;
-  const efectOcup = ocup * (1 - vac);
-  const diaDisp = Math.round(extSpotsDay * ppico);
-  const nocheDisp = extSpotsDay - diaDisp;
-  const diaVend = Math.round(diaDisp * efectOcup);
-  const nocheVend = Math.round(nocheDisp * efectOcup);
-  const ingDia = Math.round(diaVend * tarifaDia * 30);
-  const ingNoche = Math.round(nocheVend * tarifaNoche * 30);
-  const ingExtMes = ingDia + ingNoche;
+  const efectOcup   = ocup * (1 - vac);
 
-  const invDia = Math.round(invSpotsDay * ppico);
-  const invNoche = invSpotsDay - invDia;
-  const invValMes = Math.round((invDia * tarifaDia + invNoche * tarifaNoche) * 30);
-  const totalMes = ingExtMes + (ingView==='total' ? invValMes : 0);
+  const diaDisp   = Math.round(extSpotsDay * ppico);
+  const nocheDisp = extSpotsDay - diaDisp;
+  const diaVend   = Math.round(diaDisp * efectOcup);
+  const nocheVend = Math.round(nocheDisp * efectOcup);
+
+  const ingDia   = diaVend * tarifaDia * 30;
+  const ingNoche = nocheVend * tarifaNoche * 30;
+  const ingExtMes = ingDia + ingNoche;
   const ingExtAnual = ingExtMes * 12;
-  const inversion = 98902 * USD_GS;
-  const paybackMes = +(inversion / Math.max(1, ingExtMes)).toFixed(1);
+
+  const invDia   = Math.round(invSpotsDay * ppico);
+  const invNoche = invSpotsDay - invDia;
+  const invValMes = (invDia * tarifaDia + invNoche * tarifaNoche) * 30;
+
+  const totalMes  = ingExtMes + (ingView === 'total' ? invValMes : 0);
+  const paybackMes = +(98902 / Math.max(0.01, ingExtMes)).toFixed(1);
 
   document.getElementById('ing-metrics').innerHTML = `
-    <div class="metric"><div class="metric-label">Ingreso ext./mes</div><div class="metric-value teal">${fmtGs(ingExtMes)}</div><div class="metric-sub">${fmtUSD(ingExtMes/USD_GS)}</div></div>
-    <div class="metric" style="${ingView==='total'?'':'opacity:.55'}"><div class="metric-label">Valor spots Inverfin/mes</div><div class="metric-value blue">${fmtGs(invValMes)}</div><div class="metric-sub">ahorro pub. equivalente</div></div>
-    <div class="metric"><div class="metric-label">${ingView==='total'?'Total combinado/mes':'Solo externos/mes'}</div><div class="metric-value gold">${fmtGs(totalMes)}</div><div class="metric-sub">${fmtUSD(totalMes/USD_GS)}</div></div>
-    <div class="metric"><div class="metric-label">Ingresos anuales ext.</div><div class="metric-value">${fmtGs(ingExtAnual)}</div><div class="metric-sub">proyección lineal</div></div>
-    <div class="metric"><div class="metric-label">Ocup. neta (vacancia)</div><div class="metric-value">${Math.round(efectOcup*100)}%</div><div class="metric-sub">${Math.round(ocup*100)}% − ${Math.round(vac*100)}% vac.</div></div>
+    <div class="metric"><div class="metric-label">Ingreso ext./mes</div><div class="metric-value teal">${fmtUSD(ingExtMes,0)}</div><div class="metric-sub">${fmtUSDk(ingExtAnual)} / año</div></div>
+    <div class="metric" style="${ingView==='total'?'':'opacity:.5'}"><div class="metric-label">Valor spots Inverfin/mes</div><div class="metric-value blue">${fmtUSD(invValMes,0)}</div><div class="metric-sub">ahorro pub. equivalente</div></div>
+    <div class="metric"><div class="metric-label">${ingView==='total'?'Total combinado/mes':'Solo externos/mes'}</div><div class="metric-value gold">${fmtUSD(totalMes,0)}</div><div class="metric-sub">${fmtUSDk(totalMes*12)} / año</div></div>
+    <div class="metric"><div class="metric-label">Ocup. neta (−vacancia)</div><div class="metric-value">${Math.round(efectOcup*100)}%</div><div class="metric-sub">${Math.round(ocup*100)}% − ${Math.round(vac*100)}% vac.</div></div>
     <div class="metric"><div class="metric-label">Payback inversión</div><div class="metric-value">${paybackMes} m</div><div class="metric-sub">solo ing. externos</div></div>
   `;
 
-  const rows = Object.entries(ZONAS).map(([k,v2]) => {
+  const rows = Object.entries(ZONAS).map(([k, v2]) => {
     const sel = k === zona;
-    return `<tr class="${sel?'zt-sel':''}">
-      <td>${v2.label}${sel?' ★':''}</td>
-      <td style="text-align:right;font-family:monospace">₲ ${v2.costMin.toLocaleString()} – ₲ ${v2.costMax.toLocaleString()}</td>
-      <td style="text-align:right">${fmtGs(v2.gs)}</td>
-      <td style="text-align:right">${fmtUSD(v2.gs/USD_GS)}</td>
+    const mid = usd((v2.gsPerSpotMin + v2.gsPerSpotMax) / 2);
+    return `<tr class="${sel ? 'zt-sel' : ''}">
+      <td>${v2.label}${sel ? ' ★' : ''}</td>
+      <td style="text-align:right;font-family:monospace">${fmtUSD(usd(v2.gsPerSpotMin),3)} – ${fmtUSD(usd(v2.gsPerSpotMax),3)}</td>
+      <td style="text-align:right">${fmtUSD(usd(v2.gsMes),0)}</td>
+      <td style="text-align:right;color:${sel?'var(--teal)':'inherit'}">${fmtUSD(mid,3)}/spot</td>
     </tr>`;
   }).join('');
   document.getElementById('zone-table').innerHTML =
-    `<thead><tr><th>Zona</th><th style="text-align:right">Costo/spot (Gs)</th><th style="text-align:right">Ref. mensual (Gs)</th><th style="text-align:right">En USD</th></tr></thead><tbody>${rows}</tbody>`;
+    `<thead><tr><th>Zona</th><th style="text-align:right">Costo/spot USD</th><th style="text-align:right">Ref. mensual USD</th><th style="text-align:right">Tarifa media</th></tr></thead><tbody>${rows}</tbody>`;
 
   document.getElementById('note-occ').className = vac >= 0.2 ? 'note warn' : 'note';
   document.getElementById('note-occ').innerHTML =
-    `Tarifa zona seleccionada: <b>${fmtGs(tarifaDia)}/spot diurno</b> · nocturno al 60% = <b>${fmtGs(tarifaNoche)}/spot</b>.
-    Ocupación neta tras vacancia: <b>${Math.round(efectOcup*100)}%</b>.
-    Con ${Math.round(ipct*100)}% para Inverfin, quedan <b>${extSpotsDay.toLocaleString()} spots/día</b> para externos, de los cuales se venden <b>${(diaVend+nocheVend).toLocaleString()}/día</b>.
-    ${vac>=0.2 ? ' <b>Atención:</b> vacancia alta — revisar estrategia comercial.' : ''}`;
+    `Tarifa zona activa: <b>${fmtUSD(tarifaDia,3)}/spot diurno</b> · nocturno (−40%): <b>${fmtUSD(tarifaNoche,3)}/spot</b>. 
+    Ocupación neta = <b>${Math.round(efectOcup*100)}%</b> (${Math.round(ocup*100)}% ocupación − ${Math.round(vac*100)}% vacancia). 
+    De ${extSpotsDay.toLocaleString()} spots/día disponibles para externos, se venden <b>${(diaVend+nocheVend).toLocaleString()}/día</b>.
+    ${vac >= 0.2 ? ' <b>Atención:</b> vacancia alta — revisar estrategia comercial.' : ''}`;
 
   document.getElementById('ing-rows').innerHTML = `
-    <tr><td>Diurna (tarifa alta)</td><td>${diaDisp.toLocaleString()}</td><td>${diaVend.toLocaleString()}</td><td>${fmtGs(tarifaDia)}</td><td>${fmtGs(ingDia)}</td><td>${fmtUSD(ingDia/USD_GS)}</td></tr>
-    <tr><td>Nocturna (tarifa reducida −40%)</td><td>${nocheDisp.toLocaleString()}</td><td>${nocheVend.toLocaleString()}</td><td>${fmtGs(tarifaNoche)}</td><td>${fmtGs(ingNoche)}</td><td>${fmtUSD(ingNoche/USD_GS)}</td></tr>
-    <tr><td><strong>Total mensual</strong></td><td>${extSpotsDay.toLocaleString()}</td><td>${(diaVend+nocheVend).toLocaleString()}</td><td>—</td><td><strong>${fmtGs(ingExtMes)}</strong></td><td><strong>${fmtUSD(ingExtMes/USD_GS)}</strong></td></tr>
+    <tr>
+      <td>Diurna (tarifa plena)</td>
+      <td>${diaDisp.toLocaleString()}</td>
+      <td>${diaVend.toLocaleString()}</td>
+      <td>${fmtUSD(tarifaDia,3)}</td>
+      <td>${fmtUSD(ingDia,0)}</td>
+      <td>${fmtUSD(ingDia*12,0)}</td>
+    </tr>
+    <tr>
+      <td>Nocturna (tarifa −40%)</td>
+      <td>${nocheDisp.toLocaleString()}</td>
+      <td>${nocheVend.toLocaleString()}</td>
+      <td>${fmtUSD(tarifaNoche,3)}</td>
+      <td>${fmtUSD(ingNoche,0)}</td>
+      <td>${fmtUSD(ingNoche*12,0)}</td>
+    </tr>
+    <tr class="total-row">
+      <td><strong>Total</strong></td>
+      <td>${extSpotsDay.toLocaleString()}</td>
+      <td>${(diaVend+nocheVend).toLocaleString()}</td>
+      <td>—</td>
+      <td><strong>${fmtUSD(ingExtMes,0)}</strong></td>
+      <td><strong>${fmtUSD(ingExtAnual,0)}</strong></td>
+    </tr>
   `;
 
   const datasets = [
-    { label:'Diurno ext.', data:[ingDia/1e6, 0, ingExtMes/1e6, ingExtAnual/1e6/12], backgroundColor:'#1D9E75', borderColor:'#1D9E75', borderWidth:1, borderRadius:5 },
-    { label:'Nocturno ext.', data:[0, ingNoche/1e6, 0, 0], backgroundColor:'#D85A30', borderColor:'#D85A30', borderWidth:1, borderRadius:5 },
+    { label:'Diurno ext.', data:[ingDia, 0, ingExtMes, ingExtAnual/12], backgroundColor:'#1D9E75', borderColor:'#1D9E75', borderWidth:1, borderRadius:5 },
+    { label:'Nocturno ext.', data:[0, ingNoche, 0, 0], backgroundColor:'#D85A30', borderColor:'#D85A30', borderWidth:1, borderRadius:5 },
   ];
   if (ingView === 'total') {
-    datasets.push({ label:'Valor Inverfin', data:[0,0,invValMes/1e6,invValMes/1e6], backgroundColor:'#378ADD', borderColor:'#378ADD', borderWidth:1, borderRadius:5 });
+    datasets.push({ label:'Valor Inverfin SAECA', data:[0,0,invValMes,invValMes], backgroundColor:'#378ADD', borderColor:'#378ADD', borderWidth:1, borderRadius:5 });
   }
 
   document.getElementById('chart-legend').innerHTML = [
-    {color:'#1D9E75', label:`Diurno ext. — ${fmtGs(ingDia)}/mes`},
-    {color:'#D85A30', label:`Nocturno ext. — ${fmtGs(ingNoche)}/mes`},
-    ...(ingView==='total'?[{color:'#378ADD', label:`Valor Inverfin — ${fmtGs(invValMes)}/mes`}]:[]),
-  ].map(l=>`<div class="leg"><div class="leg-sq" style="background:${l.color}"></div>${l.label}</div>`).join('');
+    { color:'#1D9E75', label:`Diurno ext. — ${fmtUSD(ingDia,0)}/mes` },
+    { color:'#D85A30', label:`Nocturno ext. — ${fmtUSD(ingNoche,0)}/mes` },
+    ...(ingView==='total' ? [{ color:'#378ADD', label:`Valor Inverfin SAECA — ${fmtUSD(invValMes,0)}/mes` }] : []),
+  ].map(l => `<div class="leg"><div class="leg-sq" style="background:${l.color}"></div>${l.label}</div>`).join('');
 
   if (ingChartInst) { ingChartInst.destroy(); ingChartInst = null; }
   ingChartInst = new Chart(document.getElementById('ingChart'), {
     type: 'bar',
     data: {
-      labels: ['Diurno ext.','Nocturno ext.','Total ext./mes', ingView==='total'?'Total combinado':'Anual ext. ÷12'],
+      labels: ['Diurno ext.', 'Nocturno ext.', ingView==='total'?'Total combinado/mes':'Total ext./mes', 'Promedio mensual anual'],
       datasets
     },
     options: {
-      responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>' ₲ '+Math.round(ctx.raw*1e6).toLocaleString()}} },
-      scales:{
-        x:{ ticks:{color:'#8A9BB5'}, grid:{display:false}, stacked:true },
-        y:{ ticks:{color:'#8A9BB5', callback:v=>'₲ '+v.toFixed(1)+'M'}, grid:{color:'rgba(136,135,128,.15)'}, stacked:true }
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ' ' + fmtUSD(ctx.raw, 0) } }
+      },
+      scales: {
+        x: { ticks:{ color:'#8A9BB5' }, grid:{ display:false }, stacked:true },
+        y: { ticks:{ color:'#8A9BB5', callback: v => fmtUSDk(v) }, grid:{ color:'rgba(136,135,128,.15)' }, stacked:true }
       }
     }
   });
 
-  const pbPct = Math.min(96, Math.round((36/Math.max(1,paybackMes))*100));
+  const pbPct = Math.min(96, Math.round((36 / Math.max(1, paybackMes)) * 100));
   document.getElementById('payback-section').innerHTML = `
     <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-top:.5rem">
       <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px">
-        <span style="color:var(--muted)">Payback inversión Prourbe (${fmtGs(98902*USD_GS)} ≈ ${fmtUSD(98902)})</span>
+        <span style="color:var(--muted)">Payback inversión Prourbe (USD 98,902)</span>
         <span style="font-weight:500;color:var(--white)">${paybackMes} meses</span>
       </div>
       <div class="payback-bar"><div class="payback-fill" style="width:${pbPct}%"></div></div>
@@ -659,18 +680,24 @@ function recalcIng() {
       </div>
     </div>`;
 
-  window._ingExtMes = ingExtMes;
+  window._ingExtMes  = ingExtMes;
+  window._ingExtAnual = ingExtAnual;
+  window._invValMes  = invValMes;
   window._paybackMes = paybackMes;
 }
 
 function updateResumen() {
-  const dur = +document.getElementById('spotDur').value;
-  const hrs = +document.getElementById('winHours').value;
+  const dur  = +document.getElementById('spotDur').value;
+  const hrs  = +document.getElementById('winHours').value;
   const ipct = +document.getElementById('inverfinPct').value / 100;
   const spotsDay = Math.round(hrs * 3600 / dur);
   const invSpots = Math.round(spotsDay * ipct);
-  document.getElementById('res-monthly').textContent = window._ingExtMes ? fmtGs(window._ingExtMes) : '—';
-  document.getElementById('res-payback').textContent = window._paybackMes ? window._paybackMes + ' m' : '—';
+  if (window._ingExtMes) {
+    document.getElementById('res-monthly').textContent  = fmtUSD(window._ingExtMes, 0);
+    document.getElementById('res-annual').textContent   = fmtUSD(window._ingExtAnual, 0);
+    document.getElementById('res-payback').textContent  = window._paybackMes + ' m';
+    document.getElementById('res-inv-val').textContent  = fmtUSD(window._invValMes, 0);
+  }
   document.getElementById('res-inv-spots').textContent = invSpots.toLocaleString();
 }
 
