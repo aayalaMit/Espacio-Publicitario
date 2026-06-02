@@ -8,142 +8,111 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 :root {
-  --navy: #0B1629;
-  --navy-mid: #142038;
-  --navy-light: #1E3055;
-  --gold: #F5C842;
-  --teal: #2EC4B6;
-  --coral: #E8603C;
-  --blue: #378ADD;
-  --white: #F8F6F0;
-  --muted: #8A9BB5;
-  --border: rgba(255,255,255,0.08);
-  --card-bg: rgba(255,255,255,0.04);
-  --font-display: 'DM Serif Display', serif;
-  --font-body: 'DM Sans', sans-serif;
-  --font-mono: 'Space Mono', monospace;
-  --radius: 12px;
+  --navy:#0B1629;--navy-mid:#142038;--navy-light:#1E3055;
+  --gold:#F5C842;--teal:#2EC4B6;--coral:#E8603C;--blue:#378ADD;
+  --white:#F8F6F0;--muted:#8A9BB5;
+  --border:rgba(255,255,255,0.08);--card-bg:rgba(255,255,255,0.04);
+  --font-display:'DM Serif Display',serif;--font-body:'DM Sans',sans-serif;--font-mono:'Space Mono',monospace;
+  --radius:12px;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--navy); color: var(--white); font-family: var(--font-body); font-size: 15px; line-height: 1.6; min-height: 100vh; }
-
-header { background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-light) 100%); border-bottom: 1px solid var(--border); padding: 2.5rem 3rem 2rem; position: relative; overflow: hidden; }
-header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(245,200,66,0.12) 0%, transparent 70%); pointer-events: none; }
-.header-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; }
-.eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: .5rem; }
-h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 40px); font-weight: 400; color: var(--white); line-height: 1.15; }
-h1 em { color: var(--gold); font-style: italic; }
-.header-meta { font-size: 12px; color: var(--muted); margin-top: .75rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
-.inv-logo { font-family: var(--font-display); font-size: 22px; color: var(--white); }
-.inv-logo span { color: var(--gold); }
-.date-badge { background: var(--gold); color: var(--navy); font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-top: 8px; display: inline-block; font-family: var(--font-mono); }
-
-nav { background: var(--navy-mid); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
-.nav-inner { max-width: 1100px; margin: 0 auto; display: flex; overflow-x: auto; }
-.nav-btn { padding: 1rem 1.5rem; font-family: var(--font-body); font-size: 13px; font-weight: 500; color: var(--muted); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: all .2s; }
-.nav-btn:hover { color: var(--white); }
-.nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
-
-main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 3rem 4rem; }
-.section { display: none; }
-.section.active { display: block; animation: fadeIn .3s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-
-.section-heading { font-family: var(--font-display); font-size: 24px; font-weight: 400; color: var(--white); margin-bottom: .3rem; }
-.section-sub { font-size: 13px; color: var(--muted); margin-bottom: 2rem; }
-
-.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 2rem; }
-.metric { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1rem; }
-.metric-label { font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-.metric-value { font-family: var(--font-display); font-size: 22px; color: var(--white); line-height: 1.1; }
-.metric-value.gold { color: var(--gold); }
-.metric-value.teal { color: var(--teal); }
-.metric-value.blue { color: var(--blue); }
-.metric-sub { font-size: 11px; color: var(--muted); margin-top: 5px; font-family: var(--font-mono); }
-
-.controls-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; }
-.controls-title { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem; }
-.ctrl-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
-.ctrl-row:last-child { margin-bottom: 0; }
-.ctrl-label { font-size: 13px; color: var(--muted); min-width: 220px; }
-.ctrl-row input[type=range] { flex: 1; min-width: 120px; -webkit-appearance: none; height: 4px; background: rgba(255,255,255,.15); border-radius: 2px; outline: none; cursor: pointer; }
-.ctrl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--gold); border: 2px solid var(--navy); cursor: pointer; }
-.ctrl-row select { flex: 1; min-width: 200px; background: rgba(255,255,255,.07); border: 1px solid var(--border); border-radius: 8px; color: var(--white); padding: 7px 10px; font-family: var(--font-body); font-size: 13px; cursor: pointer; }
-.ctrl-row select option { background: var(--navy-mid); color: var(--white); }
-.ctrl-val { font-family: var(--font-mono); font-size: 13px; color: var(--white); min-width: 70px; text-align: right; }
-
-.toggle-row { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; flex-wrap: wrap; }
-.toggle-label { font-size: 13px; color: var(--muted); }
-.toggle-group { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-.tog { padding: 8px 18px; font-size: 13px; cursor: pointer; background: transparent; border: none; color: var(--muted); transition: all .15s; font-family: var(--font-body); }
-.tog.on { background: rgba(255,255,255,.09); color: var(--white); font-weight: 500; }
-
-.timeline-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; overflow-x: auto; }
-.tl-label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
-.tl-bar { display: flex; height: 48px; border-radius: 8px; overflow: hidden; gap: 2px; }
-.tl-slot { flex: 1; min-width: 10px; cursor: default; transition: opacity .15s; }
-.tl-slot:hover { opacity: .75; }
-.tl-hours { display: flex; margin-top: 6px; }
-.tl-hours span { flex: 1; font-size: 9px; color: var(--muted); font-family: var(--font-mono); }
-.legend { display: flex; gap: 1.5rem; margin-top: 1rem; flex-wrap: wrap; }
-.legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
-.legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
-
-.zone-table-wrap { overflow-x: auto; margin-bottom: 1.5rem; }
-.zone-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.zone-table th { text-align: left; padding: 9px 12px; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); }
-.zone-table td { padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,.04); color: var(--white); }
-.zone-table tr.zt-sel td { background: rgba(46,196,182,.1); color: var(--teal); }
-.zone-table tr.zt-sel td:first-child { font-weight: 500; }
-
-.tbl-wrap { overflow-x: auto; margin-bottom: 2rem; }
-table.data { width: 100%; border-collapse: collapse; font-size: 13px; }
-table.data th { text-align: left; padding: 10px 14px; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); }
-table.data td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,.04); color: var(--white); }
-table.data tr.total-row td { background: rgba(245,200,66,.06); font-weight: 500; }
-table.data tr:hover:not(.total-row) td { background: rgba(255,255,255,.02); }
-
-.note { font-size: 12px; color: var(--muted); line-height: 1.65; padding: 1rem 1.25rem; background: rgba(245,200,66,.05); border-left: 3px solid rgba(245,200,66,.4); margin-bottom: 1.5rem; }
-.note b { color: var(--white); }
-.note.warn { background: rgba(232,96,60,.07); border-left-color: rgba(232,96,60,.5); }
-.note.warn b { color: var(--coral); }
-
-.chart-wrap { position: relative; width: 100%; height: 260px; margin-bottom: 1.5rem; }
-.legend-row { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
-.leg { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); }
-.leg-sq { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-
-.cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
-.cmp-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
-.cmp-card.featured { border-color: var(--teal); background: rgba(46,196,182,.05); }
-.cmp-header { padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-.cmp-name { font-family: var(--font-display); font-size: 20px; color: var(--white); }
-.cmp-tagline { font-size: 11px; color: var(--muted); margin-top: 4px; }
-.badge { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; white-space: nowrap; }
-.badge-teal { background: rgba(46,196,182,.15); color: var(--teal); border: 1px solid rgba(46,196,182,.3); }
-.badge-gold { background: rgba(245,200,66,.15); color: var(--gold); border: 1px solid rgba(245,200,66,.3); }
-.cmp-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.04); gap: 12px; }
-.cmp-row:last-child { border-bottom: none; }
-.cmp-key { font-size: 12px; color: var(--muted); flex: 0 0 115px; }
-.cmp-val { font-size: 12px; color: var(--white); text-align: right; flex: 1; }
-.cmp-section-title { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin: 1.25rem 0 .75rem; }
-
-.payback-bar { background: rgba(255,255,255,.06); border-radius: 6px; height: 12px; overflow: hidden; margin-top: 8px; }
-.payback-fill { height: 100%; border-radius: 6px; background: var(--teal); transition: width .4s ease; }
-
-footer { border-top: 1px solid var(--border); text-align: center; padding: 2rem 3rem; font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
-footer span { color: var(--gold); }
-
-@media (max-width: 700px) {
-  header, main { padding-left: 1.25rem; padding-right: 1.25rem; }
-  .cmp-grid { grid-template-columns: 1fr; }
-  .ctrl-label { min-width: 160px; }
-  .header-right { display: none; }
-}
-@media print {
-  nav { display: none; }
-  .section { display: block !important; page-break-after: always; }
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--navy);color:var(--white);font-family:var(--font-body);font-size:15px;line-height:1.6;min-height:100vh}
+header{background:linear-gradient(135deg,var(--navy-mid) 0%,var(--navy-light) 100%);border-bottom:1px solid var(--border);padding:2.5rem 3rem 2rem;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(245,200,66,0.12) 0%,transparent 70%);pointer-events:none}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+h1{font-family:var(--font-display);font-size:clamp(26px,4vw,40px);font-weight:400;color:var(--white);line-height:1.15}
+h1 em{color:var(--gold);font-style:italic}
+.header-meta{font-size:12px;color:var(--muted);margin-top:.75rem;display:flex;gap:1.5rem;flex-wrap:wrap}
+.inv-logo{font-family:var(--font-display);font-size:22px;color:var(--white)}
+.inv-logo span{color:var(--gold)}
+.date-badge{background:var(--gold);color:var(--navy);font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;margin-top:8px;display:inline-block;font-family:var(--font-mono)}
+nav{background:var(--navy-mid);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;overflow-x:auto}
+.nav-btn{padding:1rem 1.5rem;font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s}
+.nav-btn:hover{color:var(--white)}
+.nav-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+main{max-width:1100px;margin:0 auto;padding:2.5rem 3rem 4rem}
+.section{display:none}
+.section.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.section-heading{font-family:var(--font-display);font-size:24px;font-weight:400;color:var(--white);margin-bottom:.3rem}
+.section-sub{font-size:13px;color:var(--muted);margin-bottom:2rem}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:2rem}
+.metric{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1rem}
+.metric-label{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.metric-value{font-family:var(--font-display);font-size:22px;color:var(--white);line-height:1.1}
+.metric-value.gold{color:var(--gold)}
+.metric-value.teal{color:var(--teal)}
+.metric-value.blue{color:var(--blue)}
+.metric-sub{font-size:11px;color:var(--muted);margin-top:5px;font-family:var(--font-mono)}
+.controls-box{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem}
+.controls-title{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem}
+.ctrl-row{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
+.ctrl-row:last-child{margin-bottom:0}
+.ctrl-label{font-size:13px;color:var(--muted);min-width:240px}
+.ctrl-row input[type=range]{flex:1;min-width:120px;-webkit-appearance:none;height:4px;background:rgba(255,255,255,.15);border-radius:2px;outline:none;cursor:pointer}
+.ctrl-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold);border:2px solid var(--navy);cursor:pointer}
+.ctrl-row select{flex:1;min-width:200px;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:8px;color:var(--white);padding:7px 10px;font-family:var(--font-body);font-size:13px;cursor:pointer}
+.ctrl-row select option{background:var(--navy-mid);color:var(--white)}
+.ctrl-val{font-family:var(--font-mono);font-size:13px;color:var(--white);min-width:70px;text-align:right}
+.toggle-row{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;flex-wrap:wrap}
+.toggle-label{font-size:13px;color:var(--muted)}
+.toggle-group{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.tog{padding:8px 18px;font-size:13px;cursor:pointer;background:transparent;border:none;color:var(--muted);transition:all .15s;font-family:var(--font-body)}
+.tog.on{background:rgba(255,255,255,.09);color:var(--white);font-weight:500}
+.timeline-box{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem;overflow-x:auto}
+.tl-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem}
+.tl-bar{display:flex;height:48px;border-radius:8px;overflow:hidden;gap:2px}
+.tl-slot{flex:1;min-width:10px;cursor:default;transition:opacity .15s}
+.tl-slot:hover{opacity:.75}
+.tl-hours{display:flex;margin-top:6px}
+.tl-hours span{flex:1;font-size:9px;color:var(--muted);font-family:var(--font-mono)}
+.legend{display:flex;gap:1.5rem;margin-top:1rem;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.zone-table-wrap{overflow-x:auto;margin-bottom:1.5rem}
+.zone-table{width:100%;border-collapse:collapse;font-size:13px}
+.zone-table th{text-align:left;padding:9px 12px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)}
+.zone-table td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--white)}
+.zone-table tr.zt-sel td{background:rgba(46,196,182,.1);color:var(--teal)}
+.zone-table tr.zt-sel td:first-child{font-weight:500}
+.tbl-wrap{overflow-x:auto;margin-bottom:2rem}
+table.data{width:100%;border-collapse:collapse;font-size:13px}
+table.data th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)}
+table.data td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--white)}
+table.data tr.total-row td{background:rgba(245,200,66,.06);font-weight:500}
+table.data tr:hover:not(.total-row) td{background:rgba(255,255,255,.02)}
+.note{font-size:12px;color:var(--muted);line-height:1.65;padding:1rem 1.25rem;background:rgba(245,200,66,.05);border-left:3px solid rgba(245,200,66,.4);margin-bottom:1.5rem}
+.note b{color:var(--white)}
+.note.warn{background:rgba(232,96,60,.07);border-left-color:rgba(232,96,60,.5)}
+.note.warn b{color:var(--coral)}
+.note.info{background:rgba(55,138,221,.07);border-left-color:rgba(55,138,221,.4)}
+.note.info b{color:var(--blue)}
+.chart-wrap{position:relative;width:100%;height:260px;margin-bottom:1.5rem}
+.legend-row{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.leg{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+.leg-sq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem}
+.cmp-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem}
+.cmp-card.featured{border-color:var(--teal);background:rgba(46,196,182,.05)}
+.cmp-header{padding-bottom:1rem;margin-bottom:1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.cmp-name{font-family:var(--font-display);font-size:20px;color:var(--white)}
+.cmp-tagline{font-size:11px;color:var(--muted);margin-top:4px}
+.badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:20px;white-space:nowrap}
+.badge-teal{background:rgba(46,196,182,.15);color:var(--teal);border:1px solid rgba(46,196,182,.3)}
+.badge-gold{background:rgba(245,200,66,.15);color:var(--gold);border:1px solid rgba(245,200,66,.3)}
+.cmp-row{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);gap:12px}
+.cmp-row:last-child{border-bottom:none}
+.cmp-key{font-size:12px;color:var(--muted);flex:0 0 115px}
+.cmp-val{font-size:12px;color:var(--white);text-align:right;flex:1}
+.cmp-section-title{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin:1.25rem 0 .75rem}
+.payback-bar{background:rgba(255,255,255,.06);border-radius:6px;height:12px;overflow:hidden;margin-top:8px}
+.payback-fill{height:100%;border-radius:6px;background:var(--teal);transition:width .4s ease}
+footer{border-top:1px solid var(--border);text-align:center;padding:2rem 3rem;font-size:11px;color:var(--muted);font-family:var(--font-mono)}
+footer span{color:var(--gold)}
+@media(max-width:700px){header,main{padding-left:1.25rem;padding-right:1.25rem}.cmp-grid{grid-template-columns:1fr}.ctrl-label{min-width:160px}.header-right{display:none}}
+@media print{nav{display:none}.section{display:block!important;page-break-after:always}}
 </style>
 </head>
 <body>
@@ -180,8 +149,10 @@ footer span { color: var(--gold); }
 <!-- TAB 1: SPOTS -->
 <div id="tab-spots" class="section active">
   <div class="section-heading">Planificador de spots</div>
-  <div class="section-sub">Configurá los parámetros operativos y observá cómo se distribuye el inventario entre Inverfin SAECA y anunciantes externos.</div>
+  <div class="section-sub">La pantalla opera las 24 horas. La ventana comercial define cuántas horas se venden a anunciantes externos. Las horas restantes y los espacios intercalados los ocupa Inverfin SAECA con distribución equilibrada a lo largo del día.</div>
+
   <div class="metrics" id="spot-metrics"></div>
+
   <div class="controls-box">
     <div class="controls-title">Parámetros de operación</div>
     <div class="ctrl-row">
@@ -190,34 +161,38 @@ footer span { color: var(--gold); }
       <span class="ctrl-val" id="spotDurVal">15 s</span>
     </div>
     <div class="ctrl-row">
-      <span class="ctrl-label">Ventana operativa diaria</span>
-      <input type="range" id="winHours" min="8" max="20" step="1" value="16" oninput="recalcSpots()">
+      <span class="ctrl-label">Ventana comercial (horas vendibles a externos)</span>
+      <input type="range" id="winHours" min="8" max="24" step="1" value="16" oninput="recalcSpots()">
       <span class="ctrl-val" id="winHoursVal">16 h</span>
     </div>
     <div class="ctrl-row">
-      <span class="ctrl-label">% de spots para Inverfin SAECA</span>
+      <span class="ctrl-label">% de spots Inverfin dentro de ventana comercial</span>
       <input type="range" id="inverfinPct" min="5" max="70" step="5" value="30" oninput="recalcSpots()">
       <span class="ctrl-val" id="inverfinPctVal">30 %</span>
     </div>
   </div>
+
+  <div class="note info" id="spot-note-dist"></div>
+
   <div class="timeline-box">
-    <div class="tl-label">Distribución horaria representativa (24 h)</div>
+    <div class="tl-label">Distribución horaria — 24 horas (spots Inverfin intercalados de forma equilibrada)</div>
     <div class="tl-bar" id="tl-bar"></div>
     <div class="tl-hours" id="tl-hours"></div>
     <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#2EC4B6"></div>Inverfin SAECA (propio)</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#F5C842"></div>Anunciantes diurnos (tarifa alta)</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#E8603C"></div>Anunciantes nocturnos (tarifa reducida)</div>
-      <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.1)"></div>Fuera de ventana</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#2EC4B6"></div>Inverfin SAECA — ventana comercial (intercalado)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0F6E56"></div>Inverfin SAECA — fuera de ventana (100%)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#F5C842"></div>Anunciantes diurnos</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#E8603C"></div>Anunciantes nocturnos</div>
     </div>
   </div>
+
   <div class="note" id="spot-note"></div>
 </div>
 
 <!-- TAB 2: INGRESOS -->
 <div id="tab-ingresos" class="section">
   <div class="section-heading">Proyección de ingresos</div>
-  <div class="section-sub">Todos los valores en USD. Tarifas convertidas desde guaraníes según datos de mercado PY 2026 (TC: ₲ 7.750 / USD). Caso base: ocupación 80%, vacancia 10%.</div>
+  <div class="section-sub">Todos los valores en USD. Tarifa por spot según zona de mercado PY 2026 (TC referencial ₲ 7.750/USD). Caso base: ocupación 80%, vacancia 10%.</div>
 
   <div class="toggle-row">
     <span class="toggle-label">Vista de ingresos:</span>
@@ -255,13 +230,13 @@ footer span { color: var(--gold); }
       <span class="ctrl-val" id="vacV">10 %</span>
     </div>
     <div class="ctrl-row">
-      <span class="ctrl-label">% franja diurna en ventana (6–22 h)</span>
+      <span class="ctrl-label">% franja diurna en ventana comercial</span>
       <input type="range" id="ppico" min="40" max="90" step="5" value="70" oninput="recalcIng()">
       <span class="ctrl-val" id="ppicoV">70 %</span>
     </div>
   </div>
 
-  <div style="font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">Tarifas de referencia por zona — mercado PY 2026</div>
+  <div style="font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">Tarifa por spot según zona — mercado PY 2026</div>
   <div class="zone-table-wrap">
     <table class="zone-table" id="zone-table"></table>
   </div>
@@ -297,66 +272,56 @@ footer span { color: var(--gold); }
 <div id="tab-compare" class="section">
   <div class="section-heading">Comparación de proveedores</div>
   <div class="section-sub">Análisis lado a lado de Romis Paraguay S.A. y Prourbe Medios S.A. en precio, especificaciones, experiencia y capacidad comercial.</div>
-
   <div class="cmp-grid">
     <div class="cmp-card">
       <div class="cmp-header">
-        <div>
-          <div class="cmp-name">Romis Paraguay</div>
-          <div class="cmp-tagline">Presupuesto N° 0526014 · 28/05/2026</div>
-        </div>
+        <div><div class="cmp-name">Romis Paraguay</div><div class="cmp-tagline">Presupuesto N° 0526014 · 28/05/2026</div></div>
         <span class="badge badge-gold">Entrega rápida</span>
       </div>
       <div class="cmp-section-title">Propuesta — Casa Central</div>
-      <div class="cmp-row"><span class="cmp-key">Pantalla</span><span class="cmp-val">LED Outdoor P8 · 8,64 × 4,80 m · 9 000 nits</span></div>
+      <div class="cmp-row"><span class="cmp-key">Pantalla</span><span class="cmp-val">LED Outdoor P8 · 8,64 × 4,80 m · 9,000 nits</span></div>
       <div class="cmp-row"><span class="cmp-key">Total IVA incl.</span><span class="cmp-val" style="color:var(--gold);font-weight:600">USD 115,300.75</span></div>
       <div class="cmp-row"><span class="cmp-key">Estructura</span><span class="cmp-val">Cilíndrica 7 m · 12 mm — incluida</span></div>
       <div class="cmp-row"><span class="cmp-key">Inst. eléctrica</span><span class="cmp-val">Incluida (USD 450)</span></div>
       <div class="cmp-row"><span class="cmp-key">Administración</span><span class="cmp-val">12 meses × USD 113.64</span></div>
       <div class="cmp-row"><span class="cmp-key">Garantía</span><span class="cmp-val"><span class="badge badge-teal">2 años</span></span></div>
       <div class="cmp-row"><span class="cmp-key">Entrega</span><span class="cmp-val"><span class="badge badge-gold">2–4 semanas</span></span></div>
-      <div class="cmp-row"><span class="cmp-key">Pago</span><span class="cmp-val">50 % inicio · 50 % entrega</span></div>
-      <div class="cmp-row"><span class="cmp-key">Validez cotiz.</span><span class="cmp-val">15 días</span></div>
+      <div class="cmp-row"><span class="cmp-key">Pago</span><span class="cmp-val">50% inicio · 50% entrega</span></div>
       <div class="cmp-section-title">Perfil de empresa</div>
       <div class="cmp-row"><span class="cmp-key">Especialidad</span><span class="cmp-val">Pantallas LED outdoor / señalética digital</span></div>
       <div class="cmp-row"><span class="cmp-key">Clientes ref.</span><span class="cmp-val">No detallados en propuesta</span></div>
       <div class="cmp-row"><span class="cmp-key">Soporte técnico</span><span class="cmp-val">Equipo propio (datos limitados)</span></div>
       <div class="cmp-row"><span class="cmp-key">Red comercial</span><span class="cmp-val">No mencionada</span></div>
     </div>
-
     <div class="cmp-card featured">
       <div class="cmp-header">
-        <div>
-          <div class="cmp-name">Prourbe Medios</div>
-          <div class="cmp-tagline">Propuesta Pantallas LED · 2026</div>
-        </div>
+        <div><div class="cmp-name">Prourbe Medios</div><div class="cmp-tagline">Propuesta Pantallas LED · 2026</div></div>
         <span class="badge badge-teal">Mayor experiencia</span>
       </div>
       <div class="cmp-section-title">Propuesta — Casa Central (5×8 m vertical)</div>
-      <div class="cmp-row"><span class="cmp-key">Pantalla</span><span class="cmp-val">LED Vertical 5×8 m · 10 000 nits · ≥15 000 Hz</span></div>
+      <div class="cmp-row"><span class="cmp-key">Pantalla</span><span class="cmp-val">LED Vertical 5×8 m · 10,000 nits · ≥15,000 Hz</span></div>
       <div class="cmp-row"><span class="cmp-key">Total IVA incl.</span><span class="cmp-val" style="color:var(--teal);font-weight:600">USD 98,901.73</span></div>
       <div class="cmp-row"><span class="cmp-key">Estructura</span><span class="cmp-val">Cotizada a medida · sin lookeo</span></div>
       <div class="cmp-row"><span class="cmp-key">PC contenido</span><span class="cmp-val">Incluido (USD 3,066.12)</span></div>
       <div class="cmp-row"><span class="cmp-key">Mantenimiento</span><span class="cmp-val">1 año incluido · renovable</span></div>
       <div class="cmp-row"><span class="cmp-key">Garantía</span><span class="cmp-val"><span class="badge badge-teal">1 año + renovación</span></span></div>
       <div class="cmp-row"><span class="cmp-key">Entrega</span><span class="cmp-val">~90 días (fabr. + importación)</span></div>
-      <div class="cmp-row"><span class="cmp-key">Sucursal E. Ayala</span><span class="cmp-val" style="font-weight:500">USD 119,742.28 · 10×5 m horizontal</span></div>
+      <div class="cmp-row"><span class="cmp-key">Suc. E. Ayala</span><span class="cmp-val" style="font-weight:500">USD 119,742.28 · 10×5 m horizontal</span></div>
       <div class="cmp-section-title">Perfil de empresa</div>
       <div class="cmp-row"><span class="cmp-key">Especialidad</span><span class="cmp-val">Líder OOH + DOOH · centros comerciales</span></div>
       <div class="cmp-row"><span class="cmp-key">Clientes ref.</span><span class="cmp-val">Nestlé, Mastercard, McDonald's, Itaú, KFC, Huawei, Arcor, Samsung…</span></div>
       <div class="cmp-row"><span class="cmp-key">Soporte técnico</span><span class="cmp-val"><span class="badge badge-teal">Equipo local propio confirmado</span></span></div>
       <div class="cmp-row"><span class="cmp-key">Red comercial</span><span class="cmp-val"><span class="badge badge-teal">Puede vender slots en pantalla</span></span></div>
-      <div class="cmp-row"><span class="cmp-key">Capacitación</span><span class="cmp-val">Personal de Inverfin SAECA incluida</span></div>
+      <div class="cmp-row"><span class="cmp-key">Capacitación</span><span class="cmp-val">Personal Inverfin SAECA incluida</span></div>
       <div class="cmp-row"><span class="cmp-key">Pantallas inst.</span><span class="cmp-val">+20 grandes formatos en PY</span></div>
     </div>
   </div>
-
   <div style="font-size:16px;font-family:'DM Serif Display',serif;margin-bottom:.75rem;color:var(--white)">Tabla resumen comparativa</div>
   <div class="tbl-wrap">
     <table class="data">
       <thead><tr><th>Criterio</th><th>Romis Paraguay</th><th>Prourbe Medios</th></tr></thead>
       <tbody>
-        <tr><td>Precio casa central (IVA incl.)</td><td>USD 115,300.75</td><td style="color:var(--teal)">USD 98,901.73 (−14 %)</td></tr>
+        <tr><td>Precio casa central (IVA incl.)</td><td>USD 115,300.75</td><td style="color:var(--teal)">USD 98,901.73 (−14%)</td></tr>
         <tr><td>Brillo de pantalla</td><td>9,000 nits</td><td style="color:var(--teal)">10,000 nits ✓</td></tr>
         <tr><td>Frecuencia de actualización</td><td>N/D</td><td style="color:var(--teal)">≥15,000 Hz ✓</td></tr>
         <tr><td>Pantallas instaladas en PY</td><td>N/D</td><td style="color:var(--teal)">+20 grandes formatos ✓</td></tr>
@@ -372,29 +337,27 @@ footer span { color: var(--gold); }
   </div>
 </div>
 
-<!-- TAB 4: RESUMEN EJECUTIVO -->
+<!-- TAB 4: RESUMEN -->
 <div id="tab-resumen" class="section">
   <div class="section-heading">Resumen ejecutivo</div>
   <div class="section-sub">Síntesis del caso de negocio para Inverfin SAECA. Todos los valores en USD.</div>
-
   <div class="metrics">
-    <div class="metric"><div class="metric-label">Inversión recomendada</div><div class="metric-value gold" id="res-inv">USD 98,902</div><div class="metric-sub">Prourbe · casa central</div></div>
-    <div class="metric"><div class="metric-label">Ingreso ext./mes</div><div class="metric-value teal" id="res-monthly">—</div><div class="metric-sub">spots externos (caso base)</div></div>
+    <div class="metric"><div class="metric-label">Inversión recomendada</div><div class="metric-value gold">USD 98,902</div><div class="metric-sub">Prourbe · casa central</div></div>
+    <div class="metric"><div class="metric-label">Ingreso ext./mes</div><div class="metric-value teal" id="res-monthly">—</div><div class="metric-sub">caso base 80% ocup.</div></div>
     <div class="metric"><div class="metric-label">Ingreso anual ext.</div><div class="metric-value" id="res-annual">—</div><div class="metric-sub">proyección lineal</div></div>
-    <div class="metric"><div class="metric-label">Payback estimado</div><div class="metric-value" id="res-payback">—</div><div class="metric-sub">meses (solo ing. externos)</div></div>
+    <div class="metric"><div class="metric-label">Payback estimado</div><div class="metric-value" id="res-payback">—</div><div class="metric-sub">meses (ing. externos)</div></div>
     <div class="metric"><div class="metric-label">Valor spots propios/mes</div><div class="metric-value blue" id="res-inv-val">—</div><div class="metric-sub">ahorro pub. Inverfin SAECA</div></div>
-    <div class="metric"><div class="metric-label">Spots Inverfin/día</div><div class="metric-value" id="res-inv-spots">—</div><div class="metric-sub">30% del inventario</div></div>
+    <div class="metric"><div class="metric-label">Spots Inverfin/día</div><div class="metric-value" id="res-inv-spots">—</div><div class="metric-sub">incl. horas no comerciales</div></div>
   </div>
-
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem">
     <div class="controls-box" style="margin-bottom:0">
       <div class="controls-title" style="color:var(--teal)">Oportunidades</div>
       <ul style="list-style:none;display:flex;flex-direction:column;gap:.75rem;margin-top:.5rem">
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Visibilidad de marca 24/7 en sucursales propias sin costo adicional de medios.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Visibilidad de marca 24/7 — las horas no comerciales son 100% Inverfin SAECA sin costo.</li>
         <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Ingresos recurrentes que amortizan la inversión en 12–18 meses (caso base).</li>
         <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Prourbe tiene red comercial activa — anunciantes desde el primer mes.</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Escalable a múltiples sucursales con economías de escala en precio.</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">10,000 nits garantizan visibilidad en luz solar directa — crítico en Av. Artigas.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Escalable a múltiples sucursales con economías de escala.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">10,000 nits garantizan visibilidad en luz solar directa en Av. Artigas.</li>
       </ul>
     </div>
     <div class="controls-box" style="margin-bottom:0">
@@ -404,43 +367,41 @@ footer span { color: var(--gold); }
         <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Vacancia de anunciantes puede reducir ingresos — prever 10–15% en año 1.</li>
         <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Estructura y fundación de Prourbe cotizada aparte (~USD 18–20K adicionales).</li>
         <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Requiere habilitación municipal y permisos de señalización vial.</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Zona Av. Artigas: tarifa referencial USD 710/mes (≈ USD 0.13/spot).</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Garantía Prourbe es 1 año (vs 2 de Romis) — evaluar contrato de mantenimiento extendido.</li>
       </ul>
     </div>
   </div>
-
   <div class="controls-box">
     <div class="controls-title">Recomendación</div>
     <p style="font-size:14px;color:var(--white);line-height:1.8;margin-bottom:1rem">
-      Se recomienda avanzar con <strong style="color:var(--teal)">Prourbe Medios</strong> como proveedor para casa central: precio USD 16,399 inferior al de Romis (−14%), mayor brillo, soporte técnico local confirmado, y red comercial propia que permite monetizar slots externos desde el primer mes sin esfuerzo adicional de Inverfin SAECA.
+      Se recomienda avanzar con <strong style="color:var(--teal)">Prourbe Medios</strong>: precio USD 16,399 inferior a Romis (−14%), mayor brillo, soporte técnico local confirmado y red comercial propia que permite monetizar slots externos desde el primer mes.
     </p>
     <p style="font-size:14px;color:var(--muted);line-height:1.8">
-      Si la velocidad de entrega es prioritaria, <strong style="color:var(--gold)">Romis</strong> entrega en 2–4 semanas con garantía de 2 años. Considerar para sucursales de menor escala.
+      Si la velocidad de entrega es prioritaria, <strong style="color:var(--gold)">Romis</strong> entrega en 2–4 semanas con garantía de 2 años.
     </p>
   </div>
-
   <div style="margin-top:2rem">
     <div style="font-size:16px;font-family:'DM Serif Display',serif;margin-bottom:.75rem;color:var(--white)">Modelo operativo sugerido</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem">
       <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
         <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Spot estándar</div>
         <div style="font-size:26px;font-family:var(--font-display);color:var(--white)">15 seg</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:6px">Duración óptima para tráfico vehicular y peatonal en Av. Artigas</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">240 spots/hora · duración óptima para tráfico en Av. Artigas</div>
       </div>
       <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
-        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Ventana operativa</div>
-        <div style="font-size:26px;font-family:var(--font-display);color:var(--white)">06 – 22 h</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:6px">16 horas activas · mayor tráfico en Av. Artigas</div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Operación</div>
+        <div style="font-size:26px;font-family:var(--font-display);color:var(--white)">24 h</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">Pantalla encendida todo el día · 16 h comerciales · 8 h solo Inverfin SAECA</div>
       </div>
       <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
-        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Split sugerido</div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Split comercial</div>
         <div style="font-size:26px;font-family:var(--font-display);color:var(--white)">30 / 70</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:6px">30% Inverfin SAECA · 70% anunciantes externos</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">30% Inverfin SAECA intercalado · 70% anunciantes externos · dentro de ventana</div>
       </div>
       <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
         <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Tarifa zona (USD)</div>
-        <div style="font-size:26px;font-family:var(--font-display);color:var(--white)">$0.14</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:6px">Por spot diurno · nocturno 60% = $0.08 · Av. Artigas</div>
+        <div style="font-size:26px;font-family:var(--font-display);color:var(--white)">$0.135</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">Por spot diurno · Av. Artigas · nocturno −40% = $0.081</div>
       </div>
     </div>
   </div>
@@ -449,226 +410,223 @@ footer span { color: var(--gold); }
 </main>
 
 <footer>
-  Documento preparado para <span>Inverfin SAECA</span> · Uso interno · Mayo 2026 · Fuentes: Romis Paraguay S.A., Prourbe Medios S.A., datos de mercado PY (Gemini 2026) · TC referencial ₲ 7.750 / USD
+  Documento preparado para <span>Inverfin SAECA</span> · Uso interno · Mayo 2026 · Fuentes: Romis Paraguay S.A., Prourbe Medios S.A., datos de mercado PY (Gemini 2026) · TC referencial ₲ 7.750/USD
 </footer>
 
 <script>
 const ZONAS = {
-  premium:    { label:'Premium — Aviadores / Santa Teresa',      gsPerSpotMin:1750, gsPerSpotMax:1850, gsMes:9500000 },
-  alto:       { label:'Alto impacto — Av. Artigas / San Martín', gsPerSpotMin:1000, gsPerSpotMax:1100, gsMes:5500000 },
-  intermedio: { label:'Flujo intermedio — Eusebio Ayala',        gsPerSpotMin:650,  gsPerSpotMax:750,  gsMes:3500000 },
-  interior:   { label:'Interior — CDE / Encarnación',            gsPerSpotMin:550,  gsPerSpotMax:600,  gsMes:3000000 },
+  premium:    { label:'Premium — Aviadores / Santa Teresa',       gsMin:1750, gsMax:1850 },
+  alto:       { label:'Alto impacto — Av. Artigas / San Martín',  gsMin:1000, gsMax:1100 },
+  intermedio: { label:'Flujo intermedio — Eusebio Ayala',         gsMin:650,  gsMax:750  },
+  interior:   { label:'Interior — CDE / Encarnación',             gsMin:550,  gsMax:600  },
 };
 const TC = 7750;
 let ingChartInst = null;
 let ingView = 'ext';
 
-function usd(gs) { return gs / TC; }
-function fmtUSD(n, dec=2) {
-  return '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits:dec, maximumFractionDigits:dec});
-}
-function fmtUSDk(n) {
-  if (Math.abs(n) >= 1000) return '$' + (n/1000).toFixed(1) + 'K';
-  return fmtUSD(n, 0);
-}
+function usd(gs){ return gs/TC; }
+function fmtUSD(n, dec=2){ return '$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function fmtUSDk(n){ return Math.abs(n)>=1000 ? '$'+(n/1000).toFixed(1)+'K' : fmtUSD(n,0); }
 
-function showTab(id) {
-  document.querySelectorAll('.nav-btn').forEach((b,i) => {
-    b.classList.toggle('active', ['spots','ingresos','compare','resumen'][i] === id);
-  });
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+function showTab(id){
+  document.querySelectorAll('.nav-btn').forEach((b,i)=>b.classList.toggle('active',['spots','ingresos','compare','resumen'][i]===id));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
-  if (id === 'ingresos') recalcIng();
-  if (id === 'resumen') updateResumen();
+  if(id==='ingresos') recalcIng();
+  if(id==='resumen') updateResumen();
 }
 
-function setView(v) {
-  ingView = v;
-  document.getElementById('tog-ext').classList.toggle('on', v==='ext');
-  document.getElementById('tog-total').classList.toggle('on', v==='total');
+function setView(v){
+  ingView=v;
+  document.getElementById('tog-ext').classList.toggle('on',v==='ext');
+  document.getElementById('tog-total').classList.toggle('on',v==='total');
   recalcIng();
 }
 
-function recalcSpots() {
-  const dur = +document.getElementById('spotDur').value;
-  const hrs = +document.getElementById('winHours').value;
-  const ipct = +document.getElementById('inverfinPct').value / 100;
-  document.getElementById('spotDurVal').textContent = dur + ' s';
-  document.getElementById('winHoursVal').textContent = hrs + ' h';
-  document.getElementById('inverfinPctVal').textContent = Math.round(ipct*100) + ' %';
+function recalcSpots(){
+  const dur  = +document.getElementById('spotDur').value;
+  const winH = +document.getElementById('winHours').value;
+  const ipct = +document.getElementById('inverfinPct').value/100;
 
-  const spotsDay = Math.round(hrs * 3600 / dur);
-  const spotsHr  = Math.round(3600 / dur);
-  const invSpots  = Math.round(spotsDay * ipct);
-  const extSpots  = spotsDay - invSpots;
+  document.getElementById('spotDurVal').textContent    = dur+' s';
+  document.getElementById('winHoursVal').textContent   = winH+' h';
+  document.getElementById('inverfinPctVal').textContent = Math.round(ipct*100)+' %';
+
+  const spotsPerHour   = Math.round(3600/dur);
+  const totalSpotsDay  = spotsPerHour * 24;           // 24h siempre encendida
+  const winSpots       = spotsPerHour * winH;          // spots en ventana comercial
+  const offWinSpots    = totalSpotsDay - winSpots;     // horas fuera → 100% Inverfin
+  const invInWin       = Math.round(winSpots * ipct);  // Inverfin intercalado en ventana
+  const extSpots       = winSpots - invInWin;          // externos en ventana
+  const totalInvSpots  = offWinSpots + invInWin;       // total spots Inverfin/día
 
   document.getElementById('spot-metrics').innerHTML = `
-    <div class="metric"><div class="metric-label">Spots totales/día</div><div class="metric-value">${spotsDay.toLocaleString()}</div><div class="metric-sub">${hrs}h × ${spotsHr}/h</div></div>
-    <div class="metric"><div class="metric-label">Spots Inverfin/día</div><div class="metric-value teal">${invSpots.toLocaleString()}</div><div class="metric-sub">${Math.round(ipct*100)}% del inventario</div></div>
-    <div class="metric"><div class="metric-label">Spots externos/día</div><div class="metric-value gold">${extSpots.toLocaleString()}</div><div class="metric-sub">${Math.round((1-ipct)*100)}% disponible</div></div>
-    <div class="metric"><div class="metric-label">Spots Inverfin/mes</div><div class="metric-value">${(invSpots*30).toLocaleString()}</div><div class="metric-sub">≈ ${Math.round(invSpots/hrs)}/hora</div></div>
+    <div class="metric"><div class="metric-label">Spots totales/día (24 h)</div><div class="metric-value">${totalSpotsDay.toLocaleString()}</div><div class="metric-sub">${spotsPerHour} spots/hora</div></div>
+    <div class="metric"><div class="metric-label">Spots Inverfin SAECA/día</div><div class="metric-value teal">${totalInvSpots.toLocaleString()}</div><div class="metric-sub">${Math.round(totalInvSpots/totalSpotsDay*100)}% del total</div></div>
+    <div class="metric"><div class="metric-label">Spots externos disp./día</div><div class="metric-value gold">${extSpots.toLocaleString()}</div><div class="metric-sub">en ventana comercial ${winH}h</div></div>
+    <div class="metric"><div class="metric-label">Spots Inverfin/mes</div><div class="metric-value">${(totalInvSpots*30).toLocaleString()}</div><div class="metric-sub">${offWinSpots.toLocaleString()} fuera de ventana/día</div></div>
   `;
 
+  // Timeline: distribución equilibrada de Inverfin dentro de ventana
+  // Inverfin aparece cada N spots (ratio 1:floor(1/ipct))
+  const invEvery = ipct > 0 ? Math.round(1/ipct) : 999;
   const bar = document.getElementById('tl-bar');
-  bar.innerHTML = '';
-  const startH = 6, endH = 6 + hrs;
-  for (let h = 0; h < 24; h++) {
-    const inWin = h >= startH && h < endH;
-    const isPico = h >= 6 && h < 22;
+  bar.innerHTML='';
+  const startH=6, endH=6+winH > 24 ? 24 : 6+winH;
+
+  for(let h=0; h<24; h++){
+    const inWin = winH===24 ? true : (h>=startH && h<endH);
+    const isPico = h>=6 && h<22;
     let bg;
-    if (!inWin) bg = 'rgba(255,255,255,0.08)';
-    else {
-      const r = (h * 7 + 13) % 100;
-      if (r < ipct * 100) bg = '#2EC4B6';
-      else if (isPico) bg = '#F5C842';
-      else bg = '#E8603C';
+    if(!inWin){
+      bg='#0F6E56'; // Inverfin fuera de ventana
+    } else {
+      // dentro de ventana: cada invEvery horas = Inverfin, resto = anunciante
+      const posInWin = h - startH;
+      if(posInWin % invEvery === 0){
+        bg='#2EC4B6'; // Inverfin intercalado
+      } else if(isPico){
+        bg='#F5C842';
+      } else {
+        bg='#E8603C';
+      }
     }
-    const s = document.createElement('div');
-    s.className = 'tl-slot';
-    s.style.cssText = `flex:1;background:${bg};`;
-    s.title = `${h}:00 — ${!inWin ? 'Fuera de ventana' : bg==='#2EC4B6' ? 'Inverfin SAECA' : isPico ? 'Anunciante diurno' : 'Anunciante nocturno'}`;
+    const s=document.createElement('div');
+    s.className='tl-slot';
+    s.style.cssText=`flex:1;background:${bg};`;
+    const label = !inWin ? 'Inverfin SAECA (fuera de ventana)' :
+                  bg==='#2EC4B6' ? 'Inverfin SAECA (intercalado)' :
+                  isPico ? 'Anunciante diurno' : 'Anunciante nocturno';
+    s.title=`${h}:00 — ${label}`;
     bar.appendChild(s);
   }
-  const th = document.getElementById('tl-hours');
-  th.innerHTML = '';
-  [0,6,12,18,24].forEach(h => { const sp = document.createElement('span'); sp.textContent = h+'h'; th.appendChild(sp); });
+
+  const th=document.getElementById('tl-hours');
+  th.innerHTML='';
+  [0,6,12,18,24].forEach(h=>{const sp=document.createElement('span');sp.textContent=h+'h';th.appendChild(sp);});
+
+  const offH = 24-winH;
+  document.getElementById('spot-note-dist').innerHTML =
+    `<b>Distribución en ventana comercial (${winH}h):</b> los spots de Inverfin SAECA se intercalan de forma equilibrada — 
+    aproximadamente 1 de cada ${invEvery} spots es propio. 
+    <b>Fuera de ventana (${offH}h):</b> la pantalla muestra 100% contenido Inverfin SAECA 
+    (${offWinSpots.toLocaleString()} spots/día adicionales sin costo de pauta).`;
 
   document.getElementById('spot-note').innerHTML =
-    `La pantalla emite <b>${spotsDay.toLocaleString()} spots/día</b> en una ventana de <b>${hrs} horas</b> con spots de <b>${dur} segundos</b>. 
-    Inverfin SAECA ocupa <b>${invSpots.toLocaleString()} spots/día</b> (${Math.round(ipct*100)}%) y los anunciantes externos disponen de <b>${extSpots.toLocaleString()} spots/día</b> (${Math.round((1-ipct)*100)}%).
-    Mensualmente: <b>${(invSpots*30).toLocaleString()}</b> impresiones propias y <b>${(extSpots*30).toLocaleString()}</b> spots comercializables.`;
+    `Pantalla activa <b>24 horas/día</b>. Inverfin SAECA ocupa <b>${totalInvSpots.toLocaleString()} spots/día</b> en total: 
+    <b>${invInWin.toLocaleString()}</b> intercalados en la ventana comercial y <b>${offWinSpots.toLocaleString()}</b> en las ${offH} horas fuera de ventana. 
+    Los anunciantes externos disponen de <b>${extSpots.toLocaleString()} spots/día</b> dentro de la ventana de ${winH}h.`;
 }
 
-function recalcIng() {
+function recalcIng(){
   const dur   = +document.getElementById('spotDur').value;
-  const hrs   = +document.getElementById('winHours').value;
-  const ipct  = +document.getElementById('inverfinPct').value / 100;
+  const winH  = +document.getElementById('winHours').value;
+  const ipct  = +document.getElementById('inverfinPct').value/100;
   const zona  = document.getElementById('zona').value;
-  const ocup  = +document.getElementById('ocup').value / 100;
-  const vac   = +document.getElementById('vac').value / 100;
-  const ppico = +document.getElementById('ppico').value / 100;
+  const ocup  = +document.getElementById('ocup').value/100;
+  const vac   = +document.getElementById('vac').value/100;
+  const ppico = +document.getElementById('ppico').value/100;
 
-  document.getElementById('ocupV').textContent  = Math.round(ocup*100) + ' %';
-  document.getElementById('vacV').textContent   = Math.round(vac*100) + ' %';
-  document.getElementById('ppicoV').textContent = Math.round(ppico*100) + ' %';
+  document.getElementById('ocupV').textContent  = Math.round(ocup*100)+' %';
+  document.getElementById('vacV').textContent   = Math.round(vac*100)+' %';
+  document.getElementById('ppicoV').textContent = Math.round(ppico*100)+' %';
 
   const z = ZONAS[zona];
-  const tarifaDia   = usd((z.gsPerSpotMin + z.gsPerSpotMax) / 2);
-  const tarifaNoche = tarifaDia * 0.60;
+  const tarifaDia   = usd((z.gsMin+z.gsMax)/2);
+  const tarifaNoche = tarifaDia*0.60;
 
-  const spotsDay    = Math.round(hrs * 3600 / dur);
-  const invSpotsDay = Math.round(spotsDay * ipct);
-  const extSpotsDay = spotsDay - invSpotsDay;
-  const efectOcup   = ocup * (1 - vac);
+  const spotsPerHour = Math.round(3600/dur);
+  const winSpots     = spotsPerHour*winH;
+  const offWinSpots  = spotsPerHour*(24-winH);
+  const invInWin     = Math.round(winSpots*ipct);
+  const extSpots     = winSpots-invInWin;
+  const totalInvSpots= offWinSpots+invInWin;
+  const efectOcup    = ocup*(1-vac);
 
-  const diaDisp   = Math.round(extSpotsDay * ppico);
-  const nocheDisp = extSpotsDay - diaDisp;
-  const diaVend   = Math.round(diaDisp * efectOcup);
-  const nocheVend = Math.round(nocheDisp * efectOcup);
+  const diaDisp   = Math.round(extSpots*ppico);
+  const nocheDisp = extSpots-diaDisp;
+  const diaVend   = Math.round(diaDisp*efectOcup);
+  const nocheVend = Math.round(nocheDisp*efectOcup);
 
-  const ingDia   = diaVend * tarifaDia * 30;
-  const ingNoche = nocheVend * tarifaNoche * 30;
-  const ingExtMes = ingDia + ingNoche;
-  const ingExtAnual = ingExtMes * 12;
+  const ingDia    = diaVend*tarifaDia*30;
+  const ingNoche  = nocheVend*tarifaNoche*30;
+  const ingExtMes = ingDia+ingNoche;
+  const ingExtAnual = ingExtMes*12;
 
-  const invDia   = Math.round(invSpotsDay * ppico);
-  const invNoche = invSpotsDay - invDia;
-  const invValMes = (invDia * tarifaDia + invNoche * tarifaNoche) * 30;
+  // Valor spots Inverfin: en ventana a tarifa de mercado, fuera de ventana a tarifa nocturna (tráfico bajo)
+  const invInWinDia   = Math.round(invInWin*ppico);
+  const invInWinNoche = invInWin-invInWinDia;
+  const invValMes = ((invInWinDia*tarifaDia)+(invInWinNoche*tarifaNoche)+(offWinSpots*tarifaNoche*0.5))*30;
 
-  const totalMes  = ingExtMes + (ingView === 'total' ? invValMes : 0);
-  const paybackMes = +(98902 / Math.max(0.01, ingExtMes)).toFixed(1);
+  const totalMes  = ingExtMes+(ingView==='total'?invValMes:0);
+  const paybackMes = +(98902/Math.max(0.01,ingExtMes)).toFixed(1);
 
   document.getElementById('ing-metrics').innerHTML = `
-    <div class="metric"><div class="metric-label">Ingreso ext./mes</div><div class="metric-value teal">${fmtUSD(ingExtMes,0)}</div><div class="metric-sub">${fmtUSDk(ingExtAnual)} / año</div></div>
+    <div class="metric"><div class="metric-label">Ingreso ext./mes</div><div class="metric-value teal">${fmtUSD(ingExtMes,0)}</div><div class="metric-sub">${fmtUSDk(ingExtAnual)}/año</div></div>
     <div class="metric" style="${ingView==='total'?'':'opacity:.5'}"><div class="metric-label">Valor spots Inverfin/mes</div><div class="metric-value blue">${fmtUSD(invValMes,0)}</div><div class="metric-sub">ahorro pub. equivalente</div></div>
-    <div class="metric"><div class="metric-label">${ingView==='total'?'Total combinado/mes':'Solo externos/mes'}</div><div class="metric-value gold">${fmtUSD(totalMes,0)}</div><div class="metric-sub">${fmtUSDk(totalMes*12)} / año</div></div>
+    <div class="metric"><div class="metric-label">${ingView==='total'?'Total combinado/mes':'Solo externos/mes'}</div><div class="metric-value gold">${fmtUSD(totalMes,0)}</div><div class="metric-sub">${fmtUSDk(totalMes*12)}/año</div></div>
     <div class="metric"><div class="metric-label">Ocup. neta (−vacancia)</div><div class="metric-value">${Math.round(efectOcup*100)}%</div><div class="metric-sub">${Math.round(ocup*100)}% − ${Math.round(vac*100)}% vac.</div></div>
     <div class="metric"><div class="metric-label">Payback inversión</div><div class="metric-value">${paybackMes} m</div><div class="metric-sub">solo ing. externos</div></div>
   `;
 
-  const rows = Object.entries(ZONAS).map(([k, v2]) => {
-    const sel = k === zona;
-    const mid = usd((v2.gsPerSpotMin + v2.gsPerSpotMax) / 2);
-    return `<tr class="${sel ? 'zt-sel' : ''}">
-      <td>${v2.label}${sel ? ' ★' : ''}</td>
-      <td style="text-align:right;font-family:monospace">${fmtUSD(usd(v2.gsPerSpotMin),3)} – ${fmtUSD(usd(v2.gsPerSpotMax),3)}</td>
-      <td style="text-align:right">${fmtUSD(usd(v2.gsMes),0)}</td>
+  const rows = Object.entries(ZONAS).map(([k,v2])=>{
+    const sel=k===zona;
+    const mid=usd((v2.gsMin+v2.gsMax)/2);
+    return `<tr class="${sel?'zt-sel':''}">
+      <td>${v2.label}${sel?' ★':''}</td>
+      <td style="text-align:right;font-family:monospace">${fmtUSD(usd(v2.gsMin),3)} – ${fmtUSD(usd(v2.gsMax),3)}</td>
       <td style="text-align:right;color:${sel?'var(--teal)':'inherit'}">${fmtUSD(mid,3)}/spot</td>
     </tr>`;
   }).join('');
-  document.getElementById('zone-table').innerHTML =
-    `<thead><tr><th>Zona</th><th style="text-align:right">Costo/spot USD</th><th style="text-align:right">Ref. mensual USD</th><th style="text-align:right">Tarifa media</th></tr></thead><tbody>${rows}</tbody>`;
+  document.getElementById('zone-table').innerHTML=
+    `<thead><tr><th>Zona</th><th style="text-align:right">Rango costo/spot USD</th><th style="text-align:right">Tarifa media</th></tr></thead><tbody>${rows}</tbody>`;
 
-  document.getElementById('note-occ').className = vac >= 0.2 ? 'note warn' : 'note';
-  document.getElementById('note-occ').innerHTML =
-    `Tarifa zona activa: <b>${fmtUSD(tarifaDia,3)}/spot diurno</b> · nocturno (−40%): <b>${fmtUSD(tarifaNoche,3)}/spot</b>. 
-    Ocupación neta = <b>${Math.round(efectOcup*100)}%</b> (${Math.round(ocup*100)}% ocupación − ${Math.round(vac*100)}% vacancia). 
-    De ${extSpotsDay.toLocaleString()} spots/día disponibles para externos, se venden <b>${(diaVend+nocheVend).toLocaleString()}/día</b>.
-    ${vac >= 0.2 ? ' <b>Atención:</b> vacancia alta — revisar estrategia comercial.' : ''}`;
+  document.getElementById('note-occ').className=vac>=0.2?'note warn':'note';
+  document.getElementById('note-occ').innerHTML=
+    `Tarifa activa: <b>${fmtUSD(tarifaDia,3)}/spot diurno</b> · nocturno (−40%): <b>${fmtUSD(tarifaNoche,3)}/spot</b>. 
+    Ocupación neta = <b>${Math.round(efectOcup*100)}%</b> (${Math.round(ocup*100)}% ocup. − ${Math.round(vac*100)}% vacancia). 
+    De ${extSpots.toLocaleString()} spots/día externos disponibles, se venden <b>${(diaVend+nocheVend).toLocaleString()}/día</b>.
+    ${vac>=0.2?' <b>Atención:</b> vacancia alta — revisar estrategia comercial.':''}`;
 
-  document.getElementById('ing-rows').innerHTML = `
-    <tr>
-      <td>Diurna (tarifa plena)</td>
-      <td>${diaDisp.toLocaleString()}</td>
-      <td>${diaVend.toLocaleString()}</td>
-      <td>${fmtUSD(tarifaDia,3)}</td>
-      <td>${fmtUSD(ingDia,0)}</td>
-      <td>${fmtUSD(ingDia*12,0)}</td>
-    </tr>
-    <tr>
-      <td>Nocturna (tarifa −40%)</td>
-      <td>${nocheDisp.toLocaleString()}</td>
-      <td>${nocheVend.toLocaleString()}</td>
-      <td>${fmtUSD(tarifaNoche,3)}</td>
-      <td>${fmtUSD(ingNoche,0)}</td>
-      <td>${fmtUSD(ingNoche*12,0)}</td>
-    </tr>
-    <tr class="total-row">
-      <td><strong>Total</strong></td>
-      <td>${extSpotsDay.toLocaleString()}</td>
-      <td>${(diaVend+nocheVend).toLocaleString()}</td>
-      <td>—</td>
-      <td><strong>${fmtUSD(ingExtMes,0)}</strong></td>
-      <td><strong>${fmtUSD(ingExtAnual,0)}</strong></td>
-    </tr>
+  document.getElementById('ing-rows').innerHTML=`
+    <tr><td>Diurna (tarifa plena)</td><td>${diaDisp.toLocaleString()}</td><td>${diaVend.toLocaleString()}</td><td>${fmtUSD(tarifaDia,3)}</td><td>${fmtUSD(ingDia,0)}</td><td>${fmtUSD(ingDia*12,0)}</td></tr>
+    <tr><td>Nocturna (−40%)</td><td>${nocheDisp.toLocaleString()}</td><td>${nocheVend.toLocaleString()}</td><td>${fmtUSD(tarifaNoche,3)}</td><td>${fmtUSD(ingNoche,0)}</td><td>${fmtUSD(ingNoche*12,0)}</td></tr>
+    <tr class="total-row"><td><strong>Total</strong></td><td>${extSpots.toLocaleString()}</td><td>${(diaVend+nocheVend).toLocaleString()}</td><td>—</td><td><strong>${fmtUSD(ingExtMes,0)}</strong></td><td><strong>${fmtUSD(ingExtAnual,0)}</strong></td></tr>
   `;
 
-  const datasets = [
-    { label:'Diurno ext.', data:[ingDia, 0, ingExtMes, ingExtAnual/12], backgroundColor:'#1D9E75', borderColor:'#1D9E75', borderWidth:1, borderRadius:5 },
-    { label:'Nocturno ext.', data:[0, ingNoche, 0, 0], backgroundColor:'#D85A30', borderColor:'#D85A30', borderWidth:1, borderRadius:5 },
+  const datasets=[
+    {label:'Diurno ext.',data:[ingDia,0,ingExtMes,ingExtAnual/12],backgroundColor:'#1D9E75',borderColor:'#1D9E75',borderWidth:1,borderRadius:5},
+    {label:'Nocturno ext.',data:[0,ingNoche,0,0],backgroundColor:'#D85A30',borderColor:'#D85A30',borderWidth:1,borderRadius:5},
   ];
-  if (ingView === 'total') {
-    datasets.push({ label:'Valor Inverfin SAECA', data:[0,0,invValMes,invValMes], backgroundColor:'#378ADD', borderColor:'#378ADD', borderWidth:1, borderRadius:5 });
+  if(ingView==='total'){
+    datasets.push({label:'Valor Inverfin SAECA',data:[0,0,invValMes,invValMes],backgroundColor:'#378ADD',borderColor:'#378ADD',borderWidth:1,borderRadius:5});
   }
 
-  document.getElementById('chart-legend').innerHTML = [
-    { color:'#1D9E75', label:`Diurno ext. — ${fmtUSD(ingDia,0)}/mes` },
-    { color:'#D85A30', label:`Nocturno ext. — ${fmtUSD(ingNoche,0)}/mes` },
-    ...(ingView==='total' ? [{ color:'#378ADD', label:`Valor Inverfin SAECA — ${fmtUSD(invValMes,0)}/mes` }] : []),
-  ].map(l => `<div class="leg"><div class="leg-sq" style="background:${l.color}"></div>${l.label}</div>`).join('');
+  document.getElementById('chart-legend').innerHTML=[
+    {color:'#1D9E75',label:`Diurno ext. — ${fmtUSD(ingDia,0)}/mes`},
+    {color:'#D85A30',label:`Nocturno ext. — ${fmtUSD(ingNoche,0)}/mes`},
+    ...(ingView==='total'?[{color:'#378ADD',label:`Valor Inverfin SAECA — ${fmtUSD(invValMes,0)}/mes`}]:[]),
+  ].map(l=>`<div class="leg"><div class="leg-sq" style="background:${l.color}"></div>${l.label}</div>`).join('');
 
-  if (ingChartInst) { ingChartInst.destroy(); ingChartInst = null; }
-  ingChartInst = new Chart(document.getElementById('ingChart'), {
-    type: 'bar',
-    data: {
-      labels: ['Diurno ext.', 'Nocturno ext.', ingView==='total'?'Total combinado/mes':'Total ext./mes', 'Promedio mensual anual'],
+  if(ingChartInst){ingChartInst.destroy();ingChartInst=null;}
+  ingChartInst=new Chart(document.getElementById('ingChart'),{
+    type:'bar',
+    data:{
+      labels:['Diurno ext.','Nocturno ext.',ingView==='total'?'Total combinado/mes':'Total ext./mes','Promedio mensual anual'],
       datasets
     },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ' ' + fmtUSD(ctx.raw, 0) } }
-      },
-      scales: {
-        x: { ticks:{ color:'#8A9BB5' }, grid:{ display:false }, stacked:true },
-        y: { ticks:{ color:'#8A9BB5', callback: v => fmtUSDk(v) }, grid:{ color:'rgba(136,135,128,.15)' }, stacked:true }
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmtUSD(ctx.raw,0)}}},
+      scales:{
+        x:{ticks:{color:'#8A9BB5'},grid:{display:false},stacked:true},
+        y:{ticks:{color:'#8A9BB5',callback:v=>fmtUSDk(v)},grid:{color:'rgba(136,135,128,.15)'},stacked:true}
       }
     }
   });
 
-  const pbPct = Math.min(96, Math.round((36 / Math.max(1, paybackMes)) * 100));
-  document.getElementById('payback-section').innerHTML = `
+  const pbPct=Math.min(96,Math.round((36/Math.max(1,paybackMes))*100));
+  document.getElementById('payback-section').innerHTML=`
     <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-top:.5rem">
       <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px">
         <span style="color:var(--muted)">Payback inversión Prourbe (USD 98,902)</span>
@@ -680,25 +638,23 @@ function recalcIng() {
       </div>
     </div>`;
 
-  window._ingExtMes  = ingExtMes;
-  window._ingExtAnual = ingExtAnual;
-  window._invValMes  = invValMes;
-  window._paybackMes = paybackMes;
+  window._ingExtMes=ingExtMes;window._ingExtAnual=ingExtAnual;
+  window._invValMes=invValMes;window._paybackMes=paybackMes;
 }
 
-function updateResumen() {
+function updateResumen(){
   const dur  = +document.getElementById('spotDur').value;
-  const hrs  = +document.getElementById('winHours').value;
-  const ipct = +document.getElementById('inverfinPct').value / 100;
-  const spotsDay = Math.round(hrs * 3600 / dur);
-  const invSpots = Math.round(spotsDay * ipct);
-  if (window._ingExtMes) {
-    document.getElementById('res-monthly').textContent  = fmtUSD(window._ingExtMes, 0);
-    document.getElementById('res-annual').textContent   = fmtUSD(window._ingExtAnual, 0);
-    document.getElementById('res-payback').textContent  = window._paybackMes + ' m';
-    document.getElementById('res-inv-val').textContent  = fmtUSD(window._invValMes, 0);
+  const winH = +document.getElementById('winHours').value;
+  const ipct = +document.getElementById('inverfinPct').value/100;
+  const sph  = Math.round(3600/dur);
+  const inv  = sph*(24-winH) + Math.round(sph*winH*ipct);
+  document.getElementById('res-inv-spots').textContent=inv.toLocaleString();
+  if(window._ingExtMes){
+    document.getElementById('res-monthly').textContent=fmtUSD(window._ingExtMes,0);
+    document.getElementById('res-annual').textContent=fmtUSD(window._ingExtAnual,0);
+    document.getElementById('res-payback').textContent=window._paybackMes+' m';
+    document.getElementById('res-inv-val').textContent=fmtUSD(window._invValMes,0);
   }
-  document.getElementById('res-inv-spots').textContent = invSpots.toLocaleString();
 }
 
 recalcSpots();
