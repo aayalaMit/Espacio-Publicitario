@@ -139,8 +139,9 @@ footer span{color:var(--gold)}
   <div class="nav-inner">
     <button class="nav-btn active" onclick="showTab('spots')">① Planificador de spots</button>
     <button class="nav-btn" onclick="showTab('ingresos')">② Proyección de ingresos</button>
-    <button class="nav-btn" onclick="showTab('compare')">③ Comparación de proveedores</button>
+    <button class="nav-btn" onclick="showTab('proveedores')">③ Proveedores</button>
     <button class="nav-btn" onclick="showTab('resumen')">④ Resumen ejecutivo</button>
+    <button class="nav-btn" onclick="showTab('pipeline')">⑤ Pipeline anunciantes</button>
   </div>
 </nav>
 
@@ -157,8 +158,8 @@ footer span{color:var(--gold)}
     <div class="controls-title">Parámetros de operación</div>
     <div class="ctrl-row">
       <span class="ctrl-label">Duración por spot</span>
-      <input type="range" id="spotDur" min="5" max="30" step="5" value="15" oninput="recalcSpots()">
-      <span class="ctrl-val" id="spotDurVal">15 s</span>
+      <input type="range" id="spotDur" min="5" max="30" step="5" value="10" oninput="recalcSpots()">
+      <span class="ctrl-val" id="spotDurVal">10 s</span>
     </div>
     <div class="ctrl-row">
       <span class="ctrl-label">Ventana comercial (horas vendibles a externos)</span>
@@ -205,6 +206,17 @@ footer span{color:var(--gold)}
   <div class="metrics" id="ing-metrics"></div>
 
   <div class="controls-box">
+    <div class="controls-title">Modelo comercial del proveedor</div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Proveedor / modelo de ingresos</span>
+      <select id="modeloComercial" onchange="recalcIng()">
+        <option value="propio">Prourbe o Driven — 100% ingresos para Inverfin</option>
+        <option value="reimpulso">Romis + Reimpulso — 50/50 en gestionado · 100% en directo</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="controls-box">
     <div class="controls-title">Zona y tarifas de mercado</div>
     <div class="ctrl-row">
       <span class="ctrl-label">Zona / ubicación</span>
@@ -233,6 +245,49 @@ footer span{color:var(--gold)}
       <span class="ctrl-label">% franja diurna en ventana comercial</span>
       <input type="range" id="ppico" min="40" max="90" step="5" value="70" oninput="recalcIng()">
       <span class="ctrl-val" id="ppicoV">70 %</span>
+    </div>
+  </div>
+
+  <div class="controls-box">
+    <div class="controls-title">Canal de venta</div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">% spots vendidos directamente por Inverfin</span>
+      <input type="range" id="dirPct" min="10" max="80" step="5" value="35" oninput="recalcIng()">
+      <span class="ctrl-val" id="dirPctV">35 %</span>
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Comisión de agencia (sobre tarifa bruta)</span>
+      <input type="range" id="comPct" min="10" max="25" step="1" value="18" oninput="recalcIng()">
+      <span class="ctrl-val" id="comPctV">18 %</span>
+    </div>
+  </div>
+
+  <div class="controls-box">
+    <div class="controls-title">Costos operativos mensuales (USD)</div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Energía eléctrica</span>
+      <input type="range" id="costoEnergia" min="200" max="1000" step="50" value="490" oninput="recalcIng()">
+      <span class="ctrl-val" id="costoEnergiaV">$490</span>
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Seguro del equipo</span>
+      <input type="range" id="costoSeguro" min="0" max="600" step="50" value="300" oninput="recalcIng()">
+      <span class="ctrl-val" id="costoSeguroV">$300</span>
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Mantenimiento</span>
+      <input type="range" id="costoMant" min="0" max="500" step="50" value="250" oninput="recalcIng()">
+      <span class="ctrl-val" id="costoMantV">$250</span>
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Internet / conectividad</span>
+      <input type="range" id="costoInternet" min="0" max="200" step="10" value="80" oninput="recalcIng()">
+      <span class="ctrl-val" id="costoInternetV">$80</span>
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Canon municipal / otros</span>
+      <input type="range" id="costoCanon" min="0" max="500" step="50" value="200" oninput="recalcIng()">
+      <span class="ctrl-val" id="costoCanonV">$200</span>
     </div>
   </div>
 
@@ -269,75 +324,156 @@ footer span{color:var(--gold)}
 </div>
 
 <!-- TAB 3: COMPARACIÓN -->
-<div id="tab-compare" class="section">
+<div id="tab-proveedores" class="section">
   <div class="section-heading">Comparación de proveedores</div>
-  <div class="section-sub">Análisis lado a lado de Romis Paraguay S.A. y Prourbe Medios S.A. en precio, especificaciones, experiencia y capacidad comercial.</div>
-  <div class="cmp-grid">
-    <div class="cmp-card">
-      <div class="cmp-header">
-        <div><div class="cmp-name">Romis Paraguay</div><div class="cmp-tagline">Presupuesto N° 0526014 · 28/05/2026</div></div>
-        <span class="badge badge-gold">Entrega rápida</span>
-      </div>
-      <div class="cmp-section-title">Propuesta — Casa Central</div>
-      <div class="cmp-row"><span class="cmp-key">Pantalla</span><span class="cmp-val">LED Outdoor P8 · 8,64 × 4,80 m · 9,000 nits</span></div>
-      <div class="cmp-row"><span class="cmp-key">Total IVA incl.</span><span class="cmp-val" style="color:var(--gold);font-weight:600">USD 115,300.75</span></div>
-      <div class="cmp-row"><span class="cmp-key">Estructura</span><span class="cmp-val">Cilíndrica 7 m · 12 mm — incluida</span></div>
-      <div class="cmp-row"><span class="cmp-key">Inst. eléctrica</span><span class="cmp-val">Incluida (USD 450)</span></div>
-      <div class="cmp-row"><span class="cmp-key">Administración</span><span class="cmp-val">12 meses × USD 113.64</span></div>
-      <div class="cmp-row"><span class="cmp-key">Garantía</span><span class="cmp-val"><span class="badge badge-teal">2 años</span></span></div>
-      <div class="cmp-row"><span class="cmp-key">Entrega</span><span class="cmp-val"><span class="badge badge-gold">2–4 semanas</span></span></div>
-      <div class="cmp-row"><span class="cmp-key">Pago</span><span class="cmp-val">50% inicio · 50% entrega</span></div>
-      <div class="cmp-section-title">Perfil de empresa</div>
-      <div class="cmp-row"><span class="cmp-key">Especialidad</span><span class="cmp-val">Pantallas LED outdoor / señalética digital</span></div>
-      <div class="cmp-row"><span class="cmp-key">Clientes ref.</span><span class="cmp-val">No detallados en propuesta</span></div>
-      <div class="cmp-row"><span class="cmp-key">Soporte técnico</span><span class="cmp-val">Equipo propio (datos limitados)</span></div>
-      <div class="cmp-row"><span class="cmp-key">Red comercial</span><span class="cmp-val">No mencionada</span></div>
-    </div>
+  <div class="section-sub">Tres propuestas recibidas para Inverfin SAECA — distintos modelos comerciales, distintas capacidades. Todos los precios en USD con IVA.</div>
+
+  <!-- ── CARDS ── -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin-bottom:2rem">
+
+    <!-- PROURBE -->
     <div class="cmp-card featured">
       <div class="cmp-header">
         <div><div class="cmp-name">Prourbe Medios</div><div class="cmp-tagline">Propuesta Pantallas LED · 2026</div></div>
-        <span class="badge badge-teal">Mayor experiencia</span>
+        <span class="badge badge-teal">Mejor precio</span>
       </div>
-      <div class="cmp-section-title">Propuesta — Casa Central (5×8 m vertical)</div>
-      <div class="cmp-row"><span class="cmp-key">Pantalla</span><span class="cmp-val">LED Vertical 5×8 m · 10,000 nits · ≥15,000 Hz</span></div>
-      <div class="cmp-row"><span class="cmp-key">Total IVA incl.</span><span class="cmp-val" style="color:var(--teal);font-weight:600">USD 98,901.73</span></div>
-      <div class="cmp-row"><span class="cmp-key">Estructura</span><span class="cmp-val">Cotizada a medida · sin lookeo</span></div>
-      <div class="cmp-row"><span class="cmp-key">PC contenido</span><span class="cmp-val">Incluido (USD 3,066.12)</span></div>
-      <div class="cmp-row"><span class="cmp-key">Mantenimiento</span><span class="cmp-val">1 año incluido · renovable</span></div>
-      <div class="cmp-row"><span class="cmp-key">Garantía</span><span class="cmp-val"><span class="badge badge-teal">1 año + renovación</span></span></div>
+      <div class="cmp-section-title">Equipo y técnica</div>
+      <div class="cmp-row"><span class="cmp-key">Pantalla</span><span class="cmp-val">LED Vertical · 5×8 m (40 m²)</span></div>
+      <div class="cmp-row"><span class="cmp-key">Brillo</span><span class="cmp-val" style="color:var(--teal)">10,000 nits ✓ mayor del mercado</span></div>
+      <div class="cmp-row"><span class="cmp-key">Frec. actualiz.</span><span class="cmp-val">≥ 15,000 Hz</span></div>
+      <div class="cmp-row"><span class="cmp-key">Estructura</span><span class="cmp-val">Cotizada a medida · sin revestimiento</span></div>
+      <div class="cmp-row"><span class="cmp-key">PC contenido</span><span class="cmp-val">Incluido (USD 3,066)</span></div>
+      <div class="cmp-section-title">Condiciones comerciales</div>
+      <div class="cmp-row"><span class="cmp-key">Precio total IVA</span><span class="cmp-val" style="color:var(--teal);font-weight:600">USD 98,902 ✓</span></div>
+      <div class="cmp-row"><span class="cmp-key">Garantía</span><span class="cmp-val">1 año + renovación anual</span></div>
+      <div class="cmp-row"><span class="cmp-key">Mantenimiento</span><span class="cmp-val">1er año incluido · renovable</span></div>
       <div class="cmp-row"><span class="cmp-key">Entrega</span><span class="cmp-val">~90 días (fabr. + importación)</span></div>
-      <div class="cmp-row"><span class="cmp-key">Suc. E. Ayala</span><span class="cmp-val" style="font-weight:500">USD 119,742.28 · 10×5 m horizontal</span></div>
-      <div class="cmp-section-title">Perfil de empresa</div>
-      <div class="cmp-row"><span class="cmp-key">Especialidad</span><span class="cmp-val">Líder OOH + DOOH · centros comerciales</span></div>
-      <div class="cmp-row"><span class="cmp-key">Clientes ref.</span><span class="cmp-val">Nestlé, Mastercard, McDonald's, Itaú, KFC, Huawei, Arcor, Samsung…</span></div>
-      <div class="cmp-row"><span class="cmp-key">Soporte técnico</span><span class="cmp-val"><span class="badge badge-teal">Equipo local propio confirmado</span></span></div>
-      <div class="cmp-row"><span class="cmp-key">Red comercial</span><span class="cmp-val"><span class="badge badge-teal">Puede vender slots en pantalla</span></span></div>
+      <div class="cmp-row"><span class="cmp-key">Pago</span><span class="cmp-val">50% anticipo · 50% entrega</span></div>
+      <div class="cmp-row"><span class="cmp-key">Suc. E. Ayala</span><span class="cmp-val">USD 119,742 · 10×5 m horizontal</span></div>
+      <div class="cmp-section-title">Capacidad comercial</div>
+      <div class="cmp-row"><span class="cmp-key">Red anunciantes</span><span class="cmp-val" style="color:var(--teal)">Sí — red activa en PY ✓</span></div>
+      <div class="cmp-row"><span class="cmp-key">Pantallas en PY</span><span class="cmp-val">+20 grandes formatos instalados</span></div>
+      <div class="cmp-row"><span class="cmp-key">Clientes ref.</span><span class="cmp-val">Nestlé, Mastercard, McDonald's, Itaú, KFC, Huawei, Samsung…</span></div>
+      <div class="cmp-row"><span class="cmp-key">Soporte técnico</span><span class="cmp-val" style="color:var(--teal)">Equipo local propio confirmado ✓</span></div>
       <div class="cmp-row"><span class="cmp-key">Capacitación</span><span class="cmp-val">Personal Inverfin SAECA incluida</span></div>
-      <div class="cmp-row"><span class="cmp-key">Pantallas inst.</span><span class="cmp-val">+20 grandes formatos en PY</span></div>
+      <div class="cmp-row"><span class="cmp-key">Modelo ingresos</span><span class="cmp-val">Inverfin gestiona 100% de los ingresos</span></div>
+      <div class="cmp-section-title">Fortalezas</div>
+      <div style="font-size:12px;color:var(--muted);padding:4px 0;line-height:1.7">
+        ✓ Precio más bajo · ✓ Mayor brillo · ✓ Red comercial activa · ✓ Soporte local confirmado · ✓ Capacitación incluida
+      </div>
+      <div class="cmp-section-title" style="color:var(--coral)">Consideraciones</div>
+      <div style="font-size:12px;color:var(--muted);padding:4px 0;line-height:1.7">
+        · Garantía 1 año (vs 2–5 años de otros) · · Estructura sin revestimiento cotizada aparte · · ~90 días entrega
+      </div>
+    </div>
+
+    <!-- DRIVEN -->
+    <div class="cmp-card">
+      <div class="cmp-header">
+        <div><div class="cmp-name">Driven Paraguay</div><div class="cmp-tagline">Contrato borrador · 2026 · Con financiamiento</div></div>
+        <span class="badge badge-gold">5 años garantía</span>
+      </div>
+      <div class="cmp-section-title">Equipo y técnica</div>
+      <div class="cmp-row"><span class="cmp-key">Pantalla</span><span class="cmp-val">LED P6 ABSEN · 4,80×5,76 m (27,65 m²) · 1 cara</span></div>
+      <div class="cmp-row"><span class="cmp-key">Brillo</span><span class="cmp-val" style="color:var(--coral)">7,500 nits — el más bajo</span></div>
+      <div class="cmp-row"><span class="cmp-key">Frec. actualiz.</span><span class="cmp-val">≥ 7,680 Hz</span></div>
+      <div class="cmp-row"><span class="cmp-key">Estructura</span><span class="cmp-val">Fundación + estructura incluidas</span></div>
+      <div class="cmp-row"><span class="cmp-key">PC contenido</span><span class="cmp-val" style="color:var(--coral)">NO incluido — contratar aparte</span></div>
+      <div class="cmp-section-title">Condiciones comerciales</div>
+      <div class="cmp-row"><span class="cmp-key">Precio contado</span><span class="cmp-val" style="font-weight:600">USD 101,214 (IVA incl.)</span></div>
+      <div class="cmp-row"><span class="cmp-key">Financ. 24 cuotas</span><span class="cmp-val" style="color:var(--teal)">Entrada USD 32,204 + 24 × USD 2,957 ✓</span></div>
+      <div class="cmp-row"><span class="cmp-key">Financ. 36 cuotas</span><span class="cmp-val" style="color:var(--teal)">Entrada USD 32,204 + 36 × USD 2,133 ✓</span></div>
+      <div class="cmp-row"><span class="cmp-key">Garantía</span><span class="cmp-val" style="color:var(--teal)">5 años ✓ — la más extensa</span></div>
+      <div class="cmp-row"><span class="cmp-key">Entrega</span><span class="cmp-val">90–120 días</span></div>
+      <div class="cmp-row"><span class="cmp-key">Pago</span><span class="cmp-val">40% inicio · saldo contra entrega</span></div>
+      <div class="cmp-row"><span class="cmp-key">Validez cotiz.</span><span class="cmp-val">30 días</span></div>
+      <div class="cmp-section-title">Capacidad comercial</div>
+      <div class="cmp-row"><span class="cmp-key">Red anunciantes</span><span class="cmp-val" style="color:var(--coral)">No disponible</span></div>
+      <div class="cmp-row"><span class="cmp-key">Pantallas LED</span><span class="cmp-val" style="color:var(--coral)">Sin cartera DOOH documentada</span></div>
+      <div class="cmp-row"><span class="cmp-key">Especialidad</span><span class="cmp-val">TI · telecomunicaciones · seguridad electrónica</span></div>
+      <div class="cmp-row"><span class="cmp-key">Soporte técnico</span><span class="cmp-val">Equipo propio · enfoque TI</span></div>
+      <div class="cmp-row"><span class="cmp-key">Modelo ingresos</span><span class="cmp-val">Inverfin gestiona 100% de los ingresos</span></div>
+      <div class="cmp-section-title">Fortalezas</div>
+      <div style="font-size:12px;color:var(--muted);padding:4px 0;line-height:1.7">
+        ✓ Única opción con financiamiento 24 o 36 cuotas · ✓ Garantía 5 años · ✓ Llave en mano total · ✓ Empresa local en PY
+      </div>
+      <div class="cmp-section-title" style="color:var(--coral)">Consideraciones</div>
+      <div style="font-size:12px;color:var(--muted);padding:4px 0;line-height:1.7">
+        · Brillo más bajo (7,500 nits) · · Pantalla más pequeña (27 m²) · · Gestión de contenido NO incluida · · Sin experiencia DOOH ni red de anunciantes
+      </div>
+    </div>
+
+    <!-- ROMIS + REIMPULSO -->
+    <div class="cmp-card" style="border-color:var(--gold);background:rgba(245,200,66,.04)">
+      <div class="cmp-header">
+        <div><div class="cmp-name">Romis + Reimpulso</div><div class="cmp-tagline">Licitación LIC-26001 · Jun 2026 · DOOH integral</div></div>
+        <span class="badge badge-gold">Revenue share</span>
+      </div>
+      <div class="cmp-section-title">Equipo y técnica</div>
+      <div class="cmp-row"><span class="cmp-key">Pantalla</span><span class="cmp-val">LED Hikvision P8 · 8,64×4,80 m (41,47 m²)</span></div>
+      <div class="cmp-row"><span class="cmp-key">Brillo</span><span class="cmp-val">9,000 nits</span></div>
+      <div class="cmp-row"><span class="cmp-key">CMS</span><span class="cmp-val">Reimpulso TV — incluido</span></div>
+      <div class="cmp-row"><span class="cmp-key">Estructura</span><span class="cmp-val">Poste cilíndrico 7 m · zapata tubulón incluida</span></div>
+      <div class="cmp-row"><span class="cmp-key">Conectividad</span><span class="cmp-val">Red principal + backup 4G</span></div>
+      <div class="cmp-section-title">Condiciones comerciales</div>
+      <div class="cmp-row"><span class="cmp-key">CAPEX total</span><span class="cmp-val" style="font-weight:600">USD 117,900 (IVA incl.)</span></div>
+      <div class="cmp-row"><span class="cmp-key">Pago</span><span class="cmp-val">50% anticipo · 50% contra entrega</span></div>
+      <div class="cmp-row"><span class="cmp-key">Entrega</span><span class="cmp-val">Multifase: ingeniería + fabricación + instalación</span></div>
+      <div class="cmp-row"><span class="cmp-key">Garantía</span><span class="cmp-val">No especificada en propuesta</span></div>
+      <div class="cmp-section-title" style="color:var(--gold)">⚠ Modelo de revenue share — leer con atención</div>
+      <div class="cmp-row"><span class="cmp-key">Ingresos gestionados por Reimpulso</span><span class="cmp-val" style="color:var(--gold);font-weight:600">50% para Inverfin · 50% para Reimpulso</span></div>
+      <div class="cmp-row"><span class="cmp-key">Ventas directas de Inverfin</span><span class="cmp-val" style="color:var(--teal)">100% para Inverfin ✓</span></div>
+      <div class="cmp-row"><span class="cmp-key">Ocupación mínima garantizada</span><span class="cmp-val">50% del inventario comercializable</span></div>
+      <div class="cmp-row"><span class="cmp-key">CPM documentado</span><span class="cmp-val" style="color:var(--teal)">USD 172 / 1,000 impactos ✓</span></div>
+      <div style="background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.3);border-radius:8px;padding:.75rem;margin:.75rem 0;font-size:12px;color:var(--muted);line-height:1.65">
+        <b style="color:var(--gold)">Ejemplo:</b> si Reimpulso comercializa USD 10,000 en un mes, Inverfin recibe <b style="color:var(--white)">USD 5,000</b>. 
+        Si Inverfin vende directamente USD 3,000 adicionales, recibe <b style="color:var(--teal)">USD 3,000 completos</b>. 
+        Total Inverfin: USD 8,000 sobre USD 13,000 facturados.
+      </div>
+      <div class="cmp-section-title">Capacidad comercial</div>
+      <div class="cmp-row"><span class="cmp-key">Red anunciantes</span><span class="cmp-val" style="color:var(--gold)">Red activa + compra programática desde 2019 ✓</span></div>
+      <div class="cmp-row"><span class="cmp-key">Pantallas región</span><span class="cmp-val" style="color:var(--gold)">+4,500 en 5 países ✓</span></div>
+      <div class="cmp-row"><span class="cmp-key">Clientes ref.</span><span class="cmp-val">WTC Asunción, aeropuertos, Burger King, Antel Arena…</span></div>
+      <div class="cmp-row"><span class="cmp-key">Modelo operativo</span><span class="cmp-val">DOOH 360°: CMS + contenidos + medición + venta</span></div>
+      <div class="cmp-section-title">Fortalezas</div>
+      <div style="font-size:12px;color:var(--muted);padding:4px 0;line-height:1.7">
+        ✓ Mayor experiencia DOOH de la región · ✓ Compra programática multinacional · ✓ CPM USD 172 documentado · ✓ Ecosistema completo · ✓ Garantía mínima de ocupación
+      </div>
+      <div class="cmp-section-title" style="color:var(--coral)">Consideraciones</div>
+      <div style="font-size:12px;color:var(--muted);padding:4px 0;line-height:1.7">
+        · Precio más alto (USD 117,900) · · Revenue share 50/50 en ingresos gestionados por ellos — Inverfin cede la mitad · · Garantía del equipo no especificada · · Inverfin depende de Reimpulso para maximizar ocupación
+      </div>
     </div>
   </div>
-  <div style="font-size:16px;font-family:'DM Serif Display',serif;margin-bottom:.75rem;color:var(--white)">Tabla resumen comparativa</div>
+
+  <!-- ── TABLA RESUMEN ── -->
+  <div style="font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">Tabla resumen comparativa</div>
   <div class="tbl-wrap">
     <table class="data">
-      <thead><tr><th>Criterio</th><th>Romis Paraguay</th><th>Prourbe Medios</th></tr></thead>
+      <thead><tr><th>Criterio</th><th>Prourbe Medios</th><th>Driven Paraguay</th><th>Romis + Reimpulso</th></tr></thead>
       <tbody>
-        <tr><td>Precio casa central (IVA incl.)</td><td>USD 115,300.75</td><td style="color:var(--teal)">USD 98,901.73 (−14%)</td></tr>
-        <tr><td>Brillo de pantalla</td><td>9,000 nits</td><td style="color:var(--teal)">10,000 nits ✓</td></tr>
-        <tr><td>Frecuencia de actualización</td><td>N/D</td><td style="color:var(--teal)">≥15,000 Hz ✓</td></tr>
-        <tr><td>Pantallas instaladas en PY</td><td>N/D</td><td style="color:var(--teal)">+20 grandes formatos ✓</td></tr>
-        <tr><td>Red de anunciantes</td><td>No mencionada</td><td style="color:var(--teal)">Sí — puede monetizar slots ✓</td></tr>
-        <tr><td>Soporte técnico local propio</td><td>Información limitada</td><td style="color:var(--teal)">Confirmado ✓</td></tr>
-        <tr><td>Garantía equipo</td><td style="color:var(--gold)">2 años ✓</td><td>1 año + renovación</td></tr>
-        <tr><td>Tiempo de entrega</td><td style="color:var(--gold)">2–4 semanas ✓</td><td>~90 días</td></tr>
-        <tr><td>Capacitación personal</td><td>No indicada</td><td style="color:var(--teal)">Incluida ✓</td></tr>
-        <tr><td>Portafolio de clientes</td><td>No detallado</td><td style="color:var(--teal)">+40 marcas ✓</td></tr>
-        <tr class="total-row"><td><strong>Recomendación monetización</strong></td><td>—</td><td style="color:var(--teal);font-weight:600">⭐ Preferido</td></tr>
+        <tr><td>Precio total (IVA incl.)</td><td style="color:var(--teal)">USD 98,902 ✓</td><td>USD 101,214</td><td>USD 117,900</td></tr>
+        <tr><td>Brillo de pantalla</td><td style="color:var(--teal)">10,000 nits ✓</td><td style="color:var(--coral)">7,500 nits</td><td>9,000 nits</td></tr>
+        <tr><td>Tamaño pantalla</td><td>40 m²</td><td style="color:var(--coral)">27,65 m²</td><td style="color:var(--gold)">41,47 m² ✓</td></tr>
+        <tr><td>Garantía</td><td>1 año + renovación</td><td style="color:var(--teal)">5 años ✓</td><td style="color:var(--coral)">No especificada</td></tr>
+        <tr><td>Entrega</td><td>~90 días</td><td>90–120 días</td><td>Multifase</td></tr>
+        <tr><td>Financiamiento</td><td style="color:var(--coral)">No</td><td style="color:var(--teal)">24 o 36 cuotas ✓</td><td style="color:var(--coral)">No</td></tr>
+        <tr><td>Gestión de contenido</td><td style="color:var(--teal)">Incluida ✓</td><td style="color:var(--coral)">NO incluida</td><td style="color:var(--gold)">CMS Reimpulso TV ✓</td></tr>
+        <tr><td>Red de anunciantes</td><td style="color:var(--teal)">Sí · +20 pantallas PY ✓</td><td style="color:var(--coral)">No</td><td style="color:var(--gold)">Sí · +4,500 región ✓</td></tr>
+        <tr><td>Compra programática</td><td style="color:var(--coral)">No</td><td style="color:var(--coral)">No</td><td style="color:var(--gold)">Sí · desde 2019 ✓</td></tr>
+        <tr><td>Soporte técnico local</td><td style="color:var(--teal)">Confirmado ✓</td><td>Equipo TI propio</td><td>Vía Reimpulso</td></tr>
+        <tr><td>Modelo de ingresos</td><td>100% para Inverfin</td><td>100% para Inverfin</td><td style="color:var(--gold)">50/50 gestionado · 100% directo</td></tr>
+        <tr><td>Capacitación personal</td><td style="color:var(--teal)">Incluida ✓</td><td style="color:var(--coral)">No indicada</td><td style="color:var(--gold)">Incluida en DOOH 360° ✓</td></tr>
+        <tr class="total-row"><td><strong>Mejor opción para…</strong></td><td style="color:var(--teal)">Precio + autonomía</td><td style="color:var(--teal)">Garantía + financ.</td><td style="color:var(--gold)">DOOH gestionado</td></tr>
       </tbody>
     </table>
   </div>
+
+  <div class="note info">
+    <b>Sobre el revenue share de Romis+Reimpulso:</b> la propuesta plantea compartir el resultado neto (venta bruta menos comisiones de agencia) al 50/50 solo en los ingresos que Reimpulso gestiona comercialmente. Las ventas que Inverfin cierra directamente (proveedores propios, Tier 1/2) quedan al 100% para Inverfin. Esto convierte la venta directa en una ventaja clave de este modelo.
+  </div>
 </div>
 
-<!-- TAB 4: RESUMEN -->
 <div id="tab-resumen" class="section">
   <div class="section-heading">Resumen ejecutivo</div>
   <div class="section-sub">Síntesis del caso de negocio para Inverfin SAECA. Todos los valores en USD.</div>
@@ -407,6 +543,64 @@ footer span{color:var(--gold)}
   </div>
 </div>
 
+<!-- TAB: PIPELINE ANUNCIANTES (bonus section reached via resumen) -->
+<div id="tab-pipeline" class="section">
+  <div class="section-heading">Pipeline de anunciantes directos</div>
+  <div class="section-sub">Marcas que ya operan en el ecosistema Inverfin — candidatos naturales para venta directa sin comisión de agencia.</div>
+
+  <div class="note info" style="margin-bottom:2rem">
+    <b>Venta directa = 100% de la tarifa.</b> Las marcas que ya son proveedoras o anunciantes de Inverfin pueden contratarse sin intermediarios, eliminando la comisión de agencia (15–20%) y maximizando el ingreso neto por spot.
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin-bottom:2rem">
+    <div style="background:rgba(46,196,182,.07);border:1px solid rgba(46,196,182,.25);border-radius:var(--radius);padding:1.5rem">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:.75rem">Tier 1 · Core revenue</div>
+      <div style="font-size:15px;font-weight:500;color:var(--white);margin-bottom:.6rem">Samsung · Xiaomi · Apple · JBL · Sony · Whirlpool · Beko</div>
+      <div style="font-size:13px;color:var(--muted)">Categorías ultracompetitivas que ya invierten en trade marketing en Inverfin. <b style="color:var(--teal)">Objetivo: deals rápidos y recurrentes.</b></div>
+    </div>
+    <div style="background:rgba(245,200,66,.07);border:1px solid rgba(245,200,66,.25);border-radius:var(--radius);padding:1.5rem">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Tier 2 · Growth accounts</div>
+      <div style="font-size:15px;font-weight:500;color:var(--white);margin-bottom:.6rem">Consul · Husqvarna · Mueller · Tokyo · Paraná · Babyliss</div>
+      <div style="font-size:13px;color:var(--muted)">Buen volumen, menor sofisticación en media. <b style="color:var(--gold)">Espacio para educar y capturar presupuesto.</b></div>
+    </div>
+    <div style="background:rgba(55,138,221,.07);border:1px solid rgba(55,138,221,.25);border-radius:var(--radius);padding:1.5rem">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:.75rem">Tier 3 · Long tail</div>
+      <div style="font-size:15px;font-weight:500;color:var(--white);margin-bottom:.6rem">Briz · Confort · HP · Abba · Tecno · Henn · Caloi</div>
+      <div style="font-size:13px;color:var(--muted)">Menor escala, inversión esporádica. <b style="color:var(--blue)">Monetización incremental con paquetes tácticos.</b></div>
+    </div>
+    <div style="background:rgba(232,96,60,.07);border:1px solid rgba(232,96,60,.25);border-radius:var(--radius);padding:1.5rem">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--coral);margin-bottom:.75rem">Caso especial · Marcas propias</div>
+      <div style="font-size:15px;font-weight:500;color:var(--white);margin-bottom:.6rem">TAIGA · FAMA · Goodweather</div>
+      <div style="font-size:13px;color:var(--muted)">Representan el <b style="color:var(--coral)">53% de la facturación minorista.</b> No son ingreso directo pero son clave para llenar inventario, testear formatos y construir casos de éxito ante terceros.</div>
+    </div>
+  </div>
+
+  <div class="controls-box">
+    <div class="controls-title">Estimación de impacto — canal directo vs agencia</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:1rem">
+      Con <b style="color:var(--white)">Tier 1 y 2 como clientes directos</b> (Samsung, Xiaomi, Apple, JBL, Sony, Whirlpool, Beko, Consul, etc.), Inverfin puede cubrir fácilmente el 35–40% del inventario externo sin pagar comisión de agencia.
+      Cada punto porcentual adicional de venta directa vs agencia representa un ahorro neto equivalente a la comisión (15–20%) aplicada sobre esa fracción.
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem">
+      <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Tarifa Tier 1 sugerida</div>
+        <div style="font-size:22px;font-family:var(--font-display);color:var(--teal)">Pauta Full</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">~USD 656/mes · cobertura total</div>
+      </div>
+      <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Tarifa Tier 2 sugerida</div>
+        <div style="font-size:22px;font-family:var(--font-display);color:var(--gold)">Pauta Media</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">~USD 426/mes · media jornada</div>
+      </div>
+      <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Tarifa Tier 3 sugerida</div>
+        <div style="font-size:22px;font-family:var(--font-display);color:var(--blue)">Pauta 1/4</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">~USD 197/mes · rotación básica</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <footer>
@@ -429,7 +623,7 @@ function fmtUSD(n, dec=2){ return '$'+Math.abs(n).toLocaleString('en-US',{minimu
 function fmtUSDk(n){ return Math.abs(n)>=1000 ? '$'+(n/1000).toFixed(1)+'K' : fmtUSD(n,0); }
 
 function showTab(id){
-  document.querySelectorAll('.nav-btn').forEach((b,i)=>b.classList.toggle('active',['spots','ingresos','compare','resumen'][i]===id));
+  document.querySelectorAll('.nav-btn').forEach((b,i)=>b.classList.toggle('active',['spots','ingresos','proveedores','resumen','pipeline'][i]===id));
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
   if(id==='ingresos') recalcIng();
@@ -461,10 +655,10 @@ function recalcSpots(){
   const totalInvSpots  = offWinSpots + invInWin;       // total spots Inverfin/día
 
   document.getElementById('spot-metrics').innerHTML = `
-    <div class="metric"><div class="metric-label">Spots totales/día (24 h)</div><div class="metric-value">${totalSpotsDay.toLocaleString()}</div><div class="metric-sub">${spotsPerHour} spots/hora</div></div>
-    <div class="metric"><div class="metric-label">Spots Inverfin SAECA/día</div><div class="metric-value teal">${totalInvSpots.toLocaleString()}</div><div class="metric-sub">${Math.round(totalInvSpots/totalSpotsDay*100)}% del total</div></div>
-    <div class="metric"><div class="metric-label">Spots externos disp./día</div><div class="metric-value gold">${extSpots.toLocaleString()}</div><div class="metric-sub">en ventana comercial ${winH}h</div></div>
-    <div class="metric"><div class="metric-label">Spots Inverfin/mes</div><div class="metric-value">${(totalInvSpots*30).toLocaleString()}</div><div class="metric-sub">${offWinSpots.toLocaleString()} fuera de ventana/día</div></div>
+    <div class="metric"><div class="metric-label">Spots totales/día (24h)</div><div class="metric-value">${totalSpotsDay.toLocaleString()}</div><div class="metric-sub">${spotsPerHour} spots/hora</div></div>
+    <div class="metric"><div class="metric-label">Inverfin — en ventana/día</div><div class="metric-value teal">${invInWin.toLocaleString()}</div><div class="metric-sub">${Math.round(ipct*100)}% de la ventana comercial</div></div>
+    <div class="metric"><div class="metric-label">Spots externos disp./día</div><div class="metric-value gold">${extSpots.toLocaleString()}</div><div class="metric-sub">ventana comercial ${winH}h</div></div>
+    <div class="metric"><div class="metric-label">Beneficio adicional/día</div><div class="metric-value blue">${offWinSpots.toLocaleString()}</div><div class="metric-sub">${24-winH}h fuera de ventana — 100% Inverfin</div></div>
   `;
 
   // Timeline: distribución equilibrada de Inverfin dentro de ventana
@@ -513,9 +707,9 @@ function recalcSpots(){
     (${offWinSpots.toLocaleString()} spots/día adicionales sin costo de pauta).`;
 
   document.getElementById('spot-note').innerHTML =
-    `Pantalla activa <b>24 horas/día</b>. Inverfin SAECA ocupa <b>${totalInvSpots.toLocaleString()} spots/día</b> en total: 
-    <b>${invInWin.toLocaleString()}</b> intercalados en la ventana comercial y <b>${offWinSpots.toLocaleString()}</b> en las ${offH} horas fuera de ventana. 
-    Los anunciantes externos disponen de <b>${extSpots.toLocaleString()} spots/día</b> dentro de la ventana de ${winH}h.`;
+    `Dentro de la ventana comercial (<b>${winH}h</b>), Inverfin SAECA ocupa <b>${invInWin.toLocaleString()} spots/día</b> intercalados de forma equilibrada — 1 de cada ${invEvery} spots.
+    Los anunciantes externos disponen de <b>${extSpots.toLocaleString()} spots/día</b>.
+    <b>Beneficio adicional:</b> las ${24-winH}h fuera de ventana suman <b>${offWinSpots.toLocaleString()} spots/día</b> exclusivos de Inverfin SAECA, sin costo de pauta.`;
 }
 
 function recalcIng(){
@@ -523,13 +717,29 @@ function recalcIng(){
   const winH  = +document.getElementById('winHours').value;
   const ipct  = +document.getElementById('inverfinPct').value/100;
   const zona  = document.getElementById('zona').value;
-  const ocup  = +document.getElementById('ocup').value/100;
-  const vac   = +document.getElementById('vac').value/100;
-  const ppico = +document.getElementById('ppico').value/100;
+  const ocup   = +document.getElementById('ocup').value/100;
+  const vac    = +document.getElementById('vac').value/100;
+  const ppico  = +document.getElementById('ppico').value/100;
+  const dirPct = +document.getElementById('dirPct').value/100;
+  const comPct = +document.getElementById('comPct').value/100;
+  const costoEnergia  = +document.getElementById('costoEnergia').value;
+  const costoSeguro   = +document.getElementById('costoSeguro').value;
+  const costoMant     = +document.getElementById('costoMant').value;
+  const costoInternet = +document.getElementById('costoInternet').value;
+  const costoCanon    = +document.getElementById('costoCanon').value;
+  const costoTotal    = costoEnergia + costoSeguro + costoMant + costoInternet + costoCanon;
+  const agPct  = 1 - dirPct;  // fracción vendida por agencia
 
-  document.getElementById('ocupV').textContent  = Math.round(ocup*100)+' %';
-  document.getElementById('vacV').textContent   = Math.round(vac*100)+' %';
-  document.getElementById('ppicoV').textContent = Math.round(ppico*100)+' %';
+  document.getElementById('ocupV').textContent   = Math.round(ocup*100)+' %';
+  document.getElementById('vacV').textContent    = Math.round(vac*100)+' %';
+  document.getElementById('ppicoV').textContent  = Math.round(ppico*100)+' %';
+  document.getElementById('dirPctV').textContent = Math.round(dirPct*100)+' %';
+  document.getElementById('comPctV').textContent = Math.round(comPct*100)+' %';
+  document.getElementById('costoEnergiaV').textContent  = '$'+costoEnergia;
+  document.getElementById('costoSeguroV').textContent   = '$'+costoSeguro;
+  document.getElementById('costoMantV').textContent     = '$'+costoMant;
+  document.getElementById('costoInternetV').textContent = '$'+costoInternet;
+  document.getElementById('costoCanonV').textContent    = '$'+costoCanon;
 
   const z = ZONAS[zona];
   const tarifaDia   = usd((z.gsMin+z.gsMax)/2);
@@ -548,10 +758,21 @@ function recalcIng(){
   const diaVend   = Math.round(diaDisp*efectOcup);
   const nocheVend = Math.round(nocheDisp*efectOcup);
 
-  const ingDia    = diaVend*tarifaDia*30;
-  const ingNoche  = nocheVend*tarifaNoche*30;
-  const ingExtMes = ingDia+ingNoche;
-  const ingExtAnual = ingExtMes*12;
+  // Canal directo vs agencia
+  const diaDir      = Math.round(diaVend * dirPct);
+  const diaAg       = diaVend - diaDir;
+  const nocheDir    = Math.round(nocheVend * dirPct);
+  const nocheAg     = nocheVend - nocheDir;
+  const netAg       = 1 - comPct;
+  const ingDiaDir   = diaDir   * tarifaDia   * 30;
+  const ingDiaAg    = diaAg    * tarifaDia   * netAg * 30;
+  const ingNocheDir = nocheDir * tarifaNoche * 30;
+  const ingNocheAg  = nocheAg  * tarifaNoche * netAg * 30;
+  const ingDia      = ingDiaDir + ingDiaAg;
+  const ingNoche    = ingNocheDir + ingNocheAg;
+  const ingExtMes   = ingDia + ingNoche;
+  const ingExtAnual = ingExtMes * 12;
+  const perdidaComision = (diaAg*tarifaDia + nocheAg*tarifaNoche) * comPct * 30;
 
   // Valor spots Inverfin: en ventana a tarifa de mercado, fuera de ventana a tarifa nocturna (tráfico bajo)
   const invInWinDia   = Math.round(invInWin*ppico);
@@ -559,14 +780,26 @@ function recalcIng(){
   const invValMes = ((invInWinDia*tarifaDia)+(invInWinNoche*tarifaNoche)+(offWinSpots*tarifaNoche*0.5))*30;
 
   const totalMes  = ingExtMes+(ingView==='total'?invValMes:0);
-  const paybackMes = +(98902/Math.max(0.01,ingExtMes)).toFixed(1);
+  const modeloComercial = document.getElementById('modeloComercial').value;
+  // Revenue share Reimpulso: 50% of agency-managed income, 100% of direct
+  const ingDirTotal = ingDiaDir + ingNocheDir;  // always 100% to Inverfin
+  const ingAgTotal  = ingDiaAg  + ingNocheAg;  // 100% or 50% depending on model
+  const ingAgNeto   = modeloComercial === 'reimpulso' ? ingAgTotal * 0.5 : ingAgTotal;
+  const reimpulsoComision = modeloComercial === 'reimpulso' ? ingAgTotal * 0.5 : 0;
+  const ingExtMesNeto = ingDirTotal + ingAgNeto;
+  const resultNeto    = ingExtMesNeto - costoTotal;
+  const paybackMes = +(98902/Math.max(0.01,resultNeto)).toFixed(1);
 
   document.getElementById('ing-metrics').innerHTML = `
-    <div class="metric"><div class="metric-label">Ingreso ext./mes</div><div class="metric-value teal">${fmtUSD(ingExtMes,0)}</div><div class="metric-sub">${fmtUSDk(ingExtAnual)}/año</div></div>
-    <div class="metric" style="${ingView==='total'?'':'opacity:.5'}"><div class="metric-label">Valor spots Inverfin/mes</div><div class="metric-value blue">${fmtUSD(invValMes,0)}</div><div class="metric-sub">ahorro pub. equivalente</div></div>
-    <div class="metric"><div class="metric-label">${ingView==='total'?'Total combinado/mes':'Solo externos/mes'}</div><div class="metric-value gold">${fmtUSD(totalMes,0)}</div><div class="metric-sub">${fmtUSDk(totalMes*12)}/año</div></div>
-    <div class="metric"><div class="metric-label">Ocup. neta (−vacancia)</div><div class="metric-value">${Math.round(efectOcup*100)}%</div><div class="metric-sub">${Math.round(ocup*100)}% − ${Math.round(vac*100)}% vac.</div></div>
-    <div class="metric"><div class="metric-label">Payback inversión</div><div class="metric-value">${paybackMes} m</div><div class="metric-sub">solo ing. externos</div></div>
+    <div class="metric"><div class="metric-label">Ingreso bruto ext./mes</div><div class="metric-value teal">${fmtUSD(ingExtMes,0)}</div><div class="metric-sub">${fmtUSDk(ingExtMes*12)}/año</div></div>
+    ${modeloComercial==='reimpulso'?`
+    <div class="metric"><div class="metric-label">Comisión Reimpulso/mes</div><div class="metric-value" style="color:var(--gold)">-${fmtUSD(reimpulsoComision,0)}</div><div class="metric-sub">50% del canal agencia gestionado</div></div>
+    `:``}
+    <div class="metric"><div class="metric-label">Ingreso neto Inverfin/mes</div><div class="metric-value gold">${fmtUSD(ingExtMesNeto,0)}</div><div class="metric-sub">${fmtUSDk(ingExtMesNeto*12)}/año</div></div>
+    <div class="metric"><div class="metric-label">Costos operativos/mes</div><div class="metric-value" style="color:var(--coral)">-${fmtUSD(costoTotal,0)}</div><div class="metric-sub">energía+seguro+mant+otros</div></div>
+    <div class="metric"><div class="metric-label">Resultado neto/mes</div><div class="metric-value" style="color:var(--teal)">${fmtUSD(resultNeto,0)}</div><div class="metric-sub">${fmtUSDk(resultNeto*12)}/año</div></div>
+    <div class="metric"><div class="metric-label">Canal directo/mes</div><div class="metric-value">${fmtUSD(ingDirTotal,0)}</div><div class="metric-sub">${Math.round(dirPct*100)}% spots · 100% para Inverfin</div></div>
+    <div class="metric"><div class="metric-label">Payback (sobre neto)</div><div class="metric-value">${paybackMes} m</div><div class="metric-sub">ing. neto tras costos${modeloComercial==='reimpulso'?' y comisión':''}</div></div>
   `;
 
   const rows = Object.entries(ZONAS).map(([k,v2])=>{
@@ -582,16 +815,14 @@ function recalcIng(){
     `<thead><tr><th>Zona</th><th style="text-align:right">Rango costo/spot USD</th><th style="text-align:right">Tarifa media</th></tr></thead><tbody>${rows}</tbody>`;
 
   document.getElementById('note-occ').className=vac>=0.2?'note warn':'note';
-  document.getElementById('note-occ').innerHTML=
-    `Tarifa activa: <b>${fmtUSD(tarifaDia,3)}/spot diurno</b> · nocturno (−40%): <b>${fmtUSD(tarifaNoche,3)}/spot</b>. 
-    Ocupación neta = <b>${Math.round(efectOcup*100)}%</b> (${Math.round(ocup*100)}% ocup. − ${Math.round(vac*100)}% vacancia). 
-    De ${extSpots.toLocaleString()} spots/día externos disponibles, se venden <b>${(diaVend+nocheVend).toLocaleString()}/día</b>.
-    ${vac>=0.2?' <b>Atención:</b> vacancia alta — revisar estrategia comercial.':''}`;
+  document.getElementById('note-occ').innerHTML=`Tarifa activa: <b>${fmtUSD(tarifaDia,3)}/spot diurno</b> · nocturno −40%: <b>${fmtUSD(tarifaNoche,3)}/spot</b>. Ocupación neta: <b>${Math.round(efectOcup*100)}%</b>. Spots vendidos: <b>${(diaVend+nocheVend).toLocaleString()}/día</b>. Canal directo (<b>${Math.round(dirPct*100)}%</b>): tarifa plena. Canal agencia (<b>${Math.round((1-dirPct)*100)}%</b>): neto tras ${Math.round(comPct*100)}% comisión = <b>${fmtUSD(tarifaDia*netAg,3)}/spot diurno</b>. ${vac>=0.2?' <b>Atención:</b> vacancia alta.':''}` ;
 
   document.getElementById('ing-rows').innerHTML=`
-    <tr><td>Diurna (tarifa plena)</td><td>${diaDisp.toLocaleString()}</td><td>${diaVend.toLocaleString()}</td><td>${fmtUSD(tarifaDia,3)}</td><td>${fmtUSD(ingDia,0)}</td><td>${fmtUSD(ingDia*12,0)}</td></tr>
-    <tr><td>Nocturna (−40%)</td><td>${nocheDisp.toLocaleString()}</td><td>${nocheVend.toLocaleString()}</td><td>${fmtUSD(tarifaNoche,3)}</td><td>${fmtUSD(ingNoche,0)}</td><td>${fmtUSD(ingNoche*12,0)}</td></tr>
-    <tr class="total-row"><td><strong>Total</strong></td><td>${extSpots.toLocaleString()}</td><td>${(diaVend+nocheVend).toLocaleString()}</td><td>—</td><td><strong>${fmtUSD(ingExtMes,0)}</strong></td><td><strong>${fmtUSD(ingExtAnual,0)}</strong></td></tr>
+    <tr><td>Diurna — canal directo</td><td>${diaDir.toLocaleString()}</td><td>${diaDir.toLocaleString()}</td><td>${fmtUSD(tarifaDia,3)}</td><td>${fmtUSD(ingDiaDir,0)}</td><td>${fmtUSD(ingDiaDir*12,0)}</td></tr>
+    <tr><td>Diurna — agencia (neto -${Math.round(comPct*100)}%)</td><td>${diaAg.toLocaleString()}</td><td>${diaAg.toLocaleString()}</td><td>${fmtUSD(tarifaDia*netAg,3)}</td><td>${fmtUSD(ingDiaAg,0)}</td><td>${fmtUSD(ingDiaAg*12,0)}</td></tr>
+    <tr><td>Nocturna — canal directo</td><td>${nocheDir.toLocaleString()}</td><td>${nocheDir.toLocaleString()}</td><td>${fmtUSD(tarifaNoche,3)}</td><td>${fmtUSD(ingNocheDir,0)}</td><td>${fmtUSD(ingNocheDir*12,0)}</td></tr>
+    <tr><td>Nocturna — agencia (neto -${Math.round(comPct*100)}%)</td><td>${nocheAg.toLocaleString()}</td><td>${nocheAg.toLocaleString()}</td><td>${fmtUSD(tarifaNoche*netAg,3)}</td><td>${fmtUSD(ingNocheAg,0)}</td><td>${fmtUSD(ingNocheAg*12,0)}</td></tr>
+    <tr class="total-row"><td><strong>Total neto</strong></td><td>${extSpots.toLocaleString()}</td><td>${(diaVend+nocheVend).toLocaleString()}</td><td>-</td><td><strong>${fmtUSD(ingExtMes,0)}</strong></td><td><strong>${fmtUSD(ingExtAnual,0)}</strong></td></tr>
   `;
 
   const datasets=[
@@ -628,13 +859,25 @@ function recalcIng(){
   const pbPct=Math.min(96,Math.round((36/Math.max(1,paybackMes))*100));
   document.getElementById('payback-section').innerHTML=`
     <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-top:.5rem">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+        <span style="color:var(--muted)">Ingresos brutos externos/mes</span>
+        <span style="color:var(--white);font-weight:500">${fmtUSD(ingExtMes,0)}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+        <span style="color:var(--muted)">Costos operativos/mes</span>
+        <span style="color:var(--coral)">-${fmtUSD(costoTotal,0)}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:12px;padding-top:8px;border-top:1px solid var(--border)">
+        <span style="color:var(--white);font-weight:500">Resultado neto/mes</span>
+        <span style="color:var(--gold);font-weight:600">${fmtUSD(resultNeto,0)}</span>
+      </div>
       <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px">
-        <span style="color:var(--muted)">Payback inversión Prourbe (USD 98,902)</span>
+        <span style="color:var(--muted)">Payback inversión Prourbe (USD 98,902) sobre resultado neto</span>
         <span style="font-weight:500;color:var(--white)">${paybackMes} meses</span>
       </div>
-      <div class="payback-bar"><div class="payback-fill" style="width:${pbPct}%"></div></div>
+      <div class="payback-bar"><div class="payback-fill" style="width:${Math.min(96,Math.round((36/Math.max(1,paybackMes))*100))}%"></div></div>
       <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:5px">
-        <span>Inicio</span><span>Estimado: ${paybackMes} meses</span><span>36 meses</span>
+        <span>Inicio</span><span>${paybackMes} meses</span><span>36 meses</span>
       </div>
     </div>`;
 
