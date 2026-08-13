@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -241,7 +240,6 @@ footer span{color:var(--gold)}
       <div class="controls-box" style="margin-bottom:0">
         <div class="controls-title">Parámetros del modelo Prourbe</div>
 
-        <!-- Anunciantes por tipo -->
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:1rem">
           <div style="background:rgba(46,196,182,.06);border:0.5px solid rgba(46,196,182,.2);border-radius:8px;padding:.75rem;text-align:center">
             <div style="font-size:10px;font-weight:600;color:var(--teal);margin-bottom:.4rem">PAUTA FULL · $656/mes</div>
@@ -266,325 +264,18 @@ footer span{color:var(--gold)}
           </div>
         </div>
 
-        <!-- % comercialización directa -->
-        <div class="ctrl-row" style="margin-bottom:.75rem">
+        <div class="ctrl-row">
           <span class="ctrl-label">% comercializado directamente por Inverfin</span>
-          <input type="range" id="p-dirPct" min="0" max="100" step="5" value="30" oninput="recalcP()">
-          <span class="ctrl-val" id="p-dirPctV">30%</span>
+          <input type="range" id="p-dirPct" min="0" max="100" step="5" value="50" oninput="recalcP()">
+          <span class="ctrl-val" id="p-dirPctV">50%</span>
         </div>
         <div class="note" style="margin-bottom:.75rem;font-size:11px;padding:.6rem .9rem">
-          Venta directa: <b id="p-dir-detail">—</b> · sin comisión Prourbe.
-          Venta via Prourbe: <b id="p-prourbe-detail">—</b> · Prourbe cobra 10%.
+          Venta directa: <b id="p-dir-detail">2F + 2M + 2Q</b> · sin comisión Prourbe.
+          Venta vía Prourbe: <b id="p-prourbe-detail">2F + 2M + 2Q</b> · Prourbe cobra 10%.
         </div>
 
-        <!-- Ocupación año 5 -->
         <div class="ctrl-row" style="margin-bottom:0">
           <span class="ctrl-label">Ocupación año 5 (máximo)</span>
-          <input type="range" id="p-occ5" min="60" max="100" step="5" value="80" oninput="recalcP()">
-          <span class="ctrl-val" id="p-occ5V">80%</span>
-        </div>
-      </div>tml lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caso de Negocio — Pantallas LED Inverfin 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<style>
-:root {
-  --navy:#0B1629;--navy-mid:#142038;--navy-light:#1E3055;
-  --gold:#F5C842;--teal:#2EC4B6;--coral:#E8603C;--blue:#378ADD;
-  --white:#F8F6F0;--muted:#8A9BB5;
-  --border:rgba(255,255,255,0.08);--card-bg:rgba(255,255,255,0.04);
-  --font-display:'DM Serif Display',serif;--font-body:'DM Sans',sans-serif;--font-mono:'Space Mono',monospace;
-  --radius:12px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--navy);color:var(--white);font-family:var(--font-body);font-size:15px;line-height:1.6;min-height:100vh}
-header{background:linear-gradient(135deg,var(--navy-mid) 0%,var(--navy-light) 100%);border-bottom:1px solid var(--border);padding:2.5rem 3rem 2rem;position:relative;overflow:hidden}
-header::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(245,200,66,0.12) 0%,transparent 70%);pointer-events:none}
-.header-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem}
-.eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
-h1{font-family:var(--font-display);font-size:clamp(26px,4vw,40px);font-weight:400;color:var(--white);line-height:1.15}
-h1 em{color:var(--gold);font-style:italic}
-.header-meta{font-size:12px;color:var(--muted);margin-top:.75rem;display:flex;gap:1.5rem;flex-wrap:wrap}
-.inv-logo{font-family:var(--font-display);font-size:22px;color:var(--white)}
-.inv-logo span{color:var(--gold)}
-.date-badge{background:var(--gold);color:var(--navy);font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;margin-top:8px;display:inline-block;font-family:var(--font-mono)}
-nav{background:var(--navy-mid);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-.nav-inner{max-width:1100px;margin:0 auto;display:flex;overflow-x:auto}
-.nav-btn{padding:1rem 1.5rem;font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s}
-.nav-btn:hover{color:var(--white)}
-.nav-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
-main{max-width:1100px;margin:0 auto;padding:2.5rem 3rem 4rem}
-.section{display:none}
-.section.active{display:block;animation:fadeIn .3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.section-heading{font-family:var(--font-display);font-size:24px;font-weight:400;color:var(--white);margin-bottom:.3rem}
-.section-sub{font-size:13px;color:var(--muted);margin-bottom:2rem}
-.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:2rem}
-.metric{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1rem}
-.metric-label{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.metric-value{font-family:var(--font-display);font-size:22px;color:var(--white);line-height:1.1}
-.metric-value.gold{color:var(--gold)}
-.metric-value.teal{color:var(--teal)}
-.metric-value.blue{color:var(--blue)}
-.metric-sub{font-size:11px;color:var(--muted);margin-top:5px;font-family:var(--font-mono)}
-.controls-box{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem}
-.controls-title{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem}
-.ctrl-row{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
-.ctrl-row:last-child{margin-bottom:0}
-.ctrl-label{font-size:13px;color:var(--muted);min-width:240px}
-.ctrl-row input[type=range]{flex:1;min-width:120px;-webkit-appearance:none;height:4px;background:rgba(255,255,255,.15);border-radius:2px;outline:none;cursor:pointer}
-.ctrl-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold);border:2px solid var(--navy);cursor:pointer}
-.ctrl-row select{flex:1;min-width:200px;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:8px;color:var(--white);padding:7px 10px;font-family:var(--font-body);font-size:13px;cursor:pointer}
-.ctrl-row select option{background:var(--navy-mid);color:var(--white)}
-.ctrl-val{font-family:var(--font-mono);font-size:13px;color:var(--white);min-width:70px;text-align:right}
-.toggle-row{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;flex-wrap:wrap}
-.toggle-label{font-size:13px;color:var(--muted)}
-.toggle-group{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.tog{padding:8px 18px;font-size:13px;cursor:pointer;background:transparent;border:none;color:var(--muted);transition:all .15s;font-family:var(--font-body)}
-.tog.on{background:rgba(255,255,255,.09);color:var(--white);font-weight:500}
-.timeline-box{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem;overflow-x:auto}
-.tl-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem}
-.tl-bar{display:flex;height:48px;border-radius:8px;overflow:hidden;gap:2px}
-.tl-slot{flex:1;min-width:10px;cursor:default;transition:opacity .15s}
-.tl-slot:hover{opacity:.75}
-.tl-hours{display:flex;margin-top:6px}
-.tl-hours span{flex:1;font-size:9px;color:var(--muted);font-family:var(--font-mono)}
-.legend{display:flex;gap:1.5rem;margin-top:1rem;flex-wrap:wrap}
-.legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
-.legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
-.zone-table-wrap{overflow-x:auto;margin-bottom:1.5rem}
-.zone-table{width:100%;border-collapse:collapse;font-size:13px}
-.zone-table th{text-align:left;padding:9px 12px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)}
-.zone-table td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--white)}
-.zone-table tr.zt-sel td{background:rgba(46,196,182,.1);color:var(--teal)}
-.zone-table tr.zt-sel td:first-child{font-weight:500}
-.tbl-wrap{overflow-x:auto;margin-bottom:2rem}
-table.data{width:100%;border-collapse:collapse;font-size:13px}
-table.data th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)}
-table.data td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--white)}
-table.data tr.total-row td{background:rgba(245,200,66,.06);font-weight:500}
-table.data tr:hover:not(.total-row) td{background:rgba(255,255,255,.02)}
-.note{font-size:12px;color:var(--muted);line-height:1.65;padding:1rem 1.25rem;background:rgba(245,200,66,.05);border-left:3px solid rgba(245,200,66,.4);margin-bottom:1.5rem}
-.note b{color:var(--white)}
-.note.warn{background:rgba(232,96,60,.07);border-left-color:rgba(232,96,60,.5)}
-.note.warn b{color:var(--coral)}
-.note.info{background:rgba(55,138,221,.07);border-left-color:rgba(55,138,221,.4)}
-.note.info b{color:var(--blue)}
-.chart-wrap{position:relative;width:100%;height:260px;margin-bottom:1.5rem}
-.legend-row{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1rem}
-.leg{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
-.leg-sq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
-.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem}
-.cmp-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem}
-.cmp-card.featured{border-color:var(--teal);background:rgba(46,196,182,.05)}
-.cmp-header{padding-bottom:1rem;margin-bottom:1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.cmp-name{font-family:var(--font-display);font-size:20px;color:var(--white)}
-.cmp-tagline{font-size:11px;color:var(--muted);margin-top:4px}
-.badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:20px;white-space:nowrap}
-.badge-teal{background:rgba(46,196,182,.15);color:var(--teal);border:1px solid rgba(46,196,182,.3)}
-.badge-gold{background:rgba(245,200,66,.15);color:var(--gold);border:1px solid rgba(245,200,66,.3)}
-.cmp-row{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);gap:12px}
-.cmp-row:last-child{border-bottom:none}
-.cmp-key{font-size:12px;color:var(--muted);flex:0 0 115px}
-.cmp-val{font-size:12px;color:var(--white);text-align:right;flex:1}
-.cmp-section-title{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin:1.25rem 0 .75rem}
-.payback-bar{background:rgba(255,255,255,.06);border-radius:6px;height:12px;overflow:hidden;margin-top:8px}
-.payback-fill{height:100%;border-radius:6px;background:var(--teal);transition:width .4s ease}
-footer{border-top:1px solid var(--border);text-align:center;padding:2rem 3rem;font-size:11px;color:var(--muted);font-family:var(--font-mono)}
-footer span{color:var(--gold)}
-@media(max-width:700px){header,main{padding-left:1.25rem;padding-right:1.25rem}.cmp-grid{grid-template-columns:1fr}.ctrl-label{min-width:160px}.header-right{display:none}}
-@media print{nav{display:none}.section{display:block!important;page-break-after:always}}
-</style>
-</head>
-<body>
-
-<header>
-  <div class="header-inner">
-    <div class="header-left">
-      <div class="eyebrow">Caso de Negocio Interno</div>
-      <h1>Pantallas LED — <em>Monetización</em><br>de Espacio Publicitario</h1>
-      <div class="header-meta">
-        <span>📍 Inverfin SAECA — Av. Artigas, Asunción</span>
-        <span>📅 Mayo 2026</span>
-        <span>🏢 Romis Paraguay · Prourbe Medios</span>
-      </div>
-    </div>
-    <div class="header-right">
-      <div class="inv-logo"><span>E</span>Inverfin <small style="font-size:13px;color:var(--muted)">SAECA</small></div>
-      <div class="date-badge">2026-05-28</div>
-    </div>
-  </div>
-</header>
-
-<nav>
-  <div class="nav-inner">
-    <button class="nav-btn active" onclick="showTab('spots')">① Planificador de spots</button>
-    <button class="nav-btn" onclick="showTab('ingresos')">② Proyección de ingresos</button>
-    <button class="nav-btn" onclick="showTab('proveedores')">③ Proveedores</button>
-    <button class="nav-btn" onclick="showTab('resumen')">④ Resumen ejecutivo</button>
-    <button class="nav-btn" onclick="showTab('pipeline')">⑤ Pipeline anunciantes</button>
-  </div>
-</nav>
-
-<main>
-
-<!-- TAB 1: SPOTS -->
-<div id="tab-spots" class="section active">
-  <div class="section-heading">Planificador de spots</div>
-  <div class="section-sub">La pantalla opera las 24 horas. La ventana comercial define cuántas horas se venden a anunciantes externos. Las horas restantes y los espacios intercalados los ocupa Inverfin SAECA con distribución equilibrada a lo largo del día.</div>
-
-  <div class="metrics" id="spot-metrics"></div>
-
-  <div class="controls-box">
-    <div class="controls-title">Parámetros de operación</div>
-    <div class="ctrl-row">
-      <span class="ctrl-label">Duración por spot</span>
-      <input type="range" id="spotDur" min="5" max="30" step="5" value="10" oninput="recalcSpots()">
-      <span class="ctrl-val" id="spotDurVal">10 s</span>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-label">Ventana comercial (horas vendibles a externos)</span>
-      <input type="range" id="winHours" min="8" max="24" step="1" value="16" oninput="recalcSpots()">
-      <span class="ctrl-val" id="winHoursVal">16 h</span>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-label">% de spots Inverfin dentro de ventana comercial</span>
-      <input type="range" id="inverfinPct" min="5" max="70" step="5" value="30" oninput="recalcSpots()">
-      <span class="ctrl-val" id="inverfinPctVal">30 %</span>
-    </div>
-  </div>
-
-  <div class="note info" id="spot-note-dist"></div>
-
-  <div class="timeline-box">
-    <div class="tl-label">Distribución horaria — 24 horas (spots Inverfin intercalados de forma equilibrada)</div>
-    <div class="tl-bar" id="tl-bar"></div>
-    <div class="tl-hours" id="tl-hours"></div>
-    <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#2EC4B6"></div>Inverfin SAECA — ventana comercial (intercalado)</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#0F6E56"></div>Inverfin SAECA — fuera de ventana (100%)</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#F5C842"></div>Anunciantes diurnos</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#E8603C"></div>Anunciantes nocturnos</div>
-    </div>
-  </div>
-
-  <div class="note" id="spot-note"></div>
-</div>
-
-<!-- TAB 2: INGRESOS -->
-<div id="tab-ingresos" class="section">
-  <div class="section-heading">Proyección de ingresos</div>
-  <div class="section-sub">Dos modelos comerciales distintos — seleccioná el proveedor para ver su proyección. Todos los valores en USD. Inversiones sin IVA (recuperable como crédito fiscal).</div>
-
-  <!-- ── SELECTOR DE MODELO ── -->
-  <div class="toggle-row" style="margin-bottom:1.5rem">
-    <span class="toggle-label">Modelo comercial:</span>
-    <div class="toggle-group">
-      <button class="tog on" id="tog-prourbe" onclick="setModelo('prourbe')">Prourbe · Pauta mensual fija</button>
-      <button class="tog" id="tog-romis" onclick="setModelo('romis')">Romis + Reimpulso · CPM por salidas</button>
-    </div>
-  </div>
-
-  <!-- ── PROURBE SECTION ── -->
-  <div id="sec-prourbe">
-    <div class="note info" style="margin-bottom:1.5rem">
-      <b>Modelo Prourbe:</b> tarifas mensuales fijas por tipo de pauta · Prourbe gestiona anunciantes y cobra 10% de comisión ·
-      Inverfin puede vender directamente a sus proveedores sin comisión · Rampa año 1: mes 1=0%, mes 2=30%, mes 3=50%, mes 4=70%, mes 5+=60% estable.
-    </div>
-
-    <div class="metrics" id="p-metrics"></div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem">
-      <div class="controls-box" style="margin-bottom:0">
-        <div class="controls-title">Tarifas por tipo de pauta (USD/mes/anunciante)</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:.5rem">
-          <div style="text-align:center">
-            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Pauta Full</div>
-            <div style="font-size:24px;font-weight:500;color:var(--teal);font-family:var(--font-display)">$656</div>
-            <div style="font-size:10px;color:var(--muted)">Todos los ciclos</div>
-          </div>
-          <div style="text-align:center">
-            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Pauta Media</div>
-            <div style="font-size:24px;font-weight:500;color:var(--gold);font-family:var(--font-display)">$426</div>
-            <div style="font-size:10px;color:var(--muted)">1 de cada 2 ciclos</div>
-          </div>
-          <div style="text-align:center">
-            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Pauta 1/4</div>
-            <div style="font-size:24px;font-weight:500;color:var(--blue);font-family:var(--font-display)">$197</div>
-            <div style="font-size:10px;color:var(--muted)">1 de cada 4 ciclos</div>
-          </div>
-        </div>
-        <div style="margin-top:1rem;padding-top:.75rem;border-top:0.5px solid var(--border)">
-          <div style="font-size:11px;color:var(--muted)">Capacidad máxima con <span id="p-nslots-display">4</span> anunciantes/tipo:</div>
-          <div style="font-size:18px;font-weight:500;color:var(--white);margin-top:4px" id="p-maxmes-display">USD 5,116/mes</div>
-        </div>
-      </div>
-      <div class="controls-box" style="margin-bottom:0">
-        <div class="controls-title">Inventario por tipo de pauta</div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:.75rem">Cada tipo tiene su propio límite. Las ventas directas de Inverfin no pagan comisión a Prourbe.</div>
-
-        <!-- FULL -->
-        <div style="background:rgba(46,196,182,.06);border:0.5px solid rgba(46,196,182,.2);border-radius:8px;padding:.75rem;margin-bottom:.75rem">
-          <div style="font-size:11px;font-weight:600;color:var(--teal);margin-bottom:.5rem">PAUTA FULL — USD 656/mes/anunciante</div>
-          <div class="ctrl-row" style="margin-bottom:2px">
-            <span class="ctrl-label" style="min-width:160px">Total anunciantes Full</span>
-            <div style="flex:1;min-width:120px;position:relative">
-              <input type="range" id="p-nF" min="0" max="12" step="1" value="4" oninput="recalcP()" style="width:100%">
-              <div style="position:absolute;left:calc(4/12*100% - 1px);top:-4px;width:2px;height:8px;background:var(--gold);pointer-events:none;border-radius:1px" title="Caso base: 4"></div>
-            </div>
-            <span class="ctrl-val" id="p-nFV">4</span>
-          </div>
-          <div style="font-size:10px;color:var(--muted);text-align:right;margin:-2px 0 6px;padding-right:50px">│ caso base: 4</div>
-          <div class="ctrl-row" style="margin-bottom:0">
-            <span class="ctrl-label" style="min-width:160px">↳ Venta directa Inverfin</span>
-            <input type="range" id="p-dF" min="0" max="4" step="1" value="2" oninput="recalcP()">
-            <span class="ctrl-val" id="p-dFV">2 <span style="color:var(--muted);font-size:10px">/ 4</span></span>
-          </div>
-        </div>
-
-        <!-- MEDIA -->
-        <div style="background:rgba(245,200,66,.06);border:0.5px solid rgba(245,200,66,.2);border-radius:8px;padding:.75rem;margin-bottom:.75rem">
-          <div style="font-size:11px;font-weight:600;color:var(--gold);margin-bottom:.5rem">PAUTA MEDIA — USD 426/mes/anunciante</div>
-          <div class="ctrl-row" style="margin-bottom:2px">
-            <span class="ctrl-label" style="min-width:160px">Total anunciantes Media</span>
-            <div style="flex:1;min-width:120px;position:relative">
-              <input type="range" id="p-nM" min="0" max="12" step="1" value="4" oninput="recalcP()" style="width:100%">
-              <div style="position:absolute;left:calc(4/12*100% - 1px);top:-4px;width:2px;height:8px;background:var(--gold);pointer-events:none;border-radius:1px" title="Caso base: 4"></div>
-            </div>
-            <span class="ctrl-val" id="p-nMV">4</span>
-          </div>
-          <div style="font-size:10px;color:var(--muted);text-align:right;margin:-2px 0 6px;padding-right:50px">│ caso base: 4</div>
-          <div class="ctrl-row" style="margin-bottom:0">
-            <span class="ctrl-label" style="min-width:160px">↳ Venta directa Inverfin</span>
-            <input type="range" id="p-dM" min="0" max="4" step="1" value="0" oninput="recalcP()">
-            <span class="ctrl-val" id="p-dMV">0 <span style="color:var(--muted);font-size:10px">/ 4</span></span>
-          </div>
-        </div>
-
-        <!-- CUARTO -->
-        <div style="background:rgba(55,138,221,.06);border:0.5px solid rgba(55,138,221,.2);border-radius:8px;padding:.75rem;margin-bottom:.75rem">
-          <div style="font-size:11px;font-weight:600;color:var(--blue);margin-bottom:.5rem">PAUTA 1/4 — USD 197/mes/anunciante</div>
-          <div class="ctrl-row" style="margin-bottom:2px">
-            <span class="ctrl-label" style="min-width:160px">Total anunciantes 1/4</span>
-            <div style="flex:1;min-width:120px;position:relative">
-              <input type="range" id="p-nQ" min="0" max="12" step="1" value="4" oninput="recalcP()" style="width:100%">
-              <div style="position:absolute;left:calc(4/12*100% - 1px);top:-4px;width:2px;height:8px;background:var(--gold);pointer-events:none;border-radius:1px" title="Caso base: 4"></div>
-            </div>
-            <span class="ctrl-val" id="p-nQV">4</span>
-          </div>
-          <div style="font-size:10px;color:var(--muted);text-align:right;margin:-2px 0 6px;padding-right:50px">│ caso base: 4</div>
-          <div class="ctrl-row" style="margin-bottom:0">
-            <span class="ctrl-label" style="min-width:160px">↳ Venta directa Inverfin</span>
-            <input type="range" id="p-dQ" min="0" max="4" step="1" value="0" oninput="recalcP()">
-            <span class="ctrl-val" id="p-dQV">0 <span style="color:var(--muted);font-size:10px">/ 4</span></span>
-          </div>
-        </div>
-
-        <div class="ctrl-row" style="margin-bottom:0">
-          <span class="ctrl-label" style="min-width:160px">Ocupación año 5 (máximo)</span>
           <input type="range" id="p-occ5" min="60" max="100" step="5" value="80" oninput="recalcP()">
           <span class="ctrl-val" id="p-occ5V">80%</span>
         </div>
@@ -669,9 +360,6 @@ footer span{color:var(--gold)}
     <div class="tbl-wrap">
       <table class="data" id="comp-tabla"></table>
     </div>
-  </div>
-  </div>
-  </div>
   </div>
 </div>
 
