@@ -193,137 +193,486 @@ footer span{color:var(--gold)}
 <!-- TAB 2: INGRESOS -->
 <div id="tab-ingresos" class="section">
   <div class="section-heading">Proyección de ingresos</div>
-  <div class="section-sub">Todos los valores en USD. Tarifa por spot según zona de mercado PY 2026 (TC referencial ₲ 6.100/USD). Caso base: ocupación 80%, vacancia 10%.</div>
+  <div class="section-sub">Dos modelos comerciales distintos — seleccioná el proveedor para ver su proyección. Todos los valores en USD. Inversiones sin IVA (recuperable como crédito fiscal).</div>
 
-  <div class="toggle-row">
-    <span class="toggle-label">Vista de ingresos:</span>
+  <!-- ── SELECTOR DE MODELO ── -->
+  <div class="toggle-row" style="margin-bottom:1.5rem">
+    <span class="toggle-label">Modelo comercial:</span>
     <div class="toggle-group">
-      <button class="tog on" id="tog-ext" onclick="setView('ext')">Solo anunciantes externos</button>
-      <button class="tog" id="tog-total" onclick="setView('total')">Externos + valor Inverfin SAECA</button>
+      <button class="tog on" id="tog-prourbe" onclick="setModelo('prourbe')">Prourbe · Pauta mensual fija</button>
+      <button class="tog" id="tog-romis" onclick="setModelo('romis')">Romis + Reimpulso · CPM por salidas</button>
     </div>
   </div>
 
-  <div class="metrics" id="ing-metrics"></div>
+  <!-- ── PROURBE SECTION ── -->
+  <div id="sec-prourbe">
+    <div class="note info" style="margin-bottom:1.5rem">
+      <b>Modelo Prourbe:</b> tarifas mensuales fijas por tipo de pauta · Prourbe gestiona anunciantes y cobra 10% de comisión ·
+      Inverfin puede vender directamente a sus proveedores sin comisión · Rampa año 1: mes 1=0%, mes 2=30%, mes 3=50%, mes 4=70%, mes 5+=60% estable.
+    </div>
+
+    <div class="metrics" id="p-metrics"></div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem">
+      <div class="controls-box" style="margin-bottom:0">
+        <div class="controls-title">Tarifas por tipo de pauta (USD/mes/anunciante)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:.5rem">
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Pauta Full</div>
+            <div style="font-size:24px;font-weight:500;color:var(--teal);font-family:var(--font-display)">$656</div>
+            <div style="font-size:10px;color:var(--muted)">Todos los ciclos</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Pauta Media</div>
+            <div style="font-size:24px;font-weight:500;color:var(--gold);font-family:var(--font-display)">$426</div>
+            <div style="font-size:10px;color:var(--muted)">1 de cada 2 ciclos</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Pauta 1/4</div>
+            <div style="font-size:24px;font-weight:500;color:var(--blue);font-family:var(--font-display)">$197</div>
+            <div style="font-size:10px;color:var(--muted)">1 de cada 4 ciclos</div>
+          </div>
+        </div>
+        <div style="margin-top:1rem;padding-top:.75rem;border-top:0.5px solid var(--border)">
+          <div style="font-size:11px;color:var(--muted)">Capacidad máxima con <span id="p-nslots-display">4</span> anunciantes/tipo:</div>
+          <div style="font-size:18px;font-weight:500;color:var(--white);margin-top:4px" id="p-maxmes-display">USD 5,116/mes</div>
+        </div>
+      </div>
+      <div class="controls-box" style="margin-bottom:0">
+        <div class="controls-title">Parámetros del modelo Prourbe</div>
+
+        <!-- Anunciantes por tipo -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:1rem">
+          <div style="background:rgba(46,196,182,.06);border:0.5px solid rgba(46,196,182,.2);border-radius:8px;padding:.75rem;text-align:center">
+            <div style="font-size:10px;font-weight:600;color:var(--teal);margin-bottom:.4rem">PAUTA FULL · $656/mes</div>
+            <input type="range" id="p-nF" min="0" max="12" step="1" value="4" oninput="recalcP()" style="width:100%">
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:2px"><span>0</span><span style="color:var(--gold)">▲4</span><span>12</span></div>
+            <div style="font-size:22px;font-weight:500;color:var(--teal);font-family:var(--font-display);margin-top:.3rem" id="p-nFV">4</div>
+            <div style="font-size:10px;color:var(--muted)">anunciantes</div>
+          </div>
+          <div style="background:rgba(245,200,66,.06);border:0.5px solid rgba(245,200,66,.2);border-radius:8px;padding:.75rem;text-align:center">
+            <div style="font-size:10px;font-weight:600;color:var(--gold);margin-bottom:.4rem">PAUTA MEDIA · $426/mes</div>
+            <input type="range" id="p-nM" min="0" max="12" step="1" value="4" oninput="recalcP()" style="width:100%">
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:2px"><span>0</span><span style="color:var(--gold)">▲4</span><span>12</span></div>
+            <div style="font-size:22px;font-weight:500;color:var(--gold);font-family:var(--font-display);margin-top:.3rem" id="p-nMV">4</div>
+            <div style="font-size:10px;color:var(--muted)">anunciantes</div>
+          </div>
+          <div style="background:rgba(55,138,221,.06);border:0.5px solid rgba(55,138,221,.2);border-radius:8px;padding:.75rem;text-align:center">
+            <div style="font-size:10px;font-weight:600;color:var(--blue);margin-bottom:.4rem">PAUTA 1/4 · $197/mes</div>
+            <input type="range" id="p-nQ" min="0" max="12" step="1" value="4" oninput="recalcP()" style="width:100%">
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:2px"><span>0</span><span style="color:var(--gold)">▲4</span><span>12</span></div>
+            <div style="font-size:22px;font-weight:500;color:var(--blue);font-family:var(--font-display);margin-top:.3rem" id="p-nQV">4</div>
+            <div style="font-size:10px;color:var(--muted)">anunciantes</div>
+          </div>
+        </div>
+
+        <!-- % comercialización directa -->
+        <div class="ctrl-row" style="margin-bottom:.75rem">
+          <span class="ctrl-label">% comercializado directamente por Inverfin</span>
+          <input type="range" id="p-dirPct" min="0" max="100" step="5" value="30" oninput="recalcP()">
+          <span class="ctrl-val" id="p-dirPctV">30%</span>
+        </div>
+        <div class="note" style="margin-bottom:.75rem;font-size:11px;padding:.6rem .9rem">
+          Venta directa: <b id="p-dir-detail">—</b> · sin comisión Prourbe.
+          Venta via Prourbe: <b id="p-prourbe-detail">—</b> · Prourbe cobra 10%.
+        </div>
+
+        <!-- Ocupación año 5 -->
+        <div class="ctrl-row" style="margin-bottom:0">
+          <span class="ctrl-label">Ocupación año 5 (máximo)</span>
+          <input type="range" id="p-occ5" min="60" max="100" step="5" value="80" oninput="recalcP()">
+          <span class="ctrl-val" id="p-occ5V">80%</span>
+        </div>
+      </div>tml lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caso de Negocio — Pantallas LED Inverfin 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --navy:#0B1629;--navy-mid:#142038;--navy-light:#1E3055;
+  --gold:#F5C842;--teal:#2EC4B6;--coral:#E8603C;--blue:#378ADD;
+  --white:#F8F6F0;--muted:#8A9BB5;
+  --border:rgba(255,255,255,0.08);--card-bg:rgba(255,255,255,0.04);
+  --font-display:'DM Serif Display',serif;--font-body:'DM Sans',sans-serif;--font-mono:'Space Mono',monospace;
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--navy);color:var(--white);font-family:var(--font-body);font-size:15px;line-height:1.6;min-height:100vh}
+header{background:linear-gradient(135deg,var(--navy-mid) 0%,var(--navy-light) 100%);border-bottom:1px solid var(--border);padding:2.5rem 3rem 2rem;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(245,200,66,0.12) 0%,transparent 70%);pointer-events:none}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+h1{font-family:var(--font-display);font-size:clamp(26px,4vw,40px);font-weight:400;color:var(--white);line-height:1.15}
+h1 em{color:var(--gold);font-style:italic}
+.header-meta{font-size:12px;color:var(--muted);margin-top:.75rem;display:flex;gap:1.5rem;flex-wrap:wrap}
+.inv-logo{font-family:var(--font-display);font-size:22px;color:var(--white)}
+.inv-logo span{color:var(--gold)}
+.date-badge{background:var(--gold);color:var(--navy);font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;margin-top:8px;display:inline-block;font-family:var(--font-mono)}
+nav{background:var(--navy-mid);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;overflow-x:auto}
+.nav-btn{padding:1rem 1.5rem;font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s}
+.nav-btn:hover{color:var(--white)}
+.nav-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+main{max-width:1100px;margin:0 auto;padding:2.5rem 3rem 4rem}
+.section{display:none}
+.section.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.section-heading{font-family:var(--font-display);font-size:24px;font-weight:400;color:var(--white);margin-bottom:.3rem}
+.section-sub{font-size:13px;color:var(--muted);margin-bottom:2rem}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:2rem}
+.metric{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1rem}
+.metric-label{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.metric-value{font-family:var(--font-display);font-size:22px;color:var(--white);line-height:1.1}
+.metric-value.gold{color:var(--gold)}
+.metric-value.teal{color:var(--teal)}
+.metric-value.blue{color:var(--blue)}
+.metric-sub{font-size:11px;color:var(--muted);margin-top:5px;font-family:var(--font-mono)}
+.controls-box{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem}
+.controls-title{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem}
+.ctrl-row{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
+.ctrl-row:last-child{margin-bottom:0}
+.ctrl-label{font-size:13px;color:var(--muted);min-width:240px}
+.ctrl-row input[type=range]{flex:1;min-width:120px;-webkit-appearance:none;height:4px;background:rgba(255,255,255,.15);border-radius:2px;outline:none;cursor:pointer}
+.ctrl-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold);border:2px solid var(--navy);cursor:pointer}
+.ctrl-row select{flex:1;min-width:200px;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:8px;color:var(--white);padding:7px 10px;font-family:var(--font-body);font-size:13px;cursor:pointer}
+.ctrl-row select option{background:var(--navy-mid);color:var(--white)}
+.ctrl-val{font-family:var(--font-mono);font-size:13px;color:var(--white);min-width:70px;text-align:right}
+.toggle-row{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;flex-wrap:wrap}
+.toggle-label{font-size:13px;color:var(--muted)}
+.toggle-group{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.tog{padding:8px 18px;font-size:13px;cursor:pointer;background:transparent;border:none;color:var(--muted);transition:all .15s;font-family:var(--font-body)}
+.tog.on{background:rgba(255,255,255,.09);color:var(--white);font-weight:500}
+.timeline-box{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem;overflow-x:auto}
+.tl-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem}
+.tl-bar{display:flex;height:48px;border-radius:8px;overflow:hidden;gap:2px}
+.tl-slot{flex:1;min-width:10px;cursor:default;transition:opacity .15s}
+.tl-slot:hover{opacity:.75}
+.tl-hours{display:flex;margin-top:6px}
+.tl-hours span{flex:1;font-size:9px;color:var(--muted);font-family:var(--font-mono)}
+.legend{display:flex;gap:1.5rem;margin-top:1rem;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.zone-table-wrap{overflow-x:auto;margin-bottom:1.5rem}
+.zone-table{width:100%;border-collapse:collapse;font-size:13px}
+.zone-table th{text-align:left;padding:9px 12px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)}
+.zone-table td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--white)}
+.zone-table tr.zt-sel td{background:rgba(46,196,182,.1);color:var(--teal)}
+.zone-table tr.zt-sel td:first-child{font-weight:500}
+.tbl-wrap{overflow-x:auto;margin-bottom:2rem}
+table.data{width:100%;border-collapse:collapse;font-size:13px}
+table.data th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)}
+table.data td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--white)}
+table.data tr.total-row td{background:rgba(245,200,66,.06);font-weight:500}
+table.data tr:hover:not(.total-row) td{background:rgba(255,255,255,.02)}
+.note{font-size:12px;color:var(--muted);line-height:1.65;padding:1rem 1.25rem;background:rgba(245,200,66,.05);border-left:3px solid rgba(245,200,66,.4);margin-bottom:1.5rem}
+.note b{color:var(--white)}
+.note.warn{background:rgba(232,96,60,.07);border-left-color:rgba(232,96,60,.5)}
+.note.warn b{color:var(--coral)}
+.note.info{background:rgba(55,138,221,.07);border-left-color:rgba(55,138,221,.4)}
+.note.info b{color:var(--blue)}
+.chart-wrap{position:relative;width:100%;height:260px;margin-bottom:1.5rem}
+.legend-row{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.leg{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+.leg-sq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem}
+.cmp-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem}
+.cmp-card.featured{border-color:var(--teal);background:rgba(46,196,182,.05)}
+.cmp-header{padding-bottom:1rem;margin-bottom:1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.cmp-name{font-family:var(--font-display);font-size:20px;color:var(--white)}
+.cmp-tagline{font-size:11px;color:var(--muted);margin-top:4px}
+.badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:20px;white-space:nowrap}
+.badge-teal{background:rgba(46,196,182,.15);color:var(--teal);border:1px solid rgba(46,196,182,.3)}
+.badge-gold{background:rgba(245,200,66,.15);color:var(--gold);border:1px solid rgba(245,200,66,.3)}
+.cmp-row{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);gap:12px}
+.cmp-row:last-child{border-bottom:none}
+.cmp-key{font-size:12px;color:var(--muted);flex:0 0 115px}
+.cmp-val{font-size:12px;color:var(--white);text-align:right;flex:1}
+.cmp-section-title{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin:1.25rem 0 .75rem}
+.payback-bar{background:rgba(255,255,255,.06);border-radius:6px;height:12px;overflow:hidden;margin-top:8px}
+.payback-fill{height:100%;border-radius:6px;background:var(--teal);transition:width .4s ease}
+footer{border-top:1px solid var(--border);text-align:center;padding:2rem 3rem;font-size:11px;color:var(--muted);font-family:var(--font-mono)}
+footer span{color:var(--gold)}
+@media(max-width:700px){header,main{padding-left:1.25rem;padding-right:1.25rem}.cmp-grid{grid-template-columns:1fr}.ctrl-label{min-width:160px}.header-right{display:none}}
+@media print{nav{display:none}.section{display:block!important;page-break-after:always}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="eyebrow">Caso de Negocio Interno</div>
+      <h1>Pantallas LED — <em>Monetización</em><br>de Espacio Publicitario</h1>
+      <div class="header-meta">
+        <span>📍 Inverfin SAECA — Av. Artigas, Asunción</span>
+        <span>📅 Mayo 2026</span>
+        <span>🏢 Romis Paraguay · Prourbe Medios</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="inv-logo"><span>E</span>Inverfin <small style="font-size:13px;color:var(--muted)">SAECA</small></div>
+      <div class="date-badge">2026-05-28</div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showTab('spots')">① Planificador de spots</button>
+    <button class="nav-btn" onclick="showTab('ingresos')">② Proyección de ingresos</button>
+    <button class="nav-btn" onclick="showTab('proveedores')">③ Proveedores</button>
+    <button class="nav-btn" onclick="showTab('resumen')">④ Resumen ejecutivo</button>
+    <button class="nav-btn" onclick="showTab('pipeline')">⑤ Pipeline anunciantes</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- TAB 1: SPOTS -->
+<div id="tab-spots" class="section active">
+  <div class="section-heading">Planificador de spots</div>
+  <div class="section-sub">La pantalla opera las 24 horas. La ventana comercial define cuántas horas se venden a anunciantes externos. Las horas restantes y los espacios intercalados los ocupa Inverfin SAECA con distribución equilibrada a lo largo del día.</div>
+
+  <div class="metrics" id="spot-metrics"></div>
 
   <div class="controls-box">
-    <div class="controls-title">Modelo comercial del proveedor</div>
+    <div class="controls-title">Parámetros de operación</div>
     <div class="ctrl-row">
-      <span class="ctrl-label">Proveedor / modelo de ingresos</span>
-      <select id="modeloComercial" onchange="recalcIng()">
-        <option value="propio">Prourbe o Driven — 100% ingresos para Inverfin</option>
-        <option value="reimpulso">Romis + Reimpulso — 50/50 en gestionado · 100% en directo</option>
-      </select>
+      <span class="ctrl-label">Duración por spot</span>
+      <input type="range" id="spotDur" min="5" max="30" step="5" value="10" oninput="recalcSpots()">
+      <span class="ctrl-val" id="spotDurVal">10 s</span>
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Ventana comercial (horas vendibles a externos)</span>
+      <input type="range" id="winHours" min="8" max="24" step="1" value="16" oninput="recalcSpots()">
+      <span class="ctrl-val" id="winHoursVal">16 h</span>
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">% de spots Inverfin dentro de ventana comercial</span>
+      <input type="range" id="inverfinPct" min="5" max="70" step="5" value="30" oninput="recalcSpots()">
+      <span class="ctrl-val" id="inverfinPctVal">30 %</span>
     </div>
   </div>
 
-  <div class="controls-box">
-    <div class="controls-title">Zona y tarifas de mercado</div>
-    <div class="ctrl-row">
-      <span class="ctrl-label">Zona / ubicación</span>
-      <select id="zona" onchange="recalcIng()">
-        <option value="premium">Premium — Aviadores / Santa Teresa</option>
-        <option value="alto" selected>Alto impacto — Av. Artigas / San Martín ★</option>
-        <option value="intermedio">Flujo intermedio — Eusebio Ayala</option>
-        <option value="interior">Interior — CDE / Encarnación</option>
-      </select>
+  <div class="note info" id="spot-note-dist"></div>
+
+  <div class="timeline-box">
+    <div class="tl-label">Distribución horaria — 24 horas (spots Inverfin intercalados de forma equilibrada)</div>
+    <div class="tl-bar" id="tl-bar"></div>
+    <div class="tl-hours" id="tl-hours"></div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#2EC4B6"></div>Inverfin SAECA — ventana comercial (intercalado)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0F6E56"></div>Inverfin SAECA — fuera de ventana (100%)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#F5C842"></div>Anunciantes diurnos</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#E8603C"></div>Anunciantes nocturnos</div>
     </div>
   </div>
 
-  <div class="controls-box">
-    <div class="controls-title">Factor de ocupación y vacancia</div>
-    <div class="ctrl-row">
-      <span class="ctrl-label">Ocupación promedio de anunciantes</span>
-      <input type="range" id="ocup" min="20" max="100" step="5" value="80" oninput="recalcIng()">
-      <span class="ctrl-val" id="ocupV">80 %</span>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-label">Factor de vacancia esperado</span>
-      <input type="range" id="vac" min="0" max="40" step="5" value="10" oninput="recalcIng()">
-      <span class="ctrl-val" id="vacV">10 %</span>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-label">% franja diurna en ventana comercial</span>
-      <input type="range" id="ppico" min="40" max="90" step="5" value="70" oninput="recalcIng()">
-      <span class="ctrl-val" id="ppicoV">70 %</span>
-    </div>
-  </div>
-
-  <div class="controls-box">
-    <div class="controls-title">Canal de venta</div>
-    <div class="ctrl-row">
-      <span class="ctrl-label">% spots vendidos directamente por Inverfin</span>
-      <input type="range" id="dirPct" min="10" max="80" step="5" value="35" oninput="recalcIng()">
-      <span class="ctrl-val" id="dirPctV">35 %</span>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-label">Comisión de agencia (sobre tarifa bruta)</span>
-      <input type="range" id="comPct" min="10" max="25" step="1" value="18" oninput="recalcIng()">
-      <span class="ctrl-val" id="comPctV">18 %</span>
-    </div>
-  </div>
-
-  <div class="controls-box">
-    <div class="controls-title">Costos operativos mensuales (USD)</div>
-    <div class="ctrl-row">
-      <span class="ctrl-label">Energía eléctrica</span>
-      <input type="range" id="costoEnergia" min="200" max="1000" step="50" value="490" oninput="recalcIng()">
-      <span class="ctrl-val" id="costoEnergiaV">$490</span>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-label">Seguro del equipo</span>
-      <input type="range" id="costoSeguro" min="0" max="600" step="50" value="300" oninput="recalcIng()">
-      <span class="ctrl-val" id="costoSeguroV">$300</span>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-label">Mantenimiento</span>
-      <input type="range" id="costoMant" min="0" max="500" step="50" value="250" oninput="recalcIng()">
-      <span class="ctrl-val" id="costoMantV">$250</span>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-label">Internet / conectividad</span>
-      <input type="range" id="costoInternet" min="0" max="200" step="10" value="80" oninput="recalcIng()">
-      <span class="ctrl-val" id="costoInternetV">$80</span>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-label">Canon municipal / otros</span>
-      <input type="range" id="costoCanon" min="0" max="500" step="50" value="200" oninput="recalcIng()">
-      <span class="ctrl-val" id="costoCanonV">$200</span>
-    </div>
-  </div>
-
-  <div style="font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">Tarifa por spot según zona — mercado PY 2026</div>
-  <div class="zone-table-wrap">
-    <table class="zone-table" id="zone-table"></table>
-  </div>
-
-  <div class="note" id="note-occ"></div>
-
-  <div style="font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">Proyección mensual de ingresos (USD)</div>
-  <div class="tbl-wrap">
-    <table class="data">
-      <thead>
-        <tr>
-          <th>Franja</th>
-          <th>Spots ext. disp./día</th>
-          <th>Spots vendidos/día</th>
-          <th>Tarifa USD/spot</th>
-          <th>Ingreso mensual USD</th>
-          <th>Ingreso anual USD</th>
-        </tr>
-      </thead>
-      <tbody id="ing-rows"></tbody>
-    </table>
-  </div>
-
-  <div class="legend-row" id="chart-legend"></div>
-  <div class="chart-wrap">
-    <canvas id="ingChart" role="img" aria-label="Ingresos mensuales en USD por franja horaria"></canvas>
-  </div>
-
-  <div id="payback-section"></div>
+  <div class="note" id="spot-note"></div>
 </div>
 
-<!-- TAB 3: COMPARACIÓN -->
+<!-- TAB 2: INGRESOS -->
+<div id="tab-ingresos" class="section">
+  <div class="section-heading">Proyección de ingresos</div>
+  <div class="section-sub">Dos modelos comerciales distintos — seleccioná el proveedor para ver su proyección. Todos los valores en USD. Inversiones sin IVA (recuperable como crédito fiscal).</div>
+
+  <!-- ── SELECTOR DE MODELO ── -->
+  <div class="toggle-row" style="margin-bottom:1.5rem">
+    <span class="toggle-label">Modelo comercial:</span>
+    <div class="toggle-group">
+      <button class="tog on" id="tog-prourbe" onclick="setModelo('prourbe')">Prourbe · Pauta mensual fija</button>
+      <button class="tog" id="tog-romis" onclick="setModelo('romis')">Romis + Reimpulso · CPM por salidas</button>
+    </div>
+  </div>
+
+  <!-- ── PROURBE SECTION ── -->
+  <div id="sec-prourbe">
+    <div class="note info" style="margin-bottom:1.5rem">
+      <b>Modelo Prourbe:</b> tarifas mensuales fijas por tipo de pauta · Prourbe gestiona anunciantes y cobra 10% de comisión ·
+      Inverfin puede vender directamente a sus proveedores sin comisión · Rampa año 1: mes 1=0%, mes 2=30%, mes 3=50%, mes 4=70%, mes 5+=60% estable.
+    </div>
+
+    <div class="metrics" id="p-metrics"></div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem">
+      <div class="controls-box" style="margin-bottom:0">
+        <div class="controls-title">Tarifas por tipo de pauta (USD/mes/anunciante)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:.5rem">
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Pauta Full</div>
+            <div style="font-size:24px;font-weight:500;color:var(--teal);font-family:var(--font-display)">$656</div>
+            <div style="font-size:10px;color:var(--muted)">Todos los ciclos</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Pauta Media</div>
+            <div style="font-size:24px;font-weight:500;color:var(--gold);font-family:var(--font-display)">$426</div>
+            <div style="font-size:10px;color:var(--muted)">1 de cada 2 ciclos</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Pauta 1/4</div>
+            <div style="font-size:24px;font-weight:500;color:var(--blue);font-family:var(--font-display)">$197</div>
+            <div style="font-size:10px;color:var(--muted)">1 de cada 4 ciclos</div>
+          </div>
+        </div>
+        <div style="margin-top:1rem;padding-top:.75rem;border-top:0.5px solid var(--border)">
+          <div style="font-size:11px;color:var(--muted)">Capacidad máxima con <span id="p-nslots-display">4</span> anunciantes/tipo:</div>
+          <div style="font-size:18px;font-weight:500;color:var(--white);margin-top:4px" id="p-maxmes-display">USD 5,116/mes</div>
+        </div>
+      </div>
+      <div class="controls-box" style="margin-bottom:0">
+        <div class="controls-title">Inventario por tipo de pauta</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:.75rem">Cada tipo tiene su propio límite. Las ventas directas de Inverfin no pagan comisión a Prourbe.</div>
+
+        <!-- FULL -->
+        <div style="background:rgba(46,196,182,.06);border:0.5px solid rgba(46,196,182,.2);border-radius:8px;padding:.75rem;margin-bottom:.75rem">
+          <div style="font-size:11px;font-weight:600;color:var(--teal);margin-bottom:.5rem">PAUTA FULL — USD 656/mes/anunciante</div>
+          <div class="ctrl-row" style="margin-bottom:2px">
+            <span class="ctrl-label" style="min-width:160px">Total anunciantes Full</span>
+            <div style="flex:1;min-width:120px;position:relative">
+              <input type="range" id="p-nF" min="0" max="12" step="1" value="4" oninput="recalcP()" style="width:100%">
+              <div style="position:absolute;left:calc(4/12*100% - 1px);top:-4px;width:2px;height:8px;background:var(--gold);pointer-events:none;border-radius:1px" title="Caso base: 4"></div>
+            </div>
+            <span class="ctrl-val" id="p-nFV">4</span>
+          </div>
+          <div style="font-size:10px;color:var(--muted);text-align:right;margin:-2px 0 6px;padding-right:50px">│ caso base: 4</div>
+          <div class="ctrl-row" style="margin-bottom:0">
+            <span class="ctrl-label" style="min-width:160px">↳ Venta directa Inverfin</span>
+            <input type="range" id="p-dF" min="0" max="4" step="1" value="2" oninput="recalcP()">
+            <span class="ctrl-val" id="p-dFV">2 <span style="color:var(--muted);font-size:10px">/ 4</span></span>
+          </div>
+        </div>
+
+        <!-- MEDIA -->
+        <div style="background:rgba(245,200,66,.06);border:0.5px solid rgba(245,200,66,.2);border-radius:8px;padding:.75rem;margin-bottom:.75rem">
+          <div style="font-size:11px;font-weight:600;color:var(--gold);margin-bottom:.5rem">PAUTA MEDIA — USD 426/mes/anunciante</div>
+          <div class="ctrl-row" style="margin-bottom:2px">
+            <span class="ctrl-label" style="min-width:160px">Total anunciantes Media</span>
+            <div style="flex:1;min-width:120px;position:relative">
+              <input type="range" id="p-nM" min="0" max="12" step="1" value="4" oninput="recalcP()" style="width:100%">
+              <div style="position:absolute;left:calc(4/12*100% - 1px);top:-4px;width:2px;height:8px;background:var(--gold);pointer-events:none;border-radius:1px" title="Caso base: 4"></div>
+            </div>
+            <span class="ctrl-val" id="p-nMV">4</span>
+          </div>
+          <div style="font-size:10px;color:var(--muted);text-align:right;margin:-2px 0 6px;padding-right:50px">│ caso base: 4</div>
+          <div class="ctrl-row" style="margin-bottom:0">
+            <span class="ctrl-label" style="min-width:160px">↳ Venta directa Inverfin</span>
+            <input type="range" id="p-dM" min="0" max="4" step="1" value="0" oninput="recalcP()">
+            <span class="ctrl-val" id="p-dMV">0 <span style="color:var(--muted);font-size:10px">/ 4</span></span>
+          </div>
+        </div>
+
+        <!-- CUARTO -->
+        <div style="background:rgba(55,138,221,.06);border:0.5px solid rgba(55,138,221,.2);border-radius:8px;padding:.75rem;margin-bottom:.75rem">
+          <div style="font-size:11px;font-weight:600;color:var(--blue);margin-bottom:.5rem">PAUTA 1/4 — USD 197/mes/anunciante</div>
+          <div class="ctrl-row" style="margin-bottom:2px">
+            <span class="ctrl-label" style="min-width:160px">Total anunciantes 1/4</span>
+            <div style="flex:1;min-width:120px;position:relative">
+              <input type="range" id="p-nQ" min="0" max="12" step="1" value="4" oninput="recalcP()" style="width:100%">
+              <div style="position:absolute;left:calc(4/12*100% - 1px);top:-4px;width:2px;height:8px;background:var(--gold);pointer-events:none;border-radius:1px" title="Caso base: 4"></div>
+            </div>
+            <span class="ctrl-val" id="p-nQV">4</span>
+          </div>
+          <div style="font-size:10px;color:var(--muted);text-align:right;margin:-2px 0 6px;padding-right:50px">│ caso base: 4</div>
+          <div class="ctrl-row" style="margin-bottom:0">
+            <span class="ctrl-label" style="min-width:160px">↳ Venta directa Inverfin</span>
+            <input type="range" id="p-dQ" min="0" max="4" step="1" value="0" oninput="recalcP()">
+            <span class="ctrl-val" id="p-dQV">0 <span style="color:var(--muted);font-size:10px">/ 4</span></span>
+          </div>
+        </div>
+
+        <div class="ctrl-row" style="margin-bottom:0">
+          <span class="ctrl-label" style="min-width:160px">Ocupación año 5 (máximo)</span>
+          <input type="range" id="p-occ5" min="60" max="100" step="5" value="80" oninput="recalcP()">
+          <span class="ctrl-val" id="p-occ5V">80%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- tabla anual -->
+    <div style="font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">Proyección anual — Modelo Prourbe</div>
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Año</th><th>Ocup.</th><th>Bruto anual</th><th>Comisión Prourbe (10%)</th><th>Venta directa Inverfin</th><th>Costos operativos</th><th>Neto Inverfin/año</th><th>Neto/mes</th></tr></thead>
+        <tbody id="p-tabla"></tbody>
+      </table>
+    </div>
+    <div id="p-payback-section"></div>
+  </div>
+
+  <!-- ── ROMIS + REIMPULSO SECTION ── -->
+  <div id="sec-romis" style="display:none">
+    <div class="note" style="border-left-color:var(--gold);background:rgba(245,200,66,.06);margin-bottom:1.5rem">
+      <b style="color:var(--gold)">Modelo Romis + Reimpulso:</b> Reimpulso comercializa por CPM (USD 172/1,000 salidas) con red programática ·
+      Inverfin recibe <b>50% de la venta bruta</b> — sin importar lo que Reimpulso pague internamente a sus agencias ·
+      Misma rampa año 1 que Prourbe · Venta directa Inverfin va al 100% sin afectar el split.
+    </div>
+
+    <div class="metrics" id="r-metrics"></div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem">
+      <div class="controls-box" style="margin-bottom:0">
+        <div class="controls-title">Datos del modelo Reimpulso</div>
+        <div class="ctrl-row" style="margin-bottom:.5rem">
+          <span class="ctrl-label">CPM documentado</span>
+          <span style="font-size:18px;font-weight:500;color:var(--gold)">USD 172 / 1,000 salidas</span>
+        </div>
+        <div class="ctrl-row" style="margin-bottom:.5rem">
+          <span class="ctrl-label">Potencial máximo/mes</span>
+          <span style="font-size:18px;font-weight:500;color:var(--teal)">USD 26,006 + IVA</span>
+        </div>
+        <div class="ctrl-row" style="margin-bottom:.5rem">
+          <span class="ctrl-label">Split para Inverfin</span>
+          <span style="font-size:18px;font-weight:500;color:var(--white)">50% de venta bruta</span>
+        </div>
+        <div class="ctrl-row" style="margin-bottom:0">
+          <span class="ctrl-label">Venta directa Inverfin</span>
+          <span style="font-size:15px;color:var(--teal)">100% para Inverfin (sin split)</span>
+        </div>
+      </div>
+      <div class="controls-box" style="margin-bottom:0">
+        <div class="controls-title">Parámetros sensibilizables</div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">% venta año 1 (Reimpulso proyecta 40%)</span>
+          <input type="range" id="r-occ1" min="20" max="60" step="5" value="40" oninput="recalcR()">
+          <span class="ctrl-val" id="r-occ1V">40%</span>
+        </div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">% venta año 5 (máximo)</span>
+          <input type="range" id="r-occ5" min="50" max="90" step="5" value="70" oninput="recalcR()">
+          <span class="ctrl-val" id="r-occ5V">70%</span>
+        </div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">Clientes directos Inverfin (tipo USD 1,238/mes)</span>
+          <input type="range" id="r-direct" min="0" max="8" step="1" value="2" oninput="recalcR()">
+          <span class="ctrl-val" id="r-directV">2 clientes</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">Proyección anual — Modelo Romis + Reimpulso</div>
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Año</th><th>% venta</th><th>Venta bruta Reimpulso</th><th>50% Inverfin</th><th>Venta directa Inverfin</th><th>Costos operativos</th><th>Neto Inverfin/año</th><th>Neto/mes</th></tr></thead>
+        <tbody id="r-tabla"></tbody>
+      </table>
+    </div>
+    <div id="r-payback-section"></div>
+  </div>
+
+  <!-- ── COMPARATIVA AMBOS MODELOS ── -->
+  <div style="margin-top:2rem">
+    <div class="section-heading" style="font-size:18px;margin-bottom:.5rem">Comparativa de modelos</div>
+    <div class="section-sub" style="margin-bottom:1rem">Neto acumulado a 5 años según escenario</div>
+    <div class="tbl-wrap">
+      <table class="data" id="comp-tabla"></table>
+    </div>
+  </div>
+</div>
+
+
 <div id="tab-proveedores" class="section">
   <div class="section-heading">Comparación de proveedores</div>
   <div class="section-sub">Tres propuestas recibidas para Inverfin SAECA — distintos modelos comerciales, distintas capacidades. Todos los precios en USD con IVA.</div>
@@ -476,74 +825,117 @@ footer span{color:var(--gold)}
 
 <div id="tab-resumen" class="section">
   <div class="section-heading">Resumen ejecutivo</div>
-  <div class="section-sub">Síntesis del caso de negocio para Inverfin SAECA. Todos los valores en USD.</div>
-  <div class="metrics">
-    <div class="metric"><div class="metric-label">Inversión recomendada</div><div class="metric-value gold">USD 98,902</div><div class="metric-sub">Prourbe · casa central</div></div>
-    <div class="metric"><div class="metric-label">Ingreso ext./mes</div><div class="metric-value teal" id="res-monthly">—</div><div class="metric-sub">caso base 80% ocup.</div></div>
-    <div class="metric"><div class="metric-label">Ingreso anual ext.</div><div class="metric-value" id="res-annual">—</div><div class="metric-sub">proyección lineal</div></div>
-    <div class="metric"><div class="metric-label">Payback estimado</div><div class="metric-value" id="res-payback">—</div><div class="metric-sub">meses (ing. externos)</div></div>
-    <div class="metric"><div class="metric-label">Valor spots propios/mes</div><div class="metric-value blue" id="res-inv-val">—</div><div class="metric-sub">ahorro pub. Inverfin SAECA</div></div>
-    <div class="metric"><div class="metric-label">Spots Inverfin/día</div><div class="metric-value" id="res-inv-spots">—</div><div class="metric-sub">incl. horas no comerciales</div></div>
+  <div class="section-sub">Comparativa de ambos modelos con sus números reales. Se actualiza automáticamente según los parámetros configurados en la pestaña de ingresos.</div>
+
+  <!-- ── DOS COLUMNAS: PROURBE vs ROMIS ── -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem">
+
+    <!-- PROURBE -->
+    <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:1rem">Prourbe Medios · Pauta mensual fija</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem">
+        <div class="metric" style="padding:.75rem"><div class="metric-label">Inversión efectiva</div><div class="metric-value" style="font-size:18px">$89,910</div><div class="metric-sub">IVA recuperado</div></div>
+        <div class="metric" style="padding:.75rem"><div class="metric-label">Break-even</div><div class="metric-value teal" style="font-size:18px" id="res-p-be">—</div><div class="metric-sub">meses</div></div>
+        <div class="metric" style="padding:.75rem"><div class="metric-label">Neto año 1/mes</div><div class="metric-value" style="font-size:18px" id="res-p-y1">—</div><div class="metric-sub">47.5% ocupación</div></div>
+        <div class="metric" style="padding:.75rem"><div class="metric-label">Neto año 5/mes</div><div class="metric-value" style="font-size:18px" id="res-p-y5">—</div><div class="metric-sub">según slider</div></div>
+        <div class="metric" style="padding:.75rem;grid-column:1/-1"><div class="metric-label">Neto acumulado 5 años</div><div class="metric-value gold" style="font-size:20px" id="res-p-5y">—</div><div class="metric-sub">tras costos y comisión 10%</div></div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7">
+        <div style="padding:6px 0;border-bottom:0.5px solid var(--border)">Comisión: <b style="color:var(--white)">10%</b> sobre lo que Prourbe gestiona</div>
+        <div style="padding:6px 0;border-bottom:0.5px solid var(--border)">Venta directa Inverfin: <b style="color:var(--teal)">0% comisión</b></div>
+        <div style="padding:6px 0;border-bottom:0.5px solid var(--border)">Capacidad máx.: <b id="res-p-cap" style="color:var(--white)">—</b></div>
+        <div style="padding:6px 0">Modelo: tarifas $656/$426/$197 por anunciante/mes</div>
+      </div>
+    </div>
+
+    <!-- ROMIS + REIMPULSO -->
+    <div style="background:rgba(245,200,66,.04);border:1px solid rgba(245,200,66,.25);border-radius:var(--radius);padding:1.5rem">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem">Romis + Reimpulso · CPM por salidas</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem">
+        <div class="metric" style="padding:.75rem"><div class="metric-label">Inversión efectiva</div><div class="metric-value" style="font-size:18px">$107,182</div><div class="metric-sub">IVA recuperado</div></div>
+        <div class="metric" style="padding:.75rem"><div class="metric-label">Break-even</div><div class="metric-value gold" style="font-size:18px" id="res-r-be">—</div><div class="metric-sub">meses</div></div>
+        <div class="metric" style="padding:.75rem"><div class="metric-label">Neto año 1/mes</div><div class="metric-value" style="font-size:18px" id="res-r-y1">—</div><div class="metric-sub">40% venta Reimpulso</div></div>
+        <div class="metric" style="padding:.75rem"><div class="metric-label">Neto año 5/mes</div><div class="metric-value" style="font-size:18px" id="res-r-y5">—</div><div class="metric-sub">según slider</div></div>
+        <div class="metric" style="padding:.75rem;grid-column:1/-1"><div class="metric-label">Neto acumulado 5 años</div><div class="metric-value gold" style="font-size:20px" id="res-r-5y">—</div><div class="metric-sub">50% de venta bruta Reimpulso</div></div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7">
+        <div style="padding:6px 0;border-bottom:0.5px solid var(--border)">Split: <b style="color:var(--gold)">50% venta bruta</b> para Inverfin · independiente de comisiones internas de Reimpulso</div>
+        <div style="padding:6px 0;border-bottom:0.5px solid var(--border)">Venta directa Inverfin: <b style="color:var(--teal)">100% para Inverfin</b> · no entra al pool Reimpulso</div>
+        <div style="padding:6px 0;border-bottom:0.5px solid var(--border)">Potencial máximo: <b style="color:var(--white)">$26,006/mes</b> · 151,200 salidas × CPM $172</div>
+        <div style="padding:6px 0">Año 1 proyectado por Reimpulso: $124,831 bruto (40% de potencial)</div>
+      </div>
+    </div>
   </div>
+
+  <!-- ── TABLA COMPARATIVA ── -->
+  <div style="font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">Comparativa de payback</div>
+  <div class="tbl-wrap" style="margin-bottom:2rem">
+    <table class="data">
+      <thead><tr><th>Criterio</th><th>Prourbe · Pauta fija</th><th>Romis + Reimpulso · CPM</th></tr></thead>
+      <tbody>
+        <tr><td>Modelo comercial</td><td>Tarifas mensuales fijas por pauta</td><td>CPM por salidas · red programática</td></tr>
+        <tr><td>Inversión efectiva (IVA recuperado)</td><td>USD 89,910</td><td>USD 107,182</td></tr>
+        <tr><td>Diferencia de inversión</td><td style="color:var(--teal)">USD 17,272 menor ✓</td><td>USD 17,272 mayor</td></tr>
+        <tr><td>Comisión del proveedor</td><td>10% sobre lo que gestiona</td><td style="color:var(--gold)">50% de venta bruta</td></tr>
+        <tr><td>Potencial máximo/mes</td><td id="res-p-caprow">—</td><td style="color:var(--gold)">USD 26,006 ✓</td></tr>
+        <tr><td>Break-even</td><td id="res-p-berow">—</td><td id="res-r-berow" style="color:var(--gold)">—</td></tr>
+        <tr><td>Neto año 1/mes</td><td id="res-p-y1row">—</td><td id="res-r-y1row" style="color:var(--gold)">—</td></tr>
+        <tr><td>Neto año 5/mes</td><td id="res-p-y5row">—</td><td id="res-r-y5row" style="color:var(--gold)">—</td></tr>
+        <tr class="total-row"><td>Neto acumulado 5 años</td><td id="res-p-5yrow">—</td><td id="res-r-5yrow" style="color:var(--gold)">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── OPORTUNIDADES Y RIESGOS ── -->
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem">
     <div class="controls-box" style="margin-bottom:0">
       <div class="controls-title" style="color:var(--teal)">Oportunidades</div>
       <ul style="list-style:none;display:flex;flex-direction:column;gap:.75rem;margin-top:.5rem">
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Visibilidad de marca 24/7 — las horas no comerciales son 100% Inverfin SAECA sin costo.</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Ingresos recurrentes que amortizan la inversión en 12–18 meses (caso base).</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Prourbe tiene red comercial activa — anunciantes desde el primer mes.</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Escalable a múltiples sucursales con economías de escala.</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">10,000 nits garantizan visibilidad en luz solar directa en Av. Artigas.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Visibilidad 24/7 — horas fuera de ventana son 100% Inverfin sin costo de pauta.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Proveedores existentes (Samsung, Beko, Xiaomi…) son clientes directos naturales — sin comisión.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Romis+Reimpulso: escalabilidad CPM permite ingresos 3–4× mayores que modelo pauta fija.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">Prourbe: menor inversión y modelo más controlado por Inverfin.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--teal)">10,000 nits (Prourbe) garantizan visibilidad en luz solar directa en Av. Artigas.</li>
       </ul>
     </div>
     <div class="controls-box" style="margin-bottom:0">
       <div class="controls-title" style="color:var(--coral)">Riesgos y consideraciones</div>
       <ul style="list-style:none;display:flex;flex-direction:column;gap:.75rem;margin-top:.5rem">
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Tiempo de entrega Prourbe (~90 días) — requiere planificación anticipada.</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Vacancia de anunciantes puede reducir ingresos — prever 10–15% en año 1.</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Estructura y fundación de Prourbe cotizada aparte (~USD 18–20K adicionales).</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Requiere habilitación municipal y permisos de señalización vial.</li>
-        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Garantía Prourbe es 1 año (vs 2 de Romis) — evaluar contrato de mantenimiento extendido.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Prourbe: capacidad limitada a N anunciantes/tipo — crecimiento acotado por modelo fijo.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Romis+Reimpulso: comisión 50% es alta — los números de Reimpulso son su proyección, no garantía.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Ambos: inversión mayor a USD 89K requiere aprobación y planificación de caja.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Permisos municipales y habilitación de señalización vial previos a la instalación.</li>
+        <li style="font-size:13px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--coral)">Confirmar si tarifas Prourbe son con o sin IVA — impacta ~9% en ingresos reales.</li>
       </ul>
     </div>
   </div>
-  <div class="controls-box">
-    <div class="controls-title">Recomendación</div>
-    <p style="font-size:14px;color:var(--white);line-height:1.8;margin-bottom:1rem">
-      Se recomienda avanzar con <strong style="color:var(--teal)">Prourbe Medios</strong>: precio USD 16,399 inferior a Romis (−14%), mayor brillo, soporte técnico local confirmado y red comercial propia que permite monetizar slots externos desde el primer mes.
-    </p>
-    <p style="font-size:14px;color:var(--muted);line-height:1.8">
-      Si la velocidad de entrega es prioritaria, <strong style="color:var(--gold)">Romis</strong> entrega en 2–4 semanas con garantía de 2 años.
-    </p>
-  </div>
-  <div style="margin-top:2rem">
-    <div style="font-size:16px;font-family:'DM Serif Display',serif;margin-bottom:.75rem;color:var(--white)">Modelo operativo sugerido</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem">
-      <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
-        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Spot estándar</div>
-        <div style="font-size:26px;font-family:var(--font-display);color:var(--white)">15 seg</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:6px">240 spots/hora · duración óptima para tráfico en Av. Artigas</div>
-      </div>
-      <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
-        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Operación</div>
-        <div style="font-size:26px;font-family:var(--font-display);color:var(--white)">24 h</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:6px">Pantalla encendida todo el día · 16 h comerciales · 8 h solo Inverfin SAECA</div>
-      </div>
-      <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
-        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Split comercial</div>
-        <div style="font-size:26px;font-family:var(--font-display);color:var(--white)">30 / 70</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:6px">30% Inverfin SAECA intercalado · 70% anunciantes externos · dentro de ventana</div>
-      </div>
-      <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
-        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Tarifa zona (USD)</div>
-        <div style="font-size:26px;font-family:var(--font-display);color:var(--white)">$0.172</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:6px">Por spot diurno · Av. Artigas · nocturno −40% = $0.103</div>
-      </div>
+
+  <!-- ── MODELO OPERATIVO ── -->
+  <div style="font-size:16px;font-family:'DM Serif Display',serif;margin-bottom:.75rem;color:var(--white)">Modelo operativo sugerido</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem">
+    <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Spot estándar</div>
+      <div style="font-size:26px;font-family:'DM Serif Display',serif;color:var(--white)">10 seg</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">360 spots/hora · óptimo para tráfico Av. Artigas</div>
+    </div>
+    <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Operación</div>
+      <div style="font-size:26px;font-family:'DM Serif Display',serif;color:var(--white)">24 h</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">16 h comerciales · 8 h 100% Inverfin SAECA</div>
+    </div>
+    <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Split ventana</div>
+      <div style="font-size:26px;font-family:'DM Serif Display',serif;color:var(--white)">30 / 70</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">30% Inverfin intercalado · 70% anunciantes externos</div>
+    </div>
+    <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Spots Inverfin/día</div>
+      <div style="font-size:26px;font-family:'DM Serif Display',serif;color:var(--white)" id="res-inv-spots">—</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">ventana + horas no comerciales</div>
     </div>
   </div>
 </div>
 
-<!-- TAB: PIPELINE ANUNCIANTES (bonus section reached via resumen) -->
 <div id="tab-pipeline" class="section">
   <div class="section-heading">Pipeline de anunciantes directos</div>
   <div class="section-sub">Marcas que ya operan en el ecosistema Inverfin — candidatos naturales para venta directa sin comisión de agencia.</div>
@@ -608,300 +1000,339 @@ footer span{color:var(--gold)}
 </footer>
 
 <script>
-const ZONAS = {
-  premium:    { label:'Premium — Aviadores / Santa Teresa',       gsMin:1750, gsMax:1850 },
-  alto:       { label:'Alto impacto — Av. Artigas / San Martín',  gsMin:1000, gsMax:1100 },
-  intermedio: { label:'Flujo intermedio — Eusebio Ayala',         gsMin:650,  gsMax:750  },
-  interior:   { label:'Interior — CDE / Encarnación',             gsMin:550,  gsMax:600  },
-};
-const TC = 6100;
-let ingChartInst = null;
-let ingView = 'ext';
+const PF=656, PM=426, PQ=197;
+const COM_P=0.10;
+const INV_PROURBE=89910, INV_ROMIS=107182;
+const MAX_CPM_ANUAL=312077; // 151200 salidas/mes × 12 × USD172/1000
+const CLIENTE_TIPO=1238; // USD/mes cliente tipo Romis
+const COSTOS=[13739,14588,14786,15378,15585]; // años 1-5 con inflación
 
-function usd(gs){ return gs/TC; }
-function fmtUSD(n, dec=2){ return '$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
-function fmtUSDk(n){ return Math.abs(n)>=1000 ? '$'+(n/1000).toFixed(1)+'K' : fmtUSD(n,0); }
+let modeloActual='prourbe';
+
+function fmtUSD(n,dec=0){ return '$'+Math.round(n).toLocaleString('en-US'); }
+function fmtK(n){ return Math.abs(n)>=1000?'$'+(n/1000).toFixed(1)+'K':fmtUSD(n); }
 
 function showTab(id){
-  document.querySelectorAll('.nav-btn').forEach((b,i)=>b.classList.toggle('active',['spots','ingresos','proveedores','resumen','pipeline'][i]===id));
+  document.querySelectorAll('.nav-btn').forEach((b,i)=>
+    b.classList.toggle('active',['spots','ingresos','proveedores','resumen','pipeline'][i]===id));
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
-  if(id==='ingresos') recalcIng();
+  if(id==='ingresos'){ recalcP(); recalcR(); }
   if(id==='resumen') updateResumen();
 }
 
-function setView(v){
-  ingView=v;
-  document.getElementById('tog-ext').classList.toggle('on',v==='ext');
-  document.getElementById('tog-total').classList.toggle('on',v==='total');
-  recalcIng();
+function setModelo(m){
+  modeloActual=m;
+  document.getElementById('tog-prourbe').classList.toggle('on',m==='prourbe');
+  document.getElementById('tog-romis').classList.toggle('on',m==='romis');
+  document.getElementById('sec-prourbe').style.display=m==='prourbe'?'block':'none';
+  document.getElementById('sec-romis').style.display=m==='romis'?'block':'none';
+  buildCompTable();
 }
 
-function recalcSpots(){
-  const dur  = +document.getElementById('spotDur').value;
-  const winH = +document.getElementById('winHours').value;
-  const ipct = +document.getElementById('inverfinPct').value/100;
+// ── PROURBE MODEL ──────────────────────────────────────────────
+function recalcP(){
+  const nF = +document.getElementById('p-nF').value;
+  const nM = +document.getElementById('p-nM').value;
+  const nQ = +document.getElementById('p-nQ').value;
+  const dirPct = +document.getElementById('p-dirPct').value/100;
+  const occ5 = +document.getElementById('p-occ5').value/100;
 
-  document.getElementById('spotDurVal').textContent    = dur+' s';
-  document.getElementById('winHoursVal').textContent   = winH+' h';
-  document.getElementById('inverfinPctVal').textContent = Math.round(ipct*100)+' %';
+  // Update displays
+  document.getElementById('p-nFV').textContent = nF;
+  document.getElementById('p-nMV').textContent = nM;
+  document.getElementById('p-nQV').textContent = nQ;
+  document.getElementById('p-dirPctV').textContent = Math.round(dirPct*100)+'%';
+  document.getElementById('p-occ5V').textContent = Math.round(occ5*100)+'%';
 
-  const spotsPerHour   = Math.round(3600/dur);
-  const totalSpotsDay  = spotsPerHour * 24;           // 24h siempre encendida
-  const winSpots       = spotsPerHour * winH;          // spots en ventana comercial
-  const offWinSpots    = totalSpotsDay - winSpots;     // horas fuera → 100% Inverfin
-  const invInWin       = Math.round(winSpots * ipct);  // Inverfin intercalado en ventana
-  const extSpots       = winSpots - invInWin;          // externos en ventana
-  const totalInvSpots  = offWinSpots + invInWin;       // total spots Inverfin/día
+  const maxMes = nF*PF + nM*PM + nQ*PQ;
+  document.getElementById('p-nslots-display').textContent = nF+'F+'+nM+'M+'+nQ+'Q';
+  document.getElementById('p-maxmes-display').textContent = fmtUSD(maxMes)+'/mes';
 
-  document.getElementById('spot-metrics').innerHTML = `
-    <div class="metric"><div class="metric-label">Spots totales/día (24h)</div><div class="metric-value">${totalSpotsDay.toLocaleString()}</div><div class="metric-sub">${spotsPerHour} spots/hora</div></div>
-    <div class="metric"><div class="metric-label">Inverfin — en ventana/día</div><div class="metric-value teal">${invInWin.toLocaleString()}</div><div class="metric-sub">${Math.round(ipct*100)}% de la ventana comercial</div></div>
-    <div class="metric"><div class="metric-label">Spots externos disp./día</div><div class="metric-value gold">${extSpots.toLocaleString()}</div><div class="metric-sub">ventana comercial ${winH}h</div></div>
-    <div class="metric"><div class="metric-label">Beneficio adicional/día</div><div class="metric-value blue">${offWinSpots.toLocaleString()}</div><div class="metric-sub">${24-winH}h fuera de ventana — 100% Inverfin</div></div>
-  `;
+  // Direct sales: dirPct applies equally to all types
+  const dF = Math.round(nF*dirPct), dM = Math.round(nM*dirPct), dQ = Math.round(nQ*dirPct);
+  const directMes = dF*PF + dM*PM + dQ*PQ;
+  const directAnual = directMes * 12;
 
-  // Timeline: distribución equilibrada de Inverfin dentro de ventana
-  // Inverfin aparece cada N spots (ratio 1:floor(1/ipct))
-  const invEvery = ipct > 0 ? Math.round(1/ipct) : 999;
-  const bar = document.getElementById('tl-bar');
-  bar.innerHTML='';
-  const startH=6, endH=6+winH > 24 ? 24 : 6+winH;
+  // Update detail note
+  const el2=id=>document.getElementById(id);
+  if(el2('p-dir-detail'))
+    el2('p-dir-detail').textContent = dF+'F + '+dM+'M + '+dQ+'Q = '+fmtUSD(directMes)+'/mes';
+  if(el2('p-prourbe-detail'))
+    el2('p-prourbe-detail').textContent = (nF-dF)+'F + '+(nM-dM)+'M + '+(nQ-dQ)+'Q = '+fmtUSD(maxMes-directMes)+'/mes';
 
-  for(let h=0; h<24; h++){
-    const inWin = winH===24 ? true : (h>=startH && h<endH);
-    const isPico = h>=6 && h<22;
-    let bg;
-    if(!inWin){
-      bg='#0F6E56'; // Inverfin fuera de ventana
-    } else {
-      // dentro de ventana: cada invEvery horas = Inverfin, resto = anunciante
-      const posInWin = h - startH;
-      if(posInWin % invEvery === 0){
-        bg='#2EC4B6'; // Inverfin intercalado
-      } else if(isPico){
-        bg='#F5C842';
-      } else {
-        bg='#E8603C';
-      }
-    }
-    const s=document.createElement('div');
-    s.className='tl-slot';
-    s.style.cssText=`flex:1;background:${bg};`;
-    const label = !inWin ? 'Inverfin SAECA (fuera de ventana)' :
-                  bg==='#2EC4B6' ? 'Inverfin SAECA (intercalado)' :
-                  isPico ? 'Anunciante diurno' : 'Anunciante nocturno';
-    s.title=`${h}:00 — ${label}`;
-    bar.appendChild(s);
+  const nSlots = Math.max(nF,nM,nQ); // compat
+
+  // Year 1 ramp: base=60% of max from month 5
+  const base60 = maxMes*0.60;
+  const mesA1 = [0, base60*0.30, base60*0.50, base60*0.70,
+                 ...Array(8).fill(base60)];
+  const brutoA1 = mesA1.reduce((a,b)=>a+b,0);
+
+  // Prourbe manages everything; commission only on what they sell (bruto - direct)
+  function calcAño(brutoAnual){
+    const prourbeGest = Math.max(0, brutoAnual - directAnual);
+    const invNeto = prourbeGest*0.90 + directAnual;
+    return invNeto;
   }
 
-  const th=document.getElementById('tl-hours');
-  th.innerHTML='';
-  [0,6,12,18,24].forEach(h=>{const sp=document.createElement('span');sp.textContent=h+'h';th.appendChild(sp);});
-
-  const offH = 24-winH;
-  document.getElementById('spot-note-dist').innerHTML =
-    `<b>Distribución en ventana comercial (${winH}h):</b> los spots de Inverfin SAECA se intercalan de forma equilibrada — 
-    aproximadamente 1 de cada ${invEvery} spots es propio. 
-    <b>Fuera de ventana (${offH}h):</b> la pantalla muestra 100% contenido Inverfin SAECA 
-    (${offWinSpots.toLocaleString()} spots/día adicionales sin costo de pauta).`;
-
-  document.getElementById('spot-note').innerHTML =
-    `Dentro de la ventana comercial (<b>${winH}h</b>), Inverfin SAECA ocupa <b>${invInWin.toLocaleString()} spots/día</b> intercalados de forma equilibrada — 1 de cada ${invEvery} spots.
-    Los anunciantes externos disponen de <b>${extSpots.toLocaleString()} spots/día</b>.
-    <b>Beneficio adicional:</b> las ${24-winH}h fuera de ventana suman <b>${offWinSpots.toLocaleString()} spots/día</b> exclusivos de Inverfin SAECA, sin costo de pauta.`;
-}
-
-function recalcIng(){
-  const dur   = +document.getElementById('spotDur').value;
-  const winH  = +document.getElementById('winHours').value;
-  const ipct  = +document.getElementById('inverfinPct').value/100;
-  const zona  = document.getElementById('zona').value;
-  const ocup   = +document.getElementById('ocup').value/100;
-  const vac    = +document.getElementById('vac').value/100;
-  const ppico  = +document.getElementById('ppico').value/100;
-  const dirPct = +document.getElementById('dirPct').value/100;
-  const comPct = +document.getElementById('comPct').value/100;
-  const costoEnergia  = +document.getElementById('costoEnergia').value;
-  const costoSeguro   = +document.getElementById('costoSeguro').value;
-  const costoMant     = +document.getElementById('costoMant').value;
-  const costoInternet = +document.getElementById('costoInternet').value;
-  const costoCanon    = +document.getElementById('costoCanon').value;
-  const costoTotal    = costoEnergia + costoSeguro + costoMant + costoInternet + costoCanon;
-  const agPct  = 1 - dirPct;  // fracción vendida por agencia
-
-  document.getElementById('ocupV').textContent   = Math.round(ocup*100)+' %';
-  document.getElementById('vacV').textContent    = Math.round(vac*100)+' %';
-  document.getElementById('ppicoV').textContent  = Math.round(ppico*100)+' %';
-  document.getElementById('dirPctV').textContent = Math.round(dirPct*100)+' %';
-  document.getElementById('comPctV').textContent = Math.round(comPct*100)+' %';
-  document.getElementById('costoEnergiaV').textContent  = '$'+costoEnergia;
-  document.getElementById('costoSeguroV').textContent   = '$'+costoSeguro;
-  document.getElementById('costoMantV').textContent     = '$'+costoMant;
-  document.getElementById('costoInternetV').textContent = '$'+costoInternet;
-  document.getElementById('costoCanonV').textContent    = '$'+costoCanon;
-
-  const z = ZONAS[zona];
-  const tarifaDia   = usd((z.gsMin+z.gsMax)/2);
-  const tarifaNoche = tarifaDia*0.60;
-
-  const spotsPerHour = Math.round(3600/dur);
-  const winSpots     = spotsPerHour*winH;
-  const offWinSpots  = spotsPerHour*(24-winH);
-  const invInWin     = Math.round(winSpots*ipct);
-  const extSpots     = winSpots-invInWin;
-  const totalInvSpots= offWinSpots+invInWin;
-  const efectOcup    = ocup*(1-vac);
-
-  const diaDisp   = Math.round(extSpots*ppico);
-  const nocheDisp = extSpots-diaDisp;
-  const diaVend   = Math.round(diaDisp*efectOcup);
-  const nocheVend = Math.round(nocheDisp*efectOcup);
-
-  // Canal directo vs agencia
-  const diaDir      = Math.round(diaVend * dirPct);
-  const diaAg       = diaVend - diaDir;
-  const nocheDir    = Math.round(nocheVend * dirPct);
-  const nocheAg     = nocheVend - nocheDir;
-  const netAg       = 1 - comPct;
-  const ingDiaDir   = diaDir   * tarifaDia   * 30;
-  const ingDiaAg    = diaAg    * tarifaDia   * netAg * 30;
-  const ingNocheDir = nocheDir * tarifaNoche * 30;
-  const ingNocheAg  = nocheAg  * tarifaNoche * netAg * 30;
-  const ingDia      = ingDiaDir + ingDiaAg;
-  const ingNoche    = ingNocheDir + ingNocheAg;
-  const ingExtMes   = ingDia + ingNoche;
-  const ingExtAnual = ingExtMes * 12;
-  const perdidaComision = (diaAg*tarifaDia + nocheAg*tarifaNoche) * comPct * 30;
-
-  // Valor spots Inverfin: en ventana a tarifa de mercado, fuera de ventana a tarifa nocturna (tráfico bajo)
-  const invInWinDia   = Math.round(invInWin*ppico);
-  const invInWinNoche = invInWin-invInWinDia;
-  const invValMes = ((invInWinDia*tarifaDia)+(invInWinNoche*tarifaNoche)+(offWinSpots*tarifaNoche*0.5))*30;
-
-  const totalMes  = ingExtMes+(ingView==='total'?invValMes:0);
-  const modeloComercial = document.getElementById('modeloComercial').value;
-  // Revenue share Reimpulso: 50% of agency-managed income, 100% of direct
-  const ingDirTotal = ingDiaDir + ingNocheDir;  // always 100% to Inverfin
-  const ingAgTotal  = ingDiaAg  + ingNocheAg;  // 100% or 50% depending on model
-  const ingAgNeto   = modeloComercial === 'reimpulso' ? ingAgTotal * 0.5 : ingAgTotal;
-  const reimpulsoComision = modeloComercial === 'reimpulso' ? ingAgTotal * 0.5 : 0;
-  const ingExtMesNeto = ingDirTotal + ingAgNeto;
-  const resultNeto    = ingExtMesNeto - costoTotal;
-  const paybackMes = +(98902/Math.max(0.01,resultNeto)).toFixed(1);
-
-  document.getElementById('ing-metrics').innerHTML = `
-    <div class="metric"><div class="metric-label">Ingreso bruto ext./mes</div><div class="metric-value teal">${fmtUSD(ingExtMes,0)}</div><div class="metric-sub">${fmtUSDk(ingExtMes*12)}/año</div></div>
-    ${modeloComercial==='reimpulso'?`
-    <div class="metric"><div class="metric-label">Comisión Reimpulso/mes</div><div class="metric-value" style="color:var(--gold)">-${fmtUSD(reimpulsoComision,0)}</div><div class="metric-sub">50% del canal agencia gestionado</div></div>
-    `:``}
-    <div class="metric"><div class="metric-label">Ingreso neto Inverfin/mes</div><div class="metric-value gold">${fmtUSD(ingExtMesNeto,0)}</div><div class="metric-sub">${fmtUSDk(ingExtMesNeto*12)}/año</div></div>
-    <div class="metric"><div class="metric-label">Costos operativos/mes</div><div class="metric-value" style="color:var(--coral)">-${fmtUSD(costoTotal,0)}</div><div class="metric-sub">energía+seguro+mant+otros</div></div>
-    <div class="metric"><div class="metric-label">Resultado neto/mes</div><div class="metric-value" style="color:var(--teal)">${fmtUSD(resultNeto,0)}</div><div class="metric-sub">${fmtUSDk(resultNeto*12)}/año</div></div>
-    <div class="metric"><div class="metric-label">Canal directo/mes</div><div class="metric-value">${fmtUSD(ingDirTotal,0)}</div><div class="metric-sub">${Math.round(dirPct*100)}% spots · 100% para Inverfin</div></div>
-    <div class="metric"><div class="metric-label">Payback (sobre neto)</div><div class="metric-value">${paybackMes} m</div><div class="metric-sub">ing. neto tras costos${modeloComercial==='reimpulso'?' y comisión':''}</div></div>
-  `;
-
-  const rows = Object.entries(ZONAS).map(([k,v2])=>{
-    const sel=k===zona;
-    const mid=usd((v2.gsMin+v2.gsMax)/2);
-    return `<tr class="${sel?'zt-sel':''}">
-      <td>${v2.label}${sel?' ★':''}</td>
-      <td style="text-align:right;font-family:monospace">${fmtUSD(usd(v2.gsMin),3)} – ${fmtUSD(usd(v2.gsMax),3)}</td>
-      <td style="text-align:right;color:${sel?'var(--teal)':'inherit'}">${fmtUSD(mid,3)}/spot</td>
-    </tr>`;
-  }).join('');
-  document.getElementById('zone-table').innerHTML=
-    `<thead><tr><th>Zona</th><th style="text-align:right">Rango costo/spot USD</th><th style="text-align:right">Tarifa media</th></tr></thead><tbody>${rows}</tbody>`;
-
-  document.getElementById('note-occ').className=vac>=0.2?'note warn':'note';
-  document.getElementById('note-occ').innerHTML=`Tarifa activa: <b>${fmtUSD(tarifaDia,3)}/spot diurno</b> · nocturno −40%: <b>${fmtUSD(tarifaNoche,3)}/spot</b>. Ocupación neta: <b>${Math.round(efectOcup*100)}%</b>. Spots vendidos: <b>${(diaVend+nocheVend).toLocaleString()}/día</b>. Canal directo (<b>${Math.round(dirPct*100)}%</b>): tarifa plena. Canal agencia (<b>${Math.round((1-dirPct)*100)}%</b>): neto tras ${Math.round(comPct*100)}% comisión = <b>${fmtUSD(tarifaDia*netAg,3)}/spot diurno</b>. ${vac>=0.2?' <b>Atención:</b> vacancia alta.':''}` ;
-
-  document.getElementById('ing-rows').innerHTML=`
-    <tr><td>Diurna — canal directo</td><td>${diaDir.toLocaleString()}</td><td>${diaDir.toLocaleString()}</td><td>${fmtUSD(tarifaDia,3)}</td><td>${fmtUSD(ingDiaDir,0)}</td><td>${fmtUSD(ingDiaDir*12,0)}</td></tr>
-    <tr><td>Diurna — agencia (neto -${Math.round(comPct*100)}%)</td><td>${diaAg.toLocaleString()}</td><td>${diaAg.toLocaleString()}</td><td>${fmtUSD(tarifaDia*netAg,3)}</td><td>${fmtUSD(ingDiaAg,0)}</td><td>${fmtUSD(ingDiaAg*12,0)}</td></tr>
-    <tr><td>Nocturna — canal directo</td><td>${nocheDir.toLocaleString()}</td><td>${nocheDir.toLocaleString()}</td><td>${fmtUSD(tarifaNoche,3)}</td><td>${fmtUSD(ingNocheDir,0)}</td><td>${fmtUSD(ingNocheDir*12,0)}</td></tr>
-    <tr><td>Nocturna — agencia (neto -${Math.round(comPct*100)}%)</td><td>${nocheAg.toLocaleString()}</td><td>${nocheAg.toLocaleString()}</td><td>${fmtUSD(tarifaNoche*netAg,3)}</td><td>${fmtUSD(ingNocheAg,0)}</td><td>${fmtUSD(ingNocheAg*12,0)}</td></tr>
-    <tr class="total-row"><td><strong>Total neto</strong></td><td>${extSpots.toLocaleString()}</td><td>${(diaVend+nocheVend).toLocaleString()}</td><td>-</td><td><strong>${fmtUSD(ingExtMes,0)}</strong></td><td><strong>${fmtUSD(ingExtAnual,0)}</strong></td></tr>
-  `;
-
-  const datasets=[
-    {label:'Diurno ext.',data:[ingDia,0,ingExtMes,ingExtAnual/12],backgroundColor:'#1D9E75',borderColor:'#1D9E75',borderWidth:1,borderRadius:5},
-    {label:'Nocturno ext.',data:[0,ingNoche,0,0],backgroundColor:'#D85A30',borderColor:'#D85A30',borderWidth:1,borderRadius:5},
+  // Occupancy ramp years 2-5
+  const occ2=0.65, occ3=0.72, occ4=0.76;
+  const años=[
+    {a:1, occ:47.5, bruto:brutoA1},
+    {a:2, occ:65,   bruto:maxMes*12*occ2},
+    {a:3, occ:72,   bruto:maxMes*12*occ3},
+    {a:4, occ:76,   bruto:maxMes*12*occ4},
+    {a:5, occ:Math.round(occ5*100), bruto:maxMes*12*occ5},
   ];
-  if(ingView==='total'){
-    datasets.push({label:'Valor Inverfin SAECA',data:[0,0,invValMes,invValMes],backgroundColor:'#378ADD',borderColor:'#378ADD',borderWidth:1,borderRadius:5});
-  }
 
-  document.getElementById('chart-legend').innerHTML=[
-    {color:'#1D9E75',label:`Diurno ext. — ${fmtUSD(ingDia,0)}/mes`},
-    {color:'#D85A30',label:`Nocturno ext. — ${fmtUSD(ingNoche,0)}/mes`},
-    ...(ingView==='total'?[{color:'#378ADD',label:`Valor Inverfin SAECA — ${fmtUSD(invValMes,0)}/mes`}]:[]),
-  ].map(l=>`<div class="leg"><div class="leg-sq" style="background:${l.color}"></div>${l.label}</div>`).join('');
-
-  if(ingChartInst){ingChartInst.destroy();ingChartInst=null;}
-  ingChartInst=new Chart(document.getElementById('ingChart'),{
-    type:'bar',
-    data:{
-      labels:['Diurno ext.','Nocturno ext.',ingView==='total'?'Total combinado/mes':'Total ext./mes','Promedio mensual anual'],
-      datasets
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmtUSD(ctx.raw,0)}}},
-      scales:{
-        x:{ticks:{color:'#8A9BB5'},grid:{display:false},stacked:true},
-        y:{ticks:{color:'#8A9BB5',callback:v=>fmtUSDk(v)},grid:{color:'rgba(136,135,128,.15)'},stacked:true}
-      }
-    }
+  const rows = años.map((y,i)=>{
+    const invNeto = calcAño(y.bruto);
+    const comision = Math.max(0,y.bruto-directAnual)*COM_P;
+    const costos = COSTOS[i];
+    const neto = invNeto - costos;
+    return {...y, invNeto, comision, costos, neto, mes:neto/12};
   });
 
-  const pbPct=Math.min(96,Math.round((36/Math.max(1,paybackMes))*100));
-  document.getElementById('payback-section').innerHTML=`
+  // Metrics
+  const r1=rows[0], r5=rows[4];
+  document.getElementById('p-metrics').innerHTML=`
+    <div class="metric"><div class="metric-label">Capacidad máxima/mes</div><div class="metric-value teal">${fmtUSD(maxMes)}</div><div class="metric-sub">${nSlots}F+${nSlots}M+${nSlots}Q anunciantes</div></div>
+    <div class="metric"><div class="metric-label">Neto Inverfin año 1/mes</div><div class="metric-value gold">${fmtK(r1.mes)}</div><div class="metric-sub">47.5% ocupación promedio</div></div>
+    <div class="metric"><div class="metric-label">Neto Inverfin año 5/mes</div><div class="metric-value">${fmtK(r5.mes)}</div><div class="metric-sub">${r5.occ}% ocupación</div></div>
+    <div class="metric"><div class="metric-label">Venta directa Inverfin/mes</div><div class="metric-value blue">${fmtUSD(directMes)}</div><div class="metric-sub">${Math.round(dirPct*100)}% del inventario · 0% comisión</div></div>
+    <div class="metric"><div class="metric-label">Inversión efectiva</div><div class="metric-value">${fmtUSD(INV_PROURBE)}</div><div class="metric-sub">IVA recuperado</div></div>
+    <div class="metric"><div class="metric-label">Break-even estimado</div><div class="metric-value" id="p-be-display">—</div><div class="metric-sub">meses</div></div>
+  `;
+
+  // Table
+  document.getElementById('p-tabla').innerHTML = rows.map((r,i)=>`
+    <tr${i===4?' class="total-row"':''}>
+      <td>Año ${r.a}</td><td>${r.occ}%</td>
+      <td>${fmtUSD(r.bruto)}</td>
+      <td style="color:var(--coral)">-${fmtUSD(r.comision)}</td>
+      <td style="color:var(--teal)">${fmtUSD(directAnual)}</td>
+      <td style="color:var(--coral)">-${fmtUSD(r.costos)}</td>
+      <td style="color:var(--gold);font-weight:${i===4?600:400}">${fmtUSD(r.neto)}</td>
+      <td style="font-weight:${i===4?600:400}">${fmtK(r.mes)}</td>
+    </tr>`).join('');
+
+  // Break-even
+  let acum=-INV_PROURBE, be=null;
+  rows.forEach((r,i)=>{
+    for(let m=0;m<12;m++){
+      acum+=r.mes;
+      if(acum>=0&&!be) be=i*12+m+1;
+    }
+  });
+  if(document.getElementById('p-be-display'))
+    document.getElementById('p-be-display').textContent=(be||'>60')+(be?' m':'');
+
+  const neto5=rows.reduce((s,r)=>s+r.neto,0);
+  const pbPct=Math.min(96,Math.round((60/Math.max(1,be||60))*100));
+  document.getElementById('p-payback-section').innerHTML=`
     <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-top:.5rem">
-      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
-        <span style="color:var(--muted)">Ingresos brutos externos/mes</span>
-        <span style="color:var(--white);font-weight:500">${fmtUSD(ingExtMes,0)}</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
-        <span style="color:var(--muted)">Costos operativos/mes</span>
-        <span style="color:var(--coral)">-${fmtUSD(costoTotal,0)}</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:12px;padding-top:8px;border-top:1px solid var(--border)">
-        <span style="color:var(--white);font-weight:500">Resultado neto/mes</span>
-        <span style="color:var(--gold);font-weight:600">${fmtUSD(resultNeto,0)}</span>
-      </div>
       <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px">
-        <span style="color:var(--muted)">Payback inversión Prourbe (USD 98,902) sobre resultado neto</span>
-        <span style="font-weight:500;color:var(--white)">${paybackMes} meses</span>
+        <span style="color:var(--muted)">Payback inversión Prourbe (${fmtUSD(INV_PROURBE)}) · Neto acumulado 5 años: <b style="color:var(--gold)">${fmtUSD(neto5)}</b></span>
+        <span style="font-weight:500;color:var(--white)">${be||'>60'} meses</span>
       </div>
-      <div class="payback-bar"><div class="payback-fill" style="width:${Math.min(96,Math.round((36/Math.max(1,paybackMes))*100))}%"></div></div>
+      <div class="payback-bar"><div class="payback-fill" style="width:${pbPct}%"></div></div>
       <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:5px">
-        <span>Inicio</span><span>${paybackMes} meses</span><span>36 meses</span>
+        <span>Inicio</span><span>Break-even: mes ${be||'>60'}</span><span>60 meses</span>
       </div>
     </div>`;
 
-  window._ingExtMes=ingExtMes;window._ingExtAnual=ingExtAnual;
-  window._invValMes=invValMes;window._paybackMes=paybackMes;
+  window._pData={be,neto5,r1mes:r1.mes,r5mes:r5.mes,nSlots};
+  buildCompTable();
+  updateResumen();
+}
+
+// ── ROMIS + REIMPULSO MODEL ────────────────────────────────────
+function recalcR(){
+  const occ1 = +document.getElementById('r-occ1').value/100;
+  const occ5 = +document.getElementById('r-occ5').value/100;
+  const nDirect = +document.getElementById('r-direct').value;
+  document.getElementById('r-occ1V').textContent = Math.round(occ1*100)+'%';
+  document.getElementById('r-occ5V').textContent = Math.round(occ5*100)+'%';
+  document.getElementById('r-directV').textContent = nDirect+' cliente'+(nDirect!==1?'s':'');
+
+  const directMes = nDirect * CLIENTE_TIPO;
+  const directAnual = directMes * 12;
+
+  // Interpolate occupancy years 1-5
+  const occs=[occ1,
+    occ1+(occ5-occ1)*0.25+0.05,
+    occ1+(occ5-occ1)*0.55,
+    occ1+(occ5-occ1)*0.80,
+    occ5];
+
+  const rows = occs.map((occ,i)=>{
+    const ventaBruta = MAX_CPM_ANUAL * occ;
+    const invSplit = ventaBruta * 0.50;
+    const costos = COSTOS[i];
+    const neto = invSplit + directAnual - costos;
+    return {a:i+1, occ:Math.round(occ*100), ventaBruta, invSplit, directAnual, costos, neto, mes:neto/12};
+  });
+
+  const r1=rows[0], r5=rows[4];
+  document.getElementById('r-metrics').innerHTML=`
+    <div class="metric"><div class="metric-label">Potencial máximo/mes</div><div class="metric-value gold">$26,006</div><div class="metric-sub">151,200 salidas × CPM 172</div></div>
+    <div class="metric"><div class="metric-label">Neto Inverfin año 1/mes</div><div class="metric-value teal">${fmtK(r1.mes)}</div><div class="metric-sub">${r1.occ}% venta · 50% split</div></div>
+    <div class="metric"><div class="metric-label">Neto Inverfin año 5/mes</div><div class="metric-value">${fmtK(r5.mes)}</div><div class="metric-sub">${r5.occ}% venta</div></div>
+    <div class="metric"><div class="metric-label">Venta directa/mes</div><div class="metric-value blue">${fmtUSD(directMes)}</div><div class="metric-sub">${nDirect} cliente tipo · 100% Inverfin</div></div>
+    <div class="metric"><div class="metric-label">Inversión efectiva</div><div class="metric-value">${fmtUSD(INV_ROMIS)}</div><div class="metric-sub">IVA recuperado</div></div>
+    <div class="metric"><div class="metric-label">Break-even estimado</div><div class="metric-value" id="r-be-display">—</div><div class="metric-sub">meses</div></div>
+  `;
+
+  document.getElementById('r-tabla').innerHTML = rows.map((r,i)=>`
+    <tr${i===4?' class="total-row"':''}>
+      <td>Año ${r.a}</td><td>${r.occ}%</td>
+      <td>${fmtUSD(r.ventaBruta)}</td>
+      <td style="color:var(--teal)">${fmtUSD(r.invSplit)}</td>
+      <td style="color:var(--teal)">${fmtUSD(r.directAnual)}</td>
+      <td style="color:var(--coral)">-${fmtUSD(r.costos)}</td>
+      <td style="color:var(--gold);font-weight:${i===4?600:400}">${fmtUSD(r.neto)}</td>
+      <td style="font-weight:${i===4?600:400}">${fmtK(r.mes)}</td>
+    </tr>`).join('');
+
+  let acum=-INV_ROMIS, be=null;
+  rows.forEach((r,i)=>{
+    for(let m=0;m<12;m++){
+      acum+=r.mes;
+      if(acum>=0&&!be) be=i*12+m+1;
+    }
+  });
+  if(document.getElementById('r-be-display'))
+    document.getElementById('r-be-display').textContent=(be||'>60')+(be?' m':'');
+
+  const neto5=rows.reduce((s,r)=>s+r.neto,0);
+  const pbPct=Math.min(96,Math.round((60/Math.max(1,be||60))*100));
+  document.getElementById('r-payback-section').innerHTML=`
+    <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-top:.5rem">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px">
+        <span style="color:var(--muted)">Payback inversión Romis (${fmtUSD(INV_ROMIS)}) · Neto acumulado 5 años: <b style="color:var(--gold)">${fmtUSD(neto5)}</b></span>
+        <span style="font-weight:500;color:var(--white)">${be||'>60'} meses</span>
+      </div>
+      <div class="payback-bar"><div class="payback-fill" style="width:${pbPct}%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:5px">
+        <span>Inicio</span><span>Break-even: mes ${be||'>60'}</span><span>60 meses</span>
+      </div>
+    </div>`;
+
+  window._rData={be,neto5,r1mes:r1.mes,r5mes:r5.mes};
+  buildCompTable();
+  updateResumen();
+}
+
+// ── TABLA COMPARATIVA ──────────────────────────────────────────
+function buildCompTable(){
+  const p=window._pData||{};
+  const r=window._rData||{};
+  document.getElementById('comp-tabla').innerHTML=`
+    <thead><tr><th>Modelo</th><th>Inversión efectiva</th><th>Break-even</th><th>Neto año 1/mes</th><th>Neto año 5/mes</th><th>Neto acumulado 5 años</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Prourbe · ${p.nSlots||4} anunciantes/tipo</td>
+        <td>${fmtUSD(INV_PROURBE)}</td>
+        <td>${p.be?(p.be+' meses'):'>60 m'}</td>
+        <td>${p.r1mes?fmtK(p.r1mes):'—'}</td>
+        <td>${p.r5mes?fmtK(p.r5mes):'—'}</td>
+        <td>${p.neto5?fmtUSD(p.neto5):'—'}</td>
+      </tr>
+      <tr class="total-row">
+        <td>Romis + Reimpulso · CPM</td>
+        <td>${fmtUSD(INV_ROMIS)}</td>
+        <td style="color:var(--teal)">${r.be?(r.be+' meses ✓'):'>60 m'}</td>
+        <td style="color:var(--teal)">${r.r1mes?fmtK(r.r1mes):'—'}</td>
+        <td style="color:var(--teal)">${r.r5mes?fmtK(r.r5mes):'—'}</td>
+        <td style="color:var(--teal)">${r.neto5?fmtUSD(r.neto5):'—'}</td>
+      </tr>
+    </tbody>`;
+}
+
+// ── SPOTS TAB (simplified — keep existing) ─────────────────────
+function recalcSpots(){
+  const dur=+document.getElementById('spotDur').value;
+  const winH=+document.getElementById('winHours').value;
+  const ipct=+document.getElementById('inverfinPct').value/100;
+  document.getElementById('spotDurVal').textContent=dur+' s';
+  document.getElementById('winHoursVal').textContent=winH+' h';
+  document.getElementById('inverfinPctVal').textContent=Math.round(ipct*100)+' %';
+  const sph=Math.round(3600/dur), totalSpots=sph*24;
+  const winSpots=sph*winH, offWin=sph*(24-winH);
+  const invInWin=Math.round(winSpots*ipct), extSpots=winSpots-invInWin;
+  const totalInv=offWin+invInWin;
+  document.getElementById('spot-metrics').innerHTML=`
+    <div class="metric"><div class="metric-label">Spots totales/día (24h)</div><div class="metric-value">${totalSpots.toLocaleString()}</div><div class="metric-sub">${sph} spots/hora</div></div>
+    <div class="metric"><div class="metric-label">Inverfin — en ventana/día</div><div class="metric-value teal">${invInWin.toLocaleString()}</div><div class="metric-sub">${Math.round(ipct*100)}% de la ventana comercial</div></div>
+    <div class="metric"><div class="metric-label">Spots externos disp./día</div><div class="metric-value gold">${extSpots.toLocaleString()}</div><div class="metric-sub">ventana comercial ${winH}h</div></div>
+    <div class="metric"><div class="metric-label">Beneficio adicional/día</div><div class="metric-value blue">${offWin.toLocaleString()}</div><div class="metric-sub">${24-winH}h fuera de ventana — 100% Inverfin</div></div>
+  `;
+  const invEvery=ipct>0?Math.round(1/ipct):999;
+  const bar=document.getElementById('tl-bar'); bar.innerHTML='';
+  const startH=6,endH=Math.min(6+winH,24);
+  for(let h=0;h<24;h++){
+    const inWin=winH===24?true:(h>=startH&&h<endH);
+    const isPico=h>=6&&h<22;
+    let bg;
+    if(!inWin) bg='#0F6E56';
+    else{ const pos=h-startH; bg=pos%invEvery===0?'#2EC4B6':isPico?'#F5C842':'#E8603C'; }
+    const s=document.createElement('div'); s.className='tl-slot';
+    s.style.cssText=`flex:1;background:${bg};`;
+    s.title=`${h}:00`; bar.appendChild(s);
+  }
+  const th=document.getElementById('tl-hours'); th.innerHTML='';
+  [0,6,12,18,24].forEach(h=>{const sp=document.createElement('span');sp.textContent=h+'h';th.appendChild(sp);});
+  document.getElementById('spot-note-dist').innerHTML=
+    `<b>Distribución equilibrada:</b> dentro de la ventana comercial (${winH}h), Inverfin SAECA aparece 1 de cada ${invEvery} spots. <b>Fuera de ventana (${24-winH}h):</b> 100% Inverfin SAECA — ${offWin.toLocaleString()} spots/día adicionales sin costo de pauta.`;
+  document.getElementById('spot-note').innerHTML=
+    `Pantalla activa <b>24 horas/día</b>. Inverfin ocupa <b>${totalInv.toLocaleString()} spots/día</b> en total. Anunciantes externos disponen de <b>${extSpots.toLocaleString()} spots/día</b>.`;
 }
 
 function updateResumen(){
-  const dur  = +document.getElementById('spotDur').value;
-  const winH = +document.getElementById('winHours').value;
-  const ipct = +document.getElementById('inverfinPct').value/100;
-  const sph  = Math.round(3600/dur);
-  const inv  = sph*(24-winH) + Math.round(sph*winH*ipct);
-  document.getElementById('res-inv-spots').textContent=inv.toLocaleString();
-  if(window._ingExtMes){
-    document.getElementById('res-monthly').textContent=fmtUSD(window._ingExtMes,0);
-    document.getElementById('res-annual').textContent=fmtUSD(window._ingExtAnual,0);
-    document.getElementById('res-payback').textContent=window._paybackMes+' m';
-    document.getElementById('res-inv-val').textContent=fmtUSD(window._invValMes,0);
-  }
+  const dur=+document.getElementById('spotDur').value;
+  const winH=+document.getElementById('winHours').value;
+  const ipct=+document.getElementById('inverfinPct').value/100;
+  const sph=Math.round(3600/dur), inv=sph*(24-winH)+Math.round(sph*winH*ipct);
+  const el=id=>document.getElementById(id);
+  if(el('res-inv-spots')) el('res-inv-spots').textContent=inv.toLocaleString();
+
+  const p=window._pData||{}, r=window._rData||{};
+  const nF2=+document.getElementById('p-nF').value;
+  const nM2=+document.getElementById('p-nM').value;
+  const nQ2=+document.getElementById('p-nQ').value;
+  const dirPct2=+document.getElementById('p-dirPct').value/100;
+  const dF2=Math.round(nF2*dirPct2), dM2=Math.round(nM2*dirPct2), dQ2=Math.round(nQ2*dirPct2);
+  const nSlots=Math.max(nF2,nM2,nQ2);
+  const maxMes=nF2*656+nM2*426+nQ2*197;
+  const dirMes2=dF2*656+dM2*426+dQ2*197;
+
+  // Prourbe fields
+  if(el('res-p-be'))    el('res-p-be').textContent   = p.be?(p.be+' m'):'>60 m';
+  if(el('res-p-y1'))    el('res-p-y1').textContent   = p.r1mes?fmtK(p.r1mes):'—';
+  if(el('res-p-y5'))    el('res-p-y5').textContent   = p.r5mes?fmtK(p.r5mes):'—';
+  if(el('res-p-5y'))    el('res-p-5y').textContent   = p.neto5?fmtUSD(p.neto5):'—';
+  if(el('res-p-cap'))   el('res-p-cap').textContent  = fmtUSD(maxMes)+'/mes · '+nF2+'F+'+nM2+'M+'+nQ2+'Q · directo '+Math.round(dirPct2*100)+'%';
+  if(el('res-p-berow')) el('res-p-berow').textContent= p.be?(p.be+' meses'):'>60 m';
+  if(el('res-p-y1row')) el('res-p-y1row').textContent= p.r1mes?fmtK(p.r1mes):'—';
+  if(el('res-p-y5row')) el('res-p-y5row').textContent= p.r5mes?fmtK(p.r5mes):'—';
+  if(el('res-p-5yrow')) el('res-p-5yrow').textContent= p.neto5?fmtUSD(p.neto5):'—';
+  if(el('res-p-caprow'))el('res-p-caprow').textContent=fmtUSD(maxMes)+'/mes ('+nF2+'F · '+nM2+'M · '+nQ2+'Q)';
+
+  // Romis fields
+  if(el('res-r-be'))    el('res-r-be').textContent   = r.be?(r.be+' m'):'>60 m';
+  if(el('res-r-y1'))    el('res-r-y1').textContent   = r.r1mes?fmtK(r.r1mes):'—';
+  if(el('res-r-y5'))    el('res-r-y5').textContent   = r.r5mes?fmtK(r.r5mes):'—';
+  if(el('res-r-5y'))    el('res-r-5y').textContent   = r.neto5?fmtUSD(r.neto5):'—';
+  if(el('res-r-berow')) el('res-r-berow').textContent= r.be?(r.be+' meses ✓'):'>60 m';
+  if(el('res-r-y1row')) el('res-r-y1row').textContent= r.r1mes?fmtK(r.r1mes):'—';
+  if(el('res-r-y5row')) el('res-r-y5row').textContent= r.r5mes?fmtK(r.r5mes):'—';
+  if(el('res-r-5yrow')) el('res-r-5yrow').textContent= r.neto5?fmtUSD(r.neto5):'—';
 }
 
 recalcSpots();
-recalcIng();
+recalcP();
+recalcR();
 </script>
 </body>
 </html>
